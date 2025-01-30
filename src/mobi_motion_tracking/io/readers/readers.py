@@ -26,10 +26,13 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
     result = data.where(data == value_to_search).stack().index
     
     if result.empty:
-        raise ValueError("x_Hip not found in DataFrame")
+        raise ValueError("x_Hip not found in DataFrame.")
     
+    x_idx = result[0][0]
+    y_idx = result[0][1]
     cleaned_data = data.iloc[
-        result[0][0]+1:, data.columns.get_loc(result[0][1])-1:61].to_numpy()
-
+        x_idx+1:, data.columns.get_loc(y_idx)-1:data.columns.get_loc(y_idx)+60
+        ].to_numpy()
+    
     return cleaned_data
 
