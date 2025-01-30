@@ -10,6 +10,7 @@ packages = [{include = "mobi_motion_tracking", from = "src"}]
 [tool.poetry.dependencies]
 python = "~3.11"
 pandas = "^2.2.3"
+pytest = "^8.3.4"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
