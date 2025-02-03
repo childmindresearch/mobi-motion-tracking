@@ -1,5 +1,8 @@
 """Functions to read motion tracking data from a file."""
 
+import os
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 
@@ -41,5 +44,40 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
         row + 1 :,
         start_col:end_col,
     ].to_numpy()
+
+    return cleaned_data
+
+
+def read_sheet(path: Path, sequence: str) -> np.ndarray:
+    """Read data from specific sheet.
+
+    Currently motion tracking data for Kinect and Zed are saved into xlsx files.
+    This function reads in the data from 1 sheet as a dataframe. Then passes the
+    raw dataframe to data_cleaner and returns the output from data_cleaner.
+
+    Args:
+        path: Path to .xlsx file.
+        sequence: str, determines which sequence is processed.
+
+    Raises:
+        FileNotFoundError: File path does not exist.
+        ValueError: Sheet name was not found.
+        PermissionError: Permission denied.
+
+    """
+    try:
+        if not os.path.exists(path):
+            raise FileNotFoundError(f"File not found: {path}")
+
+        data = pd.read_excel(path, sheet_name=sequence, engine="openpyxl")
+
+    except FileNotFoundError:
+        print(f"Error: The file at {path} was not found.")
+    except ValueError:
+        print(f"Error: Sheet name '{sequence}' may not exist.")
+    except PermissionError:
+        print("Error: Permission denied. Close the file if it's open.")
+
+    cleaned_data = data_cleaner(data)
 
     return cleaned_data
