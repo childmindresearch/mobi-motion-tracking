@@ -61,16 +61,16 @@ def read_sheet(path: Path, sequence: str) -> np.ndarray:
 
     Raises:
         FileNotFoundError: File path does not exist.
+        ValueError: Invalid file extension.
         ValueError: Sheet name was not found.
-        PermissionError: Permission denied.
-
     """
+    if not os.path.exists(path):
+        raise FileNotFoundError("File not found.")
+    if ".xlsx" != path.suffix:
+        raise ValueError("Invalid file extension. Expected '.xlsx'.")
+
     try:
-        if not os.path.exists(path):
-            raise FileNotFoundError("File not found.")
-
         data = pd.read_excel(path, sheet_name=sequence, engine="openpyxl")
-
     except ValueError:
         raise ValueError("Error: Sheet name may not exist.")
 
