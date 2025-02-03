@@ -1,14 +1,16 @@
 [tool.poetry]
-name = "app-name"
+name = "mobi_motion_tracking"
 version = "0.1.0"
-description = "A beautiful description."
-authors = ["Reinder Vos de Wael <reinder.vosdewael@childmind.org>"]
-license = "LGPL-2.1"
+description = "python package to process 3d motion tracking data"
+authors = ["cgmaiorano <celiagrace13@gmail.com>"]
+license = "GNU Lesser General Public License v2.1"
 readme = "README.md"
-packages = [{include = "APP_NAME", from = "src"}]
+packages = [{include = "mobi_motion_tracking", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "~3.11"
+pandas = "^2.2.3"
+pytest = "^8.3.4"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
