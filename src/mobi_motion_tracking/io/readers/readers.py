@@ -16,8 +16,8 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
 
     Returns:
         cleaned_data: np.array of [x,61] where x is the total number of rows
-            representing all frames and columns representing the frame number and 60 joint
-            coordinates.
+            representing all frames and columns representing the frame number and 60
+            joint coordinates.
 
     Raises:
         ValueError: when x_Hip is not found in dataframe.
