@@ -41,35 +41,27 @@ def create_dummy_dataframe(valid: bool = True) -> pd.DataFrame:
 def test_data_cleaner_invalid_dataframe() -> None:
     """Test the data_cleaner function with an invalid dataframe."""
     data = create_dummy_dataframe(valid=False)
-    with pytest.raises(ValueError, match="x_Hip not found in DataFrame"):
+    with pytest.raises(ValueError, match="x_Hip not found in DataFrame."):
         readers.data_cleaner(data)
 
 
-def test_data_cleaner_correct_size() -> None:
-    """Test that data_cleaner extracts the correct shape from valid dummy data."""
+def test_data_cleaner_good() -> None:
+    """Test that data_cleaner extracts the correct data from valid dummy data."""
     data = create_dummy_dataframe()
     expected_rows = 1
     expected_cols = 61
+    expected_output = [np.array(range(75, 136))]
 
     cleaned_data = readers.data_cleaner(data)
 
-    assert isinstance(cleaned_data, np.ndarray), "Output should be a NumPy array"
+    assert isinstance(cleaned_data, np.ndarray), "Output should be a NumPy array."
     assert cleaned_data.shape == (
         expected_rows,
         expected_cols,
     ), f"Expected shape ({expected_rows}, {expected_cols}), \
             but got {cleaned_data.shape}"
-
-
-def test_data_cleaner_correct_values() -> None:
-    """Test that data_cleaner extracts the correct known values from dummy data."""
-    data = create_dummy_dataframe()
-    expected_output = [np.array(range(75, 136))]
-
-    cleaned_data = readers.data_cleaner(data)
-
     assert np.array_equal(cleaned_data, expected_output), "Extracted data does not \
-        match expected values"
+        match expected values."
 
 
 def test_data_cleaner_index_error() -> None:
