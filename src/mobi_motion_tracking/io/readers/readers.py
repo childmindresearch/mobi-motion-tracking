@@ -67,16 +67,12 @@ def read_sheet(path: Path, sequence: str) -> np.ndarray:
     """
     try:
         if not os.path.exists(path):
-            raise FileNotFoundError(f"File not found: {path}")
+            raise FileNotFoundError("File not found.")
 
         data = pd.read_excel(path, sheet_name=sequence, engine="openpyxl")
 
-    except FileNotFoundError:
-        print(f"Error: The file at {path} was not found.")
     except ValueError:
-        print(f"Error: Sheet name '{sequence}' may not exist.")
-    except PermissionError:
-        print("Error: Permission denied. Close the file if it's open.")
+        raise ValueError("Error: Sheet name may not exist.")
 
     cleaned_data = data_cleaner(data)
 
