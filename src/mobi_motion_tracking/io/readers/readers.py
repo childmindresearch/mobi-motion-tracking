@@ -22,16 +22,23 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
     Raises:
         ValueError: when x_Hip is not found in dataframe.
     """
-    value_to_search = "x_Hip"
-    result = data.where(data == value_to_search).stack().index
+    result = data.where(data == "x_Hip").stack().index
 
     if result.empty:
         raise ValueError("x_Hip not found in DataFrame.")
 
     x_idx = result[0][0]
     y_idx = result[0][1]
+
+    start_col = data.columns.get_loc(y_idx) - 1
+    end_col = data.columns.get_loc(y_idx) + 60
+
+    if start_col < 0 or end_col > data.shape[1]:
+        raise IndexError("Column index out of range.")
+
     cleaned_data = data.iloc[
-        x_idx + 1 :, data.columns.get_loc(y_idx) - 1 : data.columns.get_loc(y_idx) + 60
+        x_idx + 1 :,
+        start_col:end_col,
     ].to_numpy()
 
     return cleaned_data
