@@ -27,6 +27,6 @@ def get_metadata(subject_path: Path, sequence: int) -> tuple[str, str]:
     if not participant_ID.isdigit():
         raise ValueError("The participant file is named incorrectly.")
 
-    sequence = f"seq{sequence}"
+    sequence = str(f"seq{sequence}")
 
     return participant_ID, sequence
