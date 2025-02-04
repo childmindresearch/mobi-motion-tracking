@@ -22,11 +22,11 @@ def get_metadata(subject_path: Path, sequence: int) -> tuple[str, str]:
     Raises:
         ValueError: subject_file named incorrectly.
     """
-    participant_ID: str = os.path.splitext(os.path.basename(subject_path))[0]
+    participant_ID = os.path.splitext(os.path.basename(subject_path))[0]
 
     if not participant_ID.isdigit():
         raise ValueError("The participant file is named incorrectly.")
 
-    sequence: str = f"seq{sequence}"
+    sequence_str = f"seq{sequence}"
 
-    return participant_ID, sequence
+    return participant_ID, sequence_str
