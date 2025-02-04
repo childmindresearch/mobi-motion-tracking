@@ -22,17 +22,21 @@ def create_dummy_dataframe(valid: bool = True) -> pd.DataFrame:
         placement or a missing 'x_Hip' for testing.
     """
     if valid:
-        data = pd.DataFrame([
-            list(range(1, 71)),
-            ["a", "b", "c", "d", "e", "x_Hip", "g"] + list(range(8, 71)),
-            list(range(71, 141)),
-        ])
+        data = pd.DataFrame(
+            [
+                list(range(1, 71)),
+                ["a", "b", "c", "d", "e", "x_Hip", "g"] + list(range(8, 71)),
+                list(range(71, 141)),
+            ]
+        )
     else:
-        data = pd.DataFrame([
-            list(range(1, 71)),
-            ["a", "b", "c", "d", "e", "f", "g"] + list(range(8, 71)),
-            list(range(71, 141)),
-        ])
+        data = pd.DataFrame(
+            [
+                list(range(1, 71)),
+                ["a", "b", "c", "d", "e", "f", "g"] + list(range(8, 71)),
+                list(range(71, 141)),
+            ]
+        )
     return data
 
 
@@ -56,14 +60,10 @@ def test_data_cleaner_good() -> None:
     assert cleaned_data.shape == (
         expected_rows,
         expected_cols,
-    ), (
-        f"Expected shape ({expected_rows}, {expected_cols}), \
+    ), f"Expected shape ({expected_rows}, {expected_cols}), \
             but got {cleaned_data.shape}"
-    )
-    assert np.array_equal(cleaned_data, expected_output), (
-        "Extracted data does not \
+    assert np.array_equal(cleaned_data, expected_output), "Extracted data does not \
         match expected values."
-    )
 
 
 def test_data_cleaner_index_error() -> None:
@@ -72,6 +72,12 @@ def test_data_cleaner_index_error() -> None:
     data = data.iloc[:, :10]
     with pytest.raises(IndexError, match="Column index out of range."):
         readers.data_cleaner(data)
+
+
+@pytest.fixture
+def sample_excel_path() -> Path:
+    """Fixture that provides the path to a sample Excel file."""
+    return Path("tests/sample_data/valid_file.xlsx")
 
 
 def test_read_sheet_file_not_found() -> None:
@@ -86,29 +92,25 @@ def test_read_sheet_invalid_file_extension() -> None:
         readers.read_sheet(Path("tests/sample_data/csv_file.csv"), "seq1")
 
 
-def test_read_sheet_invalid_sheet_name() -> None:
+def test_read_sheet_invalid_sheet_name(sample_excel_path: Path) -> None:
     """Test ValueError when sheet name does not exist."""
     with pytest.raises(ValueError, match="Error: Sheet name does not exist."):
-        readers.read_sheet(Path("tests/sample_data/valid_file.xlsx"), "InvalidSheet")
+        readers.read_sheet(sample_excel_path, "InvalidSheet")
 
 
-def test_read_sheet_good() -> None:
+def test_read_sheet_good(sample_excel_path: Path) -> None:
     """Test read_sheet with valid file type and sheet name."""
     expected_rows = 1
     expected_cols = 61
     expected_output = [np.array(range(75, 136))]
 
-    cleaned_data = readers.read_sheet(Path("tests/sample_data/valid_file.xlsx"), "seq1")
+    cleaned_data = readers.read_sheet(sample_excel_path, "seq1")
 
     assert isinstance(cleaned_data, np.ndarray), "Output should be a NumPy array."
     assert cleaned_data.shape == (
         expected_rows,
         expected_cols,
-    ), (
-        f"Expected shape ({expected_rows}, {expected_cols}), \
+    ), f"Expected shape ({expected_rows}, {expected_cols}), \
             but got {cleaned_data.shape}"
-    )
-    assert np.array_equal(cleaned_data, expected_output), (
-        "Extracted data does not \
+    assert np.array_equal(cleaned_data, expected_output), "Extracted data does not \
         match expected values."
-    )
