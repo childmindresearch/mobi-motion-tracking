@@ -70,10 +70,10 @@ def read_sheet(path: Path, sequence: str) -> np.ndarray:
         raise ValueError("Invalid file extension. Expected '.xlsx'.")
 
     try:
-        data = pd.read_excel(path, sheet_name=sequence, engine="openpyxl")
+        motion_tracking_data = pd.read_excel(
+            path, sheet_name=sequence, engine="openpyxl"
+        )
     except ValueError:
-        raise ValueError("Error: Sheet name may not exist.")
+        raise ValueError("Error: Sheet name does not exist.")
 
-    cleaned_data = data_cleaner(data)
-
-    return cleaned_data
+    return data_cleaner(motion_tracking_data)
