@@ -22,17 +22,21 @@ def create_dummy_dataframe(valid: bool = True) -> pd.DataFrame:
         placement or a missing 'x_Hip' for testing.
     """
     if valid:
-        data = pd.DataFrame([
-            list(range(1, 71)),
-            ["a", "b", "c", "d", "e", "x_Hip", "g"] + list(range(8, 71)),
-            list(range(71, 141)),
-        ])
+        data = pd.DataFrame(
+            [
+                list(range(1, 71)),
+                ["a", "b", "c", "d", "e", "x_Hip", "g"] + list(range(8, 71)),
+                list(range(71, 141)),
+            ]
+        )
     else:
-        data = pd.DataFrame([
-            list(range(1, 71)),
-            ["a", "b", "c", "d", "e", "f", "g"] + list(range(8, 71)),
-            list(range(71, 141)),
-        ])
+        data = pd.DataFrame(
+            [
+                list(range(1, 71)),
+                ["a", "b", "c", "d", "e", "f", "g"] + list(range(8, 71)),
+                list(range(71, 141)),
+            ]
+        )
     return data
 
 
@@ -56,14 +60,10 @@ def test_data_cleaner_good() -> None:
     assert cleaned_data.shape == (
         expected_rows,
         expected_cols,
-    ), (
-        f"Expected shape ({expected_rows}, {expected_cols}), \
+    ), f"Expected shape ({expected_rows}, {expected_cols}), \
             but got {cleaned_data.shape}"
-    )
-    assert np.array_equal(cleaned_data, expected_output), (
-        "Extracted data does not \
+    assert np.array_equal(cleaned_data, expected_output), "Extracted data does not \
         match expected values."
-    )
 
 
 def test_data_cleaner_index_error() -> None:
@@ -104,11 +104,7 @@ def test_read_sheet_good(sample_excel_path: Path) -> None:
     assert cleaned_data.shape == (
         expected_rows,
         expected_cols,
-    ), (
-        f"Expected shape ({expected_rows}, {expected_cols}), \
+    ), f"Expected shape ({expected_rows}, {expected_cols}), \
             but got {cleaned_data.shape}"
-    )
-    assert np.array_equal(cleaned_data, expected_output), (
-        "Extracted data does not \
+    assert np.array_equal(cleaned_data, expected_output), "Extracted data does not \
         match expected values."
-    )
