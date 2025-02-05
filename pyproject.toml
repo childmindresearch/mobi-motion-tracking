@@ -11,6 +11,7 @@ packages = [{include = "mobi_motion_tracking", from = "src"}]
 python = "~3.11"
 pandas = "^2.2.3"
 pytest = "^8.3.4"
+openpyxl = "^3.1.5"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
