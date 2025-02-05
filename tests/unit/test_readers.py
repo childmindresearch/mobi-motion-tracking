@@ -74,12 +74,6 @@ def test_data_cleaner_index_error() -> None:
         readers.data_cleaner(data)
 
 
-@pytest.fixture
-def sample_excel_path() -> Path:
-    """Fixture that provides the path to a sample Excel file."""
-    return Path("tests/sample_data/valid_file.xlsx")
-
-
 def test_read_sheet_file_not_found() -> None:
     """Test FileNotFoundError when file does not exist."""
     with pytest.raises(FileNotFoundError, match="File not found."):
