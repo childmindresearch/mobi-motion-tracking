@@ -3,11 +3,19 @@
 import numpy as np
 
 
-def normalize_all_joints_to_pelvis(data):  # noqa: ANN001, ANN201
-    """This function normalizes all joints in a skeleton to the central pelvis joint.
-    The x,y,and z coordinates of the pelvis will be subtracted from the
+def normalize_all_joints_to_pelvis(data: np.ndarray) -> np.ndarray:
+    """Normalize all joints to the central hip.
+
+    This function normalizes all joints in a skeleton to the central hip joint.
+    The x,y,and z coordinates of the hip will be subtracted from the
     x, y,and z coordinates of all joints for every frame.
-    """  # noqa: D205
+
+    Args:
+        data: ndarray, cleaned raw data.
+
+    Returns:
+        data: ndarray, data normalized to the hip.
+    """
     x_pelvis = data[:, 1]
     y_pelvis = data[:, 2]
     z_pelvis = data[:, 3]
