@@ -1,7 +1,6 @@
 """test readers.py functions."""
 
 import numpy as np
-import pytest
 
 from mobi_motion_tracking.preprocessing import preprocessing
 
@@ -28,3 +27,4 @@ def test_normalize_joints_good() -> np.ndarray:
     assert isinstance(normalized_data, np.ndarray), "Output should be a NumPy array."
     assert np.array_equal(normalized_data, expected_output), "Extracted data does not \
         match expected values."
+    return
