@@ -5,8 +5,8 @@ import numpy as np
 from mobi_motion_tracking.preprocessing import preprocessing
 
 
-def test_normalize_joints_good() -> None:
-    """Test that the normalize joints function extracts correct known values."""
+def test_center_joints_to_hip_good() -> None:
+    """Test that the center joints function extracts correct known values."""
     data = np.array(
         [
             list(range(1, 11)),
@@ -22,9 +22,8 @@ def test_normalize_joints_good() -> None:
         ]
     )
 
-    normalized_data = preprocessing.normalize_all_joints_to_hip(data)
+    normalized_data = preprocessing.center_joints_to_hip(data)
 
     assert isinstance(normalized_data, np.ndarray), "Output should be a NumPy array."
     assert np.array_equal(normalized_data, expected_output), "Extracted data does not \
         match expected values."
-    return

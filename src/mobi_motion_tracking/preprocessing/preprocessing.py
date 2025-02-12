@@ -3,12 +3,13 @@
 import numpy as np
 
 
-def normalize_all_joints_to_hip(data: np.ndarray) -> np.ndarray:
-    """Normalize all joints to the central hip.
+def center_joints_to_hip(data: np.ndarray) -> np.ndarray:
+    """Center all joints to the hip as origin.
 
-    This function normalizes all joints in a skeleton to the central hip joint.
-    The x,y,and z coordinates of the hip will be subtracted from the
-    x, y,and z coordinates of all joints for every frame.
+    "This function sets the coordinates of the hip (x,y,z) as a new
+    relative origin (0,0,0) for each frame". The x,y,and z coordinates
+    of the hip will be subtracted from the x, y, and z coordinates of
+    all joints for every frame.
 
     Args:
         data: ndarray, cleaned raw data.
