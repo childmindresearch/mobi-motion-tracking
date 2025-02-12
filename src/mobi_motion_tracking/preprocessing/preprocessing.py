@@ -14,14 +14,15 @@ def normalize_all_joints_to_hip(data: np.ndarray) -> np.ndarray:
         data: ndarray, cleaned raw data.
 
     Returns:
-        data: ndarray, data normalized to the hip.
+        normalized_data: ndarray, data normalized to the hip.
     """
+    normalized_data = data.copy()
     x_pelvis = data[:, 1]
     y_pelvis = data[:, 2]
     z_pelvis = data[:, 3]
 
-    data[:, 1::3] -= x_pelvis[:, np.newaxis]
-    data[:, 2::3] -= y_pelvis[:, np.newaxis]
-    data[:, 3::3] -= z_pelvis[:, np.newaxis]
+    normalized_data[:, 1::3] -= x_pelvis[:, np.newaxis]
+    normalized_data[:, 2::3] -= y_pelvis[:, np.newaxis]
+    normalized_data[:, 3::3] -= z_pelvis[:, np.newaxis]
 
-    return data
+    return normalized_data
