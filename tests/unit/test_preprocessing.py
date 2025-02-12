@@ -1,26 +1,9 @@
 """test readers.py functions."""
 
-from pathlib import Path
-
 import numpy as np
-import pandas as pd
 import pytest
 
 from mobi_motion_tracking.preprocessing import preprocessing
-
-
-def create_dummy_ndarray() -> np.ndarray:
-    """Create a known 3x9 dummy DataFrame for testing.
-
-    Returns:
-            data: np.ndarray, A 3x9 array with numeric values.
-    """
-    data = pd.DataFrame([
-        list(range(1, 9)),
-        list(range(10, 18)),
-        list(range(19, 27)),
-    ])
-    return data
 
 
 def test_normalize_joints_good() -> np.ndarray:
