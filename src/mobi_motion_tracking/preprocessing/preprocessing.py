@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def normalize_all_joints_to_pelvis(data: np.ndarray) -> np.ndarray:
+def normalize_all_joints_to_hip(data: np.ndarray) -> np.ndarray:
     """Normalize all joints to the central hip.
 
     This function normalizes all joints in a skeleton to the central hip joint.
