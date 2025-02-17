@@ -42,13 +42,26 @@ def get_average_length(
     Args:
         centered_data: ndarray, centered data output from center_joints_to_hip.
         segment_list: ndarray [X,2], containing starting and ending joint pairs for all
-        skeleton segments.
+        skeleton segments. This array should be 0-indexed.
 
     Returns:
         ndarray [X,1], average distance between joints for all segments.
+
+    Raises:
+        ValueError: when segment_list is empty.
+        IndexError: when a joint index in segment_list is out of range of total
+            number of joints.
     """
-    starting_joint = 3 * (segment_list[:, 0] - 1)
-    ending_joint = 3 * (segment_list[:, 1] - 1)
+    if segment_list.size == 0:
+        raise ValueError("segment_list cannot be empty.")
+
+    num_joints = (centered_data.shape[1] - 1) // 3
+
+    if np.any(segment_list < 0) or np.any(segment_list >= num_joints):
+        raise IndexError("Joint index in segment_list is out of range.")
+
+    starting_joint = 3 * segment_list[:, 0]
+    ending_joint = 3 * segment_list[:, 1]
 
     starting_points = centered_data[:, starting_joint[:, None] + np.arange(1, 4)]
     ending_points = centered_data[:, ending_joint[:, None] + np.arange(1, 4)]
