@@ -40,9 +40,11 @@ def get_average_length(
     between the two joints for all frames.
 
     Args:
-        centered_data: ndarray, centered data output from center_joints_to_hip.
+        centered_data: ndarray, centered data output from center_joints_to_hip. The
+            first column in centered data contains frame number, the following 60
+            contain joint coordinates.
         segment_list: ndarray [X,2], containing starting and ending joint pairs for all
-        skeleton segments. This array should be 0-indexed.
+            skeleton segments. This array should be 0-indexed.
 
     Returns:
         ndarray [X,1], average distance between joints for all segments.
