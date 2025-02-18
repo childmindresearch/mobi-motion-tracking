@@ -44,8 +44,10 @@ def test_get_average_length_good() -> None:
 
     average_length = preprocessing.get_average_length(data, segment_list)
 
-    assert np.array_equal(average_length, expected_output), "Calculated data does not \
-        match expected values."
+    assert np.array_equal(
+        average_length, expected_output
+    ), f"Calculated data {average_length} does not match expected values \
+            {expected_output}."
     assert average_length.shape == (3, 1), f"Expected shape (3, 1), but got \
         {average_length.shape}"
     assert isinstance(average_length, np.ndarray), "Output should be a NumPy array."
