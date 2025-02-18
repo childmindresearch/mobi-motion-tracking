@@ -40,10 +40,10 @@ def get_average_length(
     between the two joints for all frames.
 
     Args:
-        centered_data: ndarray, centered data output from center_joints_to_hip. The
+        centered_data: centered data output from center_joints_to_hip. The
             first column in centered data contains frame number, the following 60
             contain joint coordinates.
-        segment_list: ndarray [X,2], containing starting and ending joint pairs for all
+        segment_list: [N,2], containing starting and ending joint pairs for all
             skeleton segments. This array should be 0-indexed.
 
     Returns:
@@ -65,9 +65,11 @@ def get_average_length(
     starting_joint = 3 * segment_list[:, 0]
     ending_joint = 3 * segment_list[:, 1]
 
-    starting_points = centered_data[:, starting_joint[:, None] + np.arange(1, 4)]
-    ending_points = centered_data[:, ending_joint[:, None] + np.arange(1, 4)]
+    starting_points = centered_data[:, starting_joint[:, None] + [1, 2, 3]]
+    ending_points = centered_data[:, ending_joint[:, None] + [1, 2, 3]]
 
     distances = np.linalg.norm(starting_points - ending_points, axis=2)
 
-    return distances.mean(axis=0, keepdims=True).T
+    average_distances = distances.mean(axis=0, keepdims=True).T
+
+    return average_distances
