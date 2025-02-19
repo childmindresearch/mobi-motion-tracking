@@ -1,6 +1,7 @@
 """Performs preprocessing steps for raw data."""
 
 import numpy as np
+from JOINT_INDEX_LIST import JOINT_INDEX_LIST
 
 
 def center_joints_to_hip(data: np.ndarray) -> np.ndarray:
