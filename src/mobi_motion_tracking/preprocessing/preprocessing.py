@@ -1,7 +1,7 @@
 """Performs preprocessing steps for raw data."""
 
-import JOINT_INDEX_LIST
 import numpy as np
+from JOINT_INDEX_LIST import segments
 
 
 def center_joints_to_hip(data: np.ndarray) -> np.ndarray:
@@ -50,14 +50,17 @@ def get_average_length(centered_data: np.ndarray) -> np.ndarray:
         IndexError: when a joint index in JOINT_INDEX_LIST is out of range of total
             number of joints.
     """
-    num_segments = len(JOINT_INDEX_LIST.segments)
-    num_joints = centered_data.shape[1]
+    num_segments = len(segments)
+    num_joint_coordinates = centered_data.shape[1]
     all_distances = np.zeros((centered_data.shape[0], num_segments))
 
-    if np.any(np.array(JOINT_INDEX_LIST.segments) >= num_joints):
-        raise IndexError("Joint index in JOINT_INDEX_LIST.segments is out of range.")
+    if np.any(np.array(segments) >= num_joint_coordinates):
+        raise IndexError(
+            "Incorrect JOINT_INDEX_LIST.py. Joint index in \
+                         JOINT_INDEX_LIST.segments is out of range for data."
+        )
 
-    for i, segment in enumerate(JOINT_INDEX_LIST.segments):
+    for i, segment in enumerate(segments):
         start_indices = segment[:, 0]
         end_indices = segment[:, 1]
 
