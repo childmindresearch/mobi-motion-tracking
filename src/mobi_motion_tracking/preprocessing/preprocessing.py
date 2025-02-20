@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from mobi_motion_tracking.preprocessing.JOINT_INDEX_LIST import segments
+from mobi_motion_tracking.preprocessing.JOINT_INDEX_LIST import default_joint_segments
 
 
 def center_joints_to_hip(data: np.ndarray) -> np.ndarray:
@@ -32,22 +32,22 @@ def center_joints_to_hip(data: np.ndarray) -> np.ndarray:
 
 
 def get_average_length(
-    centered_data: np.ndarray, segment_list: list = segments
+    centered_data: np.ndarray, segment_list: list = default_joint_segments
 ) -> np.ndarray:
     """Calculate the average lengths of all joint segments.
 
     This function calculates the average length across all frames of all connecting
     joint segments in the skeleton. The x, y,and z coordinates of specified starting
-    and ending joints based on JOINT_INDEX_LIST are used to calculate the average
-    distance between the two joints for all frames.
+    and ending joints based on a user provided segment_list or default_joint_segments
+    in JOINT_INDEX_LIST are used to calculate the average distance between the two
+    joints for all frames.
 
     Args:
         centered_data: centered data output from center_joints_to_hip. The
             first column in centered data contains frame number, the following 60
             contain joint coordinates.
         segment_list: defaults to list from JOINT_INDEX_LIST.py containing all
-            coordinate index pairs for all joint segments in skeleton. Can be
-            overwritten for testing purposes.
+            coordinate index pairs for all joint segments in skeleton.
 
     Returns:
         ndarray [N,1], average distance between joints for all segments.
