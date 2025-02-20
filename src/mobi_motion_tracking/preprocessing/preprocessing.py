@@ -50,7 +50,7 @@ def get_average_length(
             overwritten for testing purposes.
 
     Returns:
-        ndarray [X,1], average distance between joints for all segments.
+        ndarray [N,1], average distance between joints for all segments.
 
     Raises:
         IndexError: when a joint index in JOINT_INDEX_LIST is out of range of total
