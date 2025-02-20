@@ -67,8 +67,8 @@ def get_average_length(
         )
 
     for i, segment in enumerate(segment_list):
-        start_indices = segment[:, 0]
-        end_indices = segment[:, 1]
+        start_indices = np.array([segment[0][0], segment[1][0], segment[2][0]])
+        end_indices = np.array([segment[0][1], segment[1][1], segment[2][1]])
 
         start_points = centered_data[:, start_indices]
         end_points = centered_data[:, end_indices]
