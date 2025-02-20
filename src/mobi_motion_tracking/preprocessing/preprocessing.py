@@ -35,8 +35,8 @@ def get_average_length(centered_data: np.ndarray) -> np.ndarray:
 
     This function calculates the average length across all frames of all connecting
     joint segments in the skeleton. The x, y,and z coordinates of specified starting
-    and ending joints based on JOINT_INDEX_LIST are used to calculate the average distance
-    between the two joints for all frames.
+    and ending joints based on JOINT_INDEX_LIST are used to calculate the average
+    distance between the two joints for all frames.
 
     Args:
         centered_data: centered data output from center_joints_to_hip. The
@@ -47,7 +47,6 @@ def get_average_length(centered_data: np.ndarray) -> np.ndarray:
         ndarray [X,1], average distance between joints for all segments.
 
     Raises:
-        ValueError: when JOINT_INDEX_LIST is empty.
         IndexError: when a joint index in JOINT_INDEX_LIST is out of range of total
             number of joints.
     """
