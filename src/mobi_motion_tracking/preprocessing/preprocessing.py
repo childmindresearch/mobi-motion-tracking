@@ -1,7 +1,8 @@
 """Performs preprocessing steps for raw data."""
 
 import numpy as np
-from JOINT_INDEX_LIST import segments
+
+from mobi_motion_tracking.preprocessing.JOINT_INDEX_LIST import segments
 
 
 def center_joints_to_hip(data: np.ndarray) -> np.ndarray:
@@ -30,7 +31,9 @@ def center_joints_to_hip(data: np.ndarray) -> np.ndarray:
     return normalized_data
 
 
-def get_average_length(centered_data: np.ndarray) -> np.ndarray:
+def get_average_length(
+    centered_data: np.ndarray, segment_list: list = segments
+) -> np.ndarray:
     """Calculate the average lengths of all joint segments.
 
     This function calculates the average length across all frames of all connecting
@@ -42,6 +45,9 @@ def get_average_length(centered_data: np.ndarray) -> np.ndarray:
         centered_data: centered data output from center_joints_to_hip. The
             first column in centered data contains frame number, the following 60
             contain joint coordinates.
+        segment_list: defaults to list from JOINT_INDEX_LIST.py containing all
+            coordinate index pairs for all joint segments in skeleton. Can be
+            overwritten for testing purposes.
 
     Returns:
         ndarray [X,1], average distance between joints for all segments.
@@ -50,17 +56,17 @@ def get_average_length(centered_data: np.ndarray) -> np.ndarray:
         IndexError: when a joint index in JOINT_INDEX_LIST is out of range of total
             number of joints.
     """
-    num_segments = len(segments)
+    num_segments = len(segment_list)
     num_joint_coordinates = centered_data.shape[1]
     all_distances = np.zeros((centered_data.shape[0], num_segments))
 
-    if np.any(np.array(segments) >= num_joint_coordinates):
+    if np.any(np.array(segment_list) >= num_joint_coordinates):
         raise IndexError(
             "Incorrect JOINT_INDEX_LIST.py. Joint index in \
                          JOINT_INDEX_LIST.segments is out of range for data."
         )
 
-    for i, segment in enumerate(segments):
+    for i, segment in enumerate(segment_list):
         start_indices = segment[:, 0]
         end_indices = segment[:, 1]
 

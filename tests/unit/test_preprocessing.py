@@ -62,7 +62,7 @@ def test_get_average_length_out_of_range() -> None:
     ]
     with pytest.raises(
         IndexError,
-        match="Incorrect JOINT_INDEX_LIST. Joint index in \
+        match="Incorrect JOINT_INDEX_LIST.py. Joint index in \
                          JOINT_INDEX_LIST.segments is out of range for data.",
     ):
         preprocessing.get_average_length(data, segment_list)
