@@ -1,7 +1,7 @@
 """Performs preprocessing steps for raw data."""
 
+import JOINT_INDEX_LIST
 import numpy as np
-from JOINT_INDEX_LIST import JOINT_INDEX_LIST
 
 
 def center_joints_to_hip(data: np.ndarray) -> np.ndarray:
@@ -30,47 +30,44 @@ def center_joints_to_hip(data: np.ndarray) -> np.ndarray:
     return normalized_data
 
 
-def get_average_length(
-    centered_data: np.ndarray, segment_list: np.ndarray
-) -> np.ndarray:
+def get_average_length(centered_data: np.ndarray) -> np.ndarray:
     """Calculate the average lengths of all joint segments.
 
     This function calculates the average length across all frames of all connecting
     joint segments in the skeleton. The x, y,and z coordinates of specified starting
-    and ending joints based on segment_list are used to calculate the average distance
+    and ending joints based on JOINT_INDEX_LIST are used to calculate the average distance
     between the two joints for all frames.
 
     Args:
         centered_data: centered data output from center_joints_to_hip. The
             first column in centered data contains frame number, the following 60
             contain joint coordinates.
-        segment_list: [N,2], containing starting and ending joint pairs for all
-            skeleton segments. This array should be 0-indexed.
 
     Returns:
         ndarray [X,1], average distance between joints for all segments.
 
     Raises:
-        ValueError: when segment_list is empty.
-        IndexError: when a joint index in segment_list is out of range of total
+        ValueError: when JOINT_INDEX_LIST is empty.
+        IndexError: when a joint index in JOINT_INDEX_LIST is out of range of total
             number of joints.
     """
-    if segment_list.size == 0:
-        raise ValueError("segment_list cannot be empty.")
+    num_segments = len(JOINT_INDEX_LIST.segments)
+    num_joints = centered_data.shape[1]
+    all_distances = np.zeros((centered_data.shape[0], num_segments))
 
-    num_joints = (centered_data.shape[1] - 1) // 3
+    if np.any(np.array(JOINT_INDEX_LIST.segments) >= num_joints):
+        raise IndexError("Joint index in JOINT_INDEX_LIST.segments is out of range.")
 
-    if np.any(segment_list < 0) or np.any(segment_list >= num_joints):
-        raise IndexError("Joint index in segment_list is out of range.")
+    for i, segment in enumerate(JOINT_INDEX_LIST.segments):
+        start_indices = segment[:, 0]
+        end_indices = segment[:, 1]
 
-    starting_joint = 3 * segment_list[:, 0]
-    ending_joint = 3 * segment_list[:, 1]
+        start_points = centered_data[:, start_indices]
+        end_points = centered_data[:, end_indices]
 
-    starting_points = centered_data[:, starting_joint[:, None] + [1, 2, 3]]
-    ending_points = centered_data[:, ending_joint[:, None] + [1, 2, 3]]
+        distances = np.linalg.norm(start_points - end_points, axis=1)
+        all_distances[:, i] = distances
 
-    distances = np.linalg.norm(starting_points - ending_points, axis=2)
-
-    average_distances = distances.mean(axis=0, keepdims=True).T
+    average_distances = all_distances.mean(axis=0, keepdims=True).T
 
     return average_distances
