@@ -2,6 +2,8 @@
 
 import numpy as np
 
+from mobi_motion_tracking.preprocessing.joint_index_list import DEFAULT_JOINT_SEGMENTS
+
 
 def center_joints_to_hip(data: np.ndarray) -> np.ndarray:
     """Center all joints to the hip as origin.
@@ -27,3 +29,53 @@ def center_joints_to_hip(data: np.ndarray) -> np.ndarray:
     normalized_data[:, 3::3] -= z_pelvis[:, np.newaxis]
 
     return normalized_data
+
+
+def get_average_length(
+    centered_data: np.ndarray, segment_list: list = DEFAULT_JOINT_SEGMENTS
+) -> np.ndarray:
+    """Calculate the average lengths of all joint segments.
+
+    This function calculates the average length across all frames of all connecting
+    joint segments in the skeleton. The x, y,and z coordinates of specified starting
+    and ending joints based on a user provided segment_list or default_joint_segments
+    in JOINT_INDEX_LIST are used to calculate the average distance between the two
+    joints for all frames.
+
+    Args:
+        centered_data: centered data output from center_joints_to_hip. The
+            first column in centered data contains frame number, the following 60
+            contain joint coordinates.
+        segment_list: defaults to list from JOINT_INDEX_LIST.py containing all
+            coordinate index pairs for all joint segments in skeleton.
+
+    Returns:
+        ndarray [N,1], average distance between joints for all segments.
+
+    Raises:
+        IndexError: when a joint index in JOINT_INDEX_LIST is out of range of total
+            number of joints.
+    """
+    num_segments = len(segment_list)
+    num_joint_coordinates = centered_data.shape[1]
+    all_distances = np.zeros((centered_data.shape[0], num_segments))
+
+    if np.any(np.array(segment_list) >= num_joint_coordinates):
+        raise IndexError(
+            "Incorrect joint index list. Joint index in \
+                         segment_list is out of range for data."
+        )
+
+    for i, segment in enumerate(segment_list):
+        start_indices = np.array([segment[0][0], segment[1][0], segment[2][0]])
+        end_indices = np.array([segment[0][1], segment[1][1], segment[2][1]])
+
+        start_points = centered_data[:, start_indices]
+        end_points = centered_data[:, end_indices]
+
+        distances = np.linalg.norm(start_points - end_points, axis=1)
+        all_distances[:, i] = distances
+
+    average_distances = all_distances.mean(axis=0, keepdims=True).T
+
+    return average_distances
