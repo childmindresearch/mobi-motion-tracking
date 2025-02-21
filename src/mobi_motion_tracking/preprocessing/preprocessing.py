@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from mobi_motion_tracking.preprocessing.JOINT_INDEX_LIST import default_joint_segments
+from mobi_motion_tracking.preprocessing.joint_index_list import DEFAULT_JOINT_SEGMENTS
 
 
 def center_joints_to_hip(data: np.ndarray) -> np.ndarray:
@@ -32,7 +32,7 @@ def center_joints_to_hip(data: np.ndarray) -> np.ndarray:
 
 
 def get_average_length(
-    centered_data: np.ndarray, segment_list: list = default_joint_segments
+    centered_data: np.ndarray, segment_list: list = DEFAULT_JOINT_SEGMENTS
 ) -> np.ndarray:
     """Calculate the average lengths of all joint segments.
 
@@ -62,8 +62,8 @@ def get_average_length(
 
     if np.any(np.array(segment_list) >= num_joint_coordinates):
         raise IndexError(
-            "Incorrect JOINT_INDEX_LIST.py. Joint index in \
-                         JOINT_INDEX_LIST.segments is out of range for data."
+            "Incorrect joint index list. Joint index in \
+                         segment_list is out of range for data."
         )
 
     for i, segment in enumerate(segment_list):

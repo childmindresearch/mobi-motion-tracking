@@ -1,6 +1,6 @@
 """File containing all joint segment indices."""
 
-default_joint_segments = [
+DEFAULT_JOINT_SEGMENTS = [
     [(1, 43), (2, 44), (3, 45)],
     [(1, 52), (2, 53), (3, 54)],
     [(1, 4), (2, 5), (3, 6)],
