@@ -79,3 +79,54 @@ def get_average_length(
     average_distances = all_distances.mean(axis=0, keepdims=True).T
 
     return average_distances
+
+
+def normalize_segments(
+    centered_data: np.ndarray,
+    average_lengths: np.ndarray,
+    segment_list: list = DEFAULT_JOINT_SEGMENTS,
+) -> np.ndarray:
+    """Normalize skeleton segments to maintain consistent bone lengths across frames.
+
+    This function processes a motion sequence by adjusting the length of each skeleton
+    segment to match the target lengths of the gold standard, while preserving the
+    starting joint positions. The x, y, and z coordinates of specified starting
+    and ending joints based on a user provided segment_list or default_joint_segments
+    in JOINT_INDEX_LIST are used.
+
+    Args:
+        centered_data: centered data output from center_joints_to_hip. The
+            first column in centered data contains frame number, the following 60
+            contain joint coordinates.
+        segment_list: defaults to list from JOINT_INDEX_LIST.py containing all
+            coordinate index pairs for all joint segments in skeleton.
+        average_lengths: Array of shape (num_segments,) containing target lengths
+            for each skeleton segment.
+
+    Returns:
+        np.ndarray: Normalized motion data with consistent bone lengths, same shape as
+            centered_data.
+    """
+    normalized_data = centered_data.copy()
+
+    for frame in range(centered_data.shape[0]):
+        for i, segment in enumerate(segment_list):
+            start_indices = np.array([segment[0][0], segment[1][0], segment[2][0]])
+            end_indices = np.array([segment[0][1], segment[1][1], segment[2][1]])
+
+            start_point = centered_data[frame, start_indices].T
+            end_point = centered_data[frame, end_indices].T
+
+            segment_vector = end_point - start_point
+
+            scaled_segment_vector = (
+                average_lengths[i] / np.linalg.norm(segment_vector)
+            ) * segment_vector
+
+            fixed_start_point = normalized_data[frame, start_indices].T
+
+            new_end_point = fixed_start_point + scaled_segment_vector
+
+            normalized_data[frame, end_indices] = new_end_point.T
+
+    return normalized_data
