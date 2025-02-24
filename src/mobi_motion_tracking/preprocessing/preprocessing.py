@@ -106,8 +106,17 @@ def normalize_segments(
     Returns:
         np.ndarray: Normalized motion data with consistent bone lengths, same shape as
             centered_data.
+
+    Raises:
+        ValueError: when length of segment_list and length of average_lengths do not
+            match.
     """
     normalized_data = centered_data.copy()
+
+    if len(segment_list) != len(average_lengths):
+        raise ValueError(
+            "Length of segment_list must match the length of average_lengths."
+        )
 
     for frame in range(centered_data.shape[0]):
         for i, segment in enumerate(segment_list):
