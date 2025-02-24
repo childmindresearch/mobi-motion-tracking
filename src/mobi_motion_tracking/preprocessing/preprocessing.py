@@ -98,10 +98,10 @@ def normalize_segments(
         centered_data: centered data output from center_joints_to_hip. The
             first column in centered data contains frame number, the following 60
             contain joint coordinates.
+        average_lengths: output from get_average_length. Array of shape
+            (len(segment_list), 1) containing target lengths for each skeleton segment.
         segment_list: defaults to list from JOINT_INDEX_LIST.py containing all
             coordinate index pairs for all joint segments in skeleton.
-        average_lengths: Array of shape (num_segments,) containing target lengths
-            for each skeleton segment.
 
     Returns:
         np.ndarray: Normalized motion data with consistent bone lengths, same shape as
