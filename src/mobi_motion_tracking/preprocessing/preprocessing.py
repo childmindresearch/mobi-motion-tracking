@@ -114,10 +114,7 @@ def normalize_segments(
     normalized_data = centered_data.copy()
 
     if len(segment_list) != len(average_lengths):
-        raise ValueError(
-            "Length of segment_list must match the \
-                length of average_lengths."
-        )
+        raise ValueError("Mismatch in shape for segment_list and average_lengths.")
 
     for frame in range(centered_data.shape[0]):
         for i, segment in enumerate(segment_list):

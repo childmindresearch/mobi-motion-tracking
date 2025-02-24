@@ -158,8 +158,6 @@ def test_normalize_segments_value_error() -> None:
     data = np.zeros((1, 61), dtype=float)
     average_lengths = np.ones((10, 1))
     with pytest.raises(
-        ValueError,
-        match="Length of segment_list must match the \
-                       length of average_lengths.",
+        ValueError, match="Mismatch in shape for segment_list and average_lengths."
     ):
         preprocessing.normalize_segments(data, average_lengths)
