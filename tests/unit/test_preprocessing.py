@@ -118,3 +118,34 @@ def test_normalize_segments_good_with_dummy_data() -> None:
         {normalized_data.shape}"
     )
     assert isinstance(normalized_data, np.ndarray), "Output should be a NumPy array."
+
+
+def test_normalize_segments_good_with_default() -> None:
+    """Test that the normalize segments function calculates the expected value."""
+    data = np.zeros((1, 61), dtype=float)
+    data[:, 4:] = np.repeat(np.arange(1, (61 - 4) // 3 + 1), 3)
+    average_lengths = np.ones((20, 1)) * np.sqrt(3)
+    expected_output = np.concatenate(
+        [
+            [0],
+            np.repeat([0, 1, 2, 3], 3),
+            np.tile(np.repeat([4, 5], 3), 2),
+            np.repeat([6, 7], 3),
+            np.repeat([4, 5, 6, 7], 3),
+            np.tile(np.repeat([1, 2, 3], 3), 2),
+        ],
+        dtype=float,
+    )
+    expected_output = expected_output.reshape((1, 61))
+
+    normalized_data = preprocessing.normalize_segments(data, average_lengths)
+
+    assert np.array_equal(normalized_data, expected_output), (
+        f"Calculated data {normalized_data} does not match expected values \
+            {expected_output}."
+    )
+    assert normalized_data.shape == (1, 61), (
+        f"Expected shape (1, 61), but got \
+        {normalized_data.shape}"
+    )
+    assert isinstance(normalized_data, np.ndarray), "Output should be a NumPy array."
