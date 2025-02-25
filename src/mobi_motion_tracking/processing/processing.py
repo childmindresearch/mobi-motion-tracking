@@ -29,7 +29,7 @@ def dynamic_time_warping(
     """
     if np.array_equal(preprocessed_target_data, preprocessed_experimental_data):
         raise ValueError(
-            "Target and experimental data are identical. DTW is not needed."
+            "Target and experimental data are identical. Check input sequences."
         )
 
     distance, paths = dtw.warping_paths(

@@ -55,25 +55,25 @@ def test_dtw_good() -> None:
     )
 
 
-def test_dtw_empty_warping_path() -> None:
-    """Test that the dtw function when the DTW warping path is empty."""
-    preprocessed_target_data = np.array([[]])
-    preprocessed_experimental_data = np.array([[0]])
-    with pytest.raises(
-        ValueError, match="DTW warping path is empty. Check input sequences."
-    ):
-        processing.dynamic_time_warping(
-            preprocessed_target_data, preprocessed_experimental_data
-        )
-
-
 def test_dtw_identical_sequences() -> None:
     """Test that the dtw function when target and experimental sequences are equal."""
     preprocessed_target_data = np.array([[0, 1, 2]])
     preprocessed_experimental_data = np.array([[0, 1, 2]])
     with pytest.raises(
         ValueError,
-        match="Target and experimental data are identical. DTW is not needed.",
+        match="Target and experimental data are identical. Check input sequences.",
+    ):
+        processing.dynamic_time_warping(
+            preprocessed_target_data, preprocessed_experimental_data
+        )
+
+
+def test_dtw_empty_warping_path() -> None:
+    """Test that the dtw function when the DTW warping path is empty."""
+    preprocessed_target_data = np.array([[]])
+    preprocessed_experimental_data = np.array([[0]])
+    with pytest.raises(
+        ValueError, match="DTW warping path is empty. Check input sequences."
     ):
         processing.dynamic_time_warping(
             preprocessed_target_data, preprocessed_experimental_data
