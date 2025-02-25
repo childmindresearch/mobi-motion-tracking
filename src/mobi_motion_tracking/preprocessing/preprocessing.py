@@ -121,19 +121,18 @@ def normalize_segments(
             start_indices = np.array([segment[0][0], segment[1][0], segment[2][0]])
             end_indices = np.array([segment[0][1], segment[1][1], segment[2][1]])
 
-            start_point = centered_data[frame, start_indices].T
-            end_point = centered_data[frame, end_indices].T
-
-            segment_vector = end_point - start_point
+            segment_vector = (
+                centered_data[frame, end_indices] - centered_data[frame, start_indices]
+            )
 
             scaled_segment_vector = (
                 average_lengths[i] / np.linalg.norm(segment_vector)
             ) * segment_vector
 
-            fixed_start_point = normalized_data[frame, start_indices].T
+            new_end_point = (
+                normalized_data[frame, start_indices] + scaled_segment_vector
+            )
 
-            new_end_point = fixed_start_point + scaled_segment_vector
-
-            normalized_data[frame, end_indices] = new_end_point.T
+            normalized_data[frame, end_indices] = new_end_point
 
     return normalized_data
