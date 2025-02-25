@@ -6,7 +6,7 @@ from dtaidistance import dtw
 
 def dynamic_time_warping(
     preprocessed_target_data: np.ndarray, preprocessed_experimental_data: np.ndarray
-) -> float | np.ndarray | np.ndarray:
+) -> tuple[float, np.ndarray, np.ndarray]:
     """Perform dynamic time warping.
 
     This function calculates the cumulative distance and warping paths between the
