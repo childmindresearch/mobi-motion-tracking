@@ -44,10 +44,10 @@ def get_average_length(
 
     Args:
         centered_data: centered data output from center_joints_to_hip. The
-            first column in centered data contains frame number, the following 60
+            first column in centered data contains frame number, the following columns
             contain joint coordinates.
-        segment_list: defaults to list from JOINT_INDEX_LIST.py containing all
-            coordinate index pairs for all joint segments in skeleton.
+        segment_list: List containing all coordinate index pairs for all joint segments
+            in skeleton whose lengths will be normalized. Defaults to JOINT_INDEX_LIST.
 
     Returns:
         ndarray [N,1], average distance between joints for all segments.
@@ -96,12 +96,12 @@ def normalize_segments(
 
     Args:
         centered_data: centered data output from center_joints_to_hip. The
-            first column in centered data contains frame number, the following 60
+            first column in centered data contains frame number, the following columns
             contain joint coordinates.
-        average_lengths: output from get_average_length. Array of shape
-            (len(segment_list), 1) containing target lengths for each skeleton segment.
-        segment_list: defaults to list from JOINT_INDEX_LIST.py containing all
-            coordinate index pairs for all joint segments in skeleton.
+        average_lengths: Array of shape (len(segment_list), 1) containing target
+            lengths for each skeleton segment.
+        segment_list: List containing all coordinate index pairs for all joint segments
+            in skeleton whose lengths will be normalized. Defaults to JOINT_INDEX_LIST.
 
     Returns:
         np.ndarray: Normalized motion data with consistent bone lengths, same shape as
@@ -110,6 +110,8 @@ def normalize_segments(
     Raises:
         ValueError: when length of segment_list and length of average_lengths do not
             match.
+        ValueError: when the number of columns in centered data does not correlate to
+            the length of segment_list or length of average_lengths.
     """
     normalized_data = centered_data.copy()
 
@@ -136,10 +138,7 @@ def normalize_segments(
                 average_lengths[i] / np.linalg.norm(segment_vector)
             ) * segment_vector
 
-            new_end_point = (
+            normalized_data[frame, end_indices] = (
                 normalized_data[frame, start_indices] + scaled_segment_vector
             )
-
-            normalized_data[frame, end_indices] = new_end_point
-
     return normalized_data
