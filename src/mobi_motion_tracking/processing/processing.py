@@ -1,6 +1,8 @@
 """Functions for calculating similarity metrics on preprocessed data."""
 
 import numpy as np
+from fastdtw import fastdtw
+from scipy.spatial.distance import euclidean
 
 
 def dynamic_time_warping(
@@ -22,3 +24,13 @@ def dynamic_time_warping(
         target_path: np.ndarray, warping path for preprocessed target data.
         experimental_path: np.ndarray, warping path for preprocessed experimental data.
     """
+    distance, path = fastdtw(
+        preprocessed_target_data[:, 4:],
+        preprocessed_experimental_data[:, 4:],
+        dist=euclidean,
+    )
+    target_path, experimental_path = zip(*path)
+    target_path = np.array(target_path)
+    experimental_path = np.array(experimental_path)
+
+    return distance, target_path, experimental_path
