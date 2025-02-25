@@ -4,3 +4,40 @@ import numpy as np
 import pytest
 
 from mobi_motion_tracking.processing import processing
+
+
+def test_dtw_good() -> None:
+    """Test that the dynamic time warping funciton extracts correct known values."""
+    target = np.array([[1], [2], [3]])
+    experimental = np.array([[1], [2], [2], [3]])
+
+    expected_target_path = np.array([0, 1, 1, 2])
+    expected_experimental_path = np.array([0, 1, 2, 3])
+    expected_distance = 0
+
+    distance, target_path, experimental_path = processing.dynamic_time_warping(
+        target, experimental
+    )
+
+    assert distance == expected_distance, (
+        f"Calculated distance {distance} does not \
+        match expected output {expected_distance}."
+    )
+    assert np.array_equal(target_path, expected_target_path), (
+        f"Calculated target path \
+        {target_path} does not match expected output {expected_target_path}."
+    )
+    assert np.array_equal(experimental_path, expected_experimental_path), (
+        f"Calculated \
+        experimental path {experimental_path} does not match expected output \
+            {expected_experimental_path}."
+    )
+    assert isinstance(distance, float), "Ouput distance should be a float."
+    assert isinstance(target_path, np.ndarray), (
+        "Output target path should be a NumPy \
+        array."
+    )
+    assert isinstance(experimental_path, np.ndarray), (
+        "Output experimental path should \
+        be a NumPy array."
+    )
