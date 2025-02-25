@@ -12,8 +12,7 @@ python = "~3.11"
 pandas = "^2.2.3"
 pytest = "^8.3.4"
 openpyxl = "^3.1.5"
-fastdtw = "^0.3.4"
-scipy = "^1.15.2"
+dtaidistance = "^2.3.13"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"

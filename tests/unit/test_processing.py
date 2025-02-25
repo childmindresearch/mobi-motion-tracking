@@ -1,22 +1,33 @@
 """Test processing.py functions."""
 
 import numpy as np
-import pytest
 
 from mobi_motion_tracking.processing import processing
 
 
 def test_dtw_good() -> None:
     """Test that the dynamic time warping funciton extracts correct known values."""
-    target = np.array([[1], [2], [3]])
-    experimental = np.array([[1], [2], [2], [3]])
+    preprocessed_target_data = np.array([
+        [0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 2],
+        [0, 0, 0, 0, 3],
+        [0, 0, 0, 0, 4],
+    ])
 
-    expected_target_path = np.array([0, 1, 1, 2])
-    expected_experimental_path = np.array([0, 1, 2, 3])
+    preprocessed_experimental_data = np.array([
+        [0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 2],
+        [0, 0, 0, 0, 3],
+        [0, 0, 0, 0, 4],
+    ])
+
+    expected_target_path = np.array([0, 0, 1, 2, 3])
+    expected_experimental_path = np.array([0, 1, 2, 3, 4])
     expected_distance = 0
 
     distance, target_path, experimental_path = processing.dynamic_time_warping(
-        target, experimental
+        preprocessed_target_data, preprocessed_experimental_data
     )
 
     assert distance == expected_distance, (
