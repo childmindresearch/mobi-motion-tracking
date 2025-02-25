@@ -116,6 +116,13 @@ def normalize_segments(
     if len(segment_list) != len(average_lengths):
         raise ValueError("Mismatch in shape for segment_list and average_lengths.")
 
+    if (centered_data.shape[1] != 3 * len(segment_list) + 4) or (
+        centered_data.shape[1] != 3 * len(average_lengths) + 4
+    ):
+        raise ValueError(
+            "The shape of centered_data does not match the expected dimensions."
+        )
+
     for frame in range(centered_data.shape[0]):
         for i, segment in enumerate(segment_list):
             start_indices = np.array([segment[0][0], segment[1][0], segment[2][0]])
