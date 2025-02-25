@@ -22,13 +22,25 @@ def dynamic_time_warping(
         distance: float, cumulative distance between experimental and target.
         target_path: np.ndarray, warping path for preprocessed target data.
         experimental_path: np.ndarray, warping path for preprocessed experimental data.
+
+    Raises:
+        ValueError: if the input target data and experimetnal data are identical.
+        ValueError: if path returns empty.
     """
+    if np.array_equal(preprocessed_target_data, preprocessed_experimental_data):
+        raise ValueError(
+            "Target and experimental data are identical. DTW is not needed."
+        )
+
     distance, paths = dtw.warping_paths(
         preprocessed_target_data[:, 4:].flatten(),
         preprocessed_experimental_data[:, 4:].flatten(),
     )
 
     path = dtw.best_path(paths)
+
+    if path is None or len(path) == 0:
+        raise ValueError("DTW warping path is empty. Check input sequences.")
 
     target_path = np.array([p[0] for p in path])
     experimental_path = np.array([p[1] for p in path])
