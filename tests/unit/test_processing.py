@@ -29,7 +29,7 @@ def test_dtw_good() -> None:
 
     assert (
         output.metrics["distance"] == expected_distance
-    ), f"Calculated distance {output.distance} does not \
+    ), f"Calculated distance {output.metrics['distance']} does not \
         match expected output {expected_distance}."
     assert np.array_equal(
         output.metrics["target_path"], expected_target_path
@@ -76,7 +76,7 @@ def test_dtw_identical_sequences() -> None:
 
     assert (
         output.metrics["distance"] == expected_distance
-    ), f"Calculated distance {output.distance} does not \
+    ), f"Calculated distance {output.metrics['distance']} does not \
         match expected output {expected_distance}."
     assert np.array_equal(
         output.metrics["target_path"], expected_target_path
