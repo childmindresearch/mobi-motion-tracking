@@ -1,4 +1,6 @@
-from dataclasses import dataclass, field
+"""Dataclass storing all similarity metrics."""
+
+from dataclasses import field
 from typing import Any, Dict
 
 import numpy as np
