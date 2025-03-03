@@ -1,12 +1,14 @@
 """Dataclass storing all similarity metrics."""
 
+from typing import Any
+
 import numpy as np
 
 
 class SimilarityMetrics:
     """Stores similarity metrics between two time-series sequences."""
 
-    def __init__(self, method: str, metrics: dict[str, list]) -> None:
+    def __init__(self, method: str, metrics: dict[str, Any]) -> None:
         """Initialize a SimilarityMetrics instance.
 
         Args:
