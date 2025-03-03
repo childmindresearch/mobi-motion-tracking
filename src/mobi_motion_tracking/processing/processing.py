@@ -2,7 +2,8 @@
 
 import numpy as np
 from dtaidistance import dtw
-from models import SimilarityMetrics
+
+from mobi_motion_tracking.processing import models
 
 
 def dynamic_time_warping(
@@ -27,20 +28,11 @@ def dynamic_time_warping(
 
     Returns:
         SimilarityMetrics: a dataclass which stores the DTW similarity metrics.
-
-    Raises:
-        ValueError: if the input target data and experimetnal data are identical.
-        ValueError: if path returns empty. dtaidistance.dtw.warping_paths() returns an
-            empty path when input data is missing or empty.
     """
     distance, paths = dtw.warping_paths(
         preprocessed_target_data[:, 4:].flatten(),
         preprocessed_experimental_data[:, 4:].flatten(),
     )
-
     path = dtw.best_path(paths)
 
-    if path is None or len(path) == 0:
-        raise ValueError("DTW warping path is empty. Check input sequences.")
-
-    return SimilarityMetrics.from_dtw(distance, path)
+    return models.create_similarity_metrics_from_dtw(distance, path)
