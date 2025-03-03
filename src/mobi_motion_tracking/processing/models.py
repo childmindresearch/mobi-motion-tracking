@@ -6,7 +6,7 @@ import numpy as np
 class SimilarityMetrics:
     """Stores similarity metrics between two time-series sequences."""
 
-    def __init__(self, method: str, metrics: dict[str, any]) -> None:
+    def __init__(self, method: str, metrics: dict[str, list]) -> None:
         """Initialize a SimilarityMetrics instance.
 
         Args:
