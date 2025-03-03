@@ -3,12 +3,12 @@
 import numpy as np
 from dtaidistance import dtw
 
-from mobi_motion_tracking.processing.models import SimilarityMetrics
+from mobi_motion_tracking.processing import models
 
 
 def dynamic_time_warping(
     preprocessed_target_data: np.ndarray, preprocessed_experimental_data: np.ndarray
-) -> SimilarityMetrics:
+) -> models.SimilarityMetrics:
     """Perform dynamic time warping.
 
     This function calculates the cumulative distance and warping paths between the
@@ -35,4 +35,4 @@ def dynamic_time_warping(
     )
     path = dtw.best_path(paths)
 
-    return SimilarityMetrics.from_dtw(distance=distance, path=path)
+    return models.SimilarityMetrics.from_dtw(distance=distance, path=path)
