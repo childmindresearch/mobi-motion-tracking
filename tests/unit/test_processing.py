@@ -12,13 +12,11 @@ def test_dtw_good() -> None:
             [0, 0, 0, 0, 0, 2, 4],
         ]
     )
-
     preprocessed_experimental_data = np.array(
         [
             [0, 0, 0, 0, 1, 3, 5],
         ]
     )
-
     expected_target_path = np.array([0, 1, 2])
     expected_experimental_path = np.array([0, 1, 2])
     expected_distance = np.sqrt(3)
@@ -59,15 +57,11 @@ def test_dtw_identical_sequences() -> None:
             [0, 0, 0, 0, 1, 2, 3],
         ]
     )
-
     preprocessed_experimental_data = np.array(
         [
             [0, 0, 0, 0, 1, 2, 3],
         ]
     )
-
-    expected_target_path = np.array([0, 1, 2])
-    expected_experimental_path = np.array([0, 1, 2])
     expected_distance = 0.0
 
     output = similarity_functions.dynamic_time_warping(
@@ -79,14 +73,6 @@ def test_dtw_identical_sequences() -> None:
     ), f"Calculated distance {output.metrics['distance']} does not \
         match expected output {expected_distance}."
     assert np.array_equal(
-        output.metrics["target_path"], expected_target_path
-    ), f"Calculated target path {output.metrics['target_path']} does not match \
-            expected output {expected_target_path}."
-    assert np.array_equal(
-        output.metrics["experimental_path"], expected_experimental_path
-    ), f"Calculated experimental path {output.metrics['experimental_path']} \
-            does not match expected output {expected_experimental_path}."
-    assert np.array_equal(
         output.metrics["experimental_path"], output.metrics["target_path"]
     ), f"Calculated experimental path {output.metrics['experimental_path']} and \
-            calculated target path {expected_experimental_path} are not equal."
+            calculated target path {output.metrics['target_path']} are not equal."
