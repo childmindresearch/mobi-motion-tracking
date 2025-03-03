@@ -6,26 +6,23 @@ import pytest
 from mobi_motion_tracking.processing import processing
 
 
+# change below to check for dist of nonzero and change input data to be group of 3
 def test_dtw_good() -> None:
     """Test that the dynamic time warping funciton extracts correct known values."""
-    preprocessed_target_data = np.array(
-        [
-            [0, 0, 0, 0, 1],
-            [0, 0, 0, 0, 2],
-            [0, 0, 0, 0, 3],
-            [0, 0, 0, 0, 4],
-        ]
-    )
+    preprocessed_target_data = np.array([
+        [0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 2],
+        [0, 0, 0, 0, 3],
+        [0, 0, 0, 0, 4],
+    ])
 
-    preprocessed_experimental_data = np.array(
-        [
-            [0, 0, 0, 0, 1],
-            [0, 0, 0, 0, 1],
-            [0, 0, 0, 0, 2],
-            [0, 0, 0, 0, 3],
-            [0, 0, 0, 0, 4],
-        ]
-    )
+    preprocessed_experimental_data = np.array([
+        [0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 2],
+        [0, 0, 0, 0, 3],
+        [0, 0, 0, 0, 4],
+    ])
 
     expected_target_path = np.array([0, 0, 1, 2, 3])
     expected_experimental_path = np.array([0, 1, 2, 3, 4])
@@ -35,20 +32,31 @@ def test_dtw_good() -> None:
         preprocessed_target_data, preprocessed_experimental_data
     )
 
-    assert distance == expected_distance, f"Calculated distance {distance} does not \
+    assert distance == expected_distance, (
+        f"Calculated distance {distance} does not \
         match expected output {expected_distance}."
-    assert np.array_equal(target_path, expected_target_path), f"Calculated target path \
+    )
+    assert np.array_equal(target_path, expected_target_path), (
+        f"Calculated target path \
         {target_path} does not match expected output {expected_target_path}."
-    assert np.array_equal(experimental_path, expected_experimental_path), f"Calculated \
+    )
+    assert np.array_equal(experimental_path, expected_experimental_path), (
+        f"Calculated \
         experimental path {experimental_path} does not match expected output \
             {expected_experimental_path}."
+    )
     assert isinstance(distance, float), "Ouput distance should be a float."
-    assert isinstance(target_path, np.ndarray), "Output target path should be a NumPy \
+    assert isinstance(target_path, np.ndarray), (
+        "Output target path should be a NumPy \
         array."
-    assert isinstance(experimental_path, np.ndarray), "Output experimental path should \
+    )
+    assert isinstance(experimental_path, np.ndarray), (
+        "Output experimental path should \
         be a NumPy array."
+    )
 
 
+# change below to check for distance of 0
 def test_dtw_identical_sequences() -> None:
     """Test that the dtw function when target and experimental sequences are equal."""
     preprocessed_target_data = np.array([[0, 1, 2]])

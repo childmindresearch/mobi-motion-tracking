@@ -4,6 +4,7 @@ import numpy as np
 from dtaidistance import dtw
 
 
+# explain data input shape to explain for 4:
 def dynamic_time_warping(
     preprocessed_target_data: np.ndarray, preprocessed_experimental_data: np.ndarray
 ) -> tuple[float, np.ndarray, np.ndarray]:
@@ -25,13 +26,9 @@ def dynamic_time_warping(
 
     Raises:
         ValueError: if the input target data and experimetnal data are identical.
-        ValueError: if path returns empty.
+        ValueError: if path returns empty. dtaidistance.dtw.warping_paths() returns an
+            empty path when input data is missing or empty.
     """
-    if np.array_equal(preprocessed_target_data, preprocessed_experimental_data):
-        raise ValueError(
-            "Target and experimental data are identical. Check input sequences."
-        )
-
     distance, paths = dtw.warping_paths(
         preprocessed_target_data[:, 4:].flatten(),
         preprocessed_experimental_data[:, 4:].flatten(),
@@ -46,3 +43,6 @@ def dynamic_time_warping(
     experimental_path = np.array([p[1] for p in path])
 
     return distance, target_path, experimental_path
+
+
+# build out dataclass to return
