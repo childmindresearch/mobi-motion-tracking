@@ -33,6 +33,8 @@ def dynamic_time_warping(
         preprocessed_target_data[:, 4:].flatten(),
         preprocessed_experimental_data[:, 4:].flatten(),
     )
-    path = dtw.best_path(paths)
+    warping_path = dtw.best_path(paths)
 
-    return models.SimilarityMetrics.from_dtw(distance=distance, path=path)
+    return models.SimilarityMetrics.from_dtw(
+        distance=distance, warping_path=warping_path
+    )
