@@ -1,5 +1,7 @@
 """Dataclass storing all similarity metrics."""
 
+import os
+import pathlib
 from dataclasses import dataclass, field
 from typing import Any, Dict
 
@@ -40,3 +42,42 @@ class SimilarityMetrics:
                 "experimental_path": np.array([p[1] for p in warping_path]),
             },
         )
+
+
+@dataclass
+class Metadata:
+    """Stores relevant participant information.
+
+    Attributes:
+        participant_ID: integer value unique to every participant.
+        sequence: integer value associated with each iteration of a test.
+    """
+
+    participant_ID: str
+    sequence_sheetname: str
+
+    def get_metadata(subject_path: pathlib.Path, sequence: int) -> "Metadata":
+        """Strip path name for participant ID and create sequence sheet name.
+
+        This function strips the basename without the file extension per
+        participant to extract each participant ID and saves the sequence (int)
+        as a string with the preface 'seq' for the sheet name.
+
+        Args:
+            subject_path: Path, full filepath per participant.
+            sequence: int, sequence number.
+
+        Returns:
+            Metadata: Dataclass with participant_ID and sequence.
+
+        Raises:
+            ValueError: subject_file named incorrectly.
+        """
+        participant_ID = os.path.splitext(os.path.basename(subject_path))[0]
+
+        if not participant_ID.isdigit():
+            raise ValueError("The participant file is named incorrectly.")
+
+        sequence_str = f"seq{sequence}"
+
+        return Metadata(participant_ID=participant_ID, sequence_sheetname=sequence_str)
