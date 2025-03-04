@@ -1,4 +1,4 @@
-"""Test processing.py functions."""
+"""Test similarity_functions.py functions."""
 
 import numpy as np
 
