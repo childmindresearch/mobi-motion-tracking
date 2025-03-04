@@ -3,7 +3,7 @@
 import numpy as np
 from dtaidistance import dtw
 
-from mobi_motion_tracking.processing import models
+from mobi_motion_tracking.core import models
 
 
 def dynamic_time_warping(
