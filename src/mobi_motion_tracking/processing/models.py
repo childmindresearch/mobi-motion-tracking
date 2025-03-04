@@ -10,9 +10,10 @@ import numpy as np
 class SimilarityMetrics:
     """Stores similarity metrics between two time-series sequences.
 
-    The method attribute contains the name of the similarity function used.
-    The metrics attribute is a string containing speciifc outputs for each
-    similarity function.
+    Attributes:
+        method: a string containing the name of the similarity function used.
+        metrics a list containing speciifc outputs for each
+            similarity function.
     """
 
     method: str
