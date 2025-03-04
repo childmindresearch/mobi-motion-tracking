@@ -3,7 +3,6 @@
 import numpy as np
 from dtaidistance import dtw
 
-14-task-write-get_metadata-function
 from mobi_motion_tracking.core import models
 
 
