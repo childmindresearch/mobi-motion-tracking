@@ -56,7 +56,8 @@ class Metadata:
     participant_ID: str
     sequence_sheetname: str
 
-    def get_metadata(subject_path: pathlib.Path, sequence: int) -> "Metadata":
+    @classmethod
+    def get_metadata(cls, subject_path: pathlib.Path, sequence: int) -> "Metadata":
         """Strip path name for participant ID and create sequence sheet name.
 
         This function strips the basename without the file extension per
@@ -80,4 +81,4 @@ class Metadata:
 
         sequence_str = f"seq{sequence}"
 
-        return Metadata(participant_ID=participant_ID, sequence_sheetname=sequence_str)
+        return cls(participant_ID=participant_ID, sequence_sheetname=sequence_str)
