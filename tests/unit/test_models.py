@@ -1,4 +1,4 @@
-"""Test organizer.py functions."""
+"""Test models.py functions."""
 
 import pathlib
 
@@ -20,13 +20,13 @@ def test_get_metadata_good() -> None:
 
     metadata = models.Metadata.get_metadata(pathlib.Path("/dummy/path/100.xlsx"), 1)
 
-    assert isinstance(
-        metadata.participant_ID, str
-    ), "participant_ID should be a string."
+    assert isinstance(metadata.participant_ID, str), (
+        "participant_ID should be a string."
+    )
     assert isinstance(metadata.sequence_sheetname, str), "sequence should be a string."
-    assert (
-        expected_ID == metadata.participant_ID
-    ), "extracted ID does not match expected value."
-    assert (
-        expected_seq == metadata.sequence_sheetname
-    ), "extracted sequence does not match expected value."
+    assert expected_ID == metadata.participant_ID, (
+        "extracted ID does not match expected value."
+    )
+    assert expected_seq == metadata.sequence_sheetname, (
+        "extracted sequence does not match expected value."
+    )
