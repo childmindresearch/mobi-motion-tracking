@@ -1,6 +1,5 @@
 """Dataclass storing all similarity metrics."""
 
-import os
 import pathlib
 from dataclasses import dataclass, field
 from typing import Any, Dict
