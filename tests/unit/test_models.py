@@ -37,7 +37,6 @@ def test_from_dtw_good() -> None:
     """Test from_dtw works."""
     distance = 1.0
     warping_path = [(0, 1), (2, 3)]
-
     expected_method = "DTW"
     expected_distance = 1.0
     expected_target_path = np.array([0, 2])
@@ -46,6 +45,7 @@ def test_from_dtw_good() -> None:
     similaritymetrics = models.SimilarityMetrics.from_dtw(
         distance=distance, warping_path=warping_path
     )
+    
     assert (
         similaritymetrics.method == expected_method
     ), f"Returned method {similaritymetrics.method} does not equal expected method \
