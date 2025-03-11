@@ -13,8 +13,8 @@ class SimilarityMetrics:
     """Stores similarity metrics between two time-series sequences.
 
     Attributes:
-        method: a string containing the name of the similarity function used.
-        metrics a list containing speciifc outputs for each
+        method: A string containing the name of the similarity function used.
+        metrics A list containing speciifc outputs for each
             similarity function.
     """
 
@@ -49,8 +49,8 @@ class Metadata:
     """Stores relevant participant information.
 
     Attributes:
-        participant_ID: integer value unique to every participant.
-        sequence: integer value associated with each iteration of a test.
+        participant_ID: Integer value unique to every participant.
+        sequence: Integer value associated with each iteration of a test.
     """
 
     participant_ID: str
