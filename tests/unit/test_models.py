@@ -34,7 +34,8 @@ def test_get_metadata_good() -> None:
 
 
 @pytest.mark.parametrize(
-    "distance, warping_path, expected_method, expected_distance, expected_target_path, expected_experimental_path",
+    "distance, warping_path, expected_method, expected_distance, expected_target_path, \
+        expected_experimental_path",
     [
         (1.0, [(0, 1), (2, 3)], "DTW", 1.0, np.array([0, 2]), np.array([1, 3])),
         (2.5, [(1, 2), (3, 4)], "DTW", 2.5, np.array([1, 3]), np.array([2, 4])),
@@ -56,16 +57,20 @@ def test_from_dtw_good(
 
     assert (
         similaritymetrics.method == expected_method
-    ), f"Returned method {similaritymetrics.method} does not equal expected method {expected_method}."
+    ), f"Returned method {similaritymetrics.method} does not equal expected method \
+        {expected_method}."
     assert (
         similaritymetrics.metrics["distance"] == expected_distance
-    ), f"Calculated distance {similaritymetrics.metrics['distance']} does not match expected output {expected_distance}."
+    ), f"Calculated distance {similaritymetrics.metrics['distance']} does not match \
+        expected output {expected_distance}."
     assert np.array_equal(
         similaritymetrics.metrics["target_path"], expected_target_path
-    ), f"Calculated target path {similaritymetrics.metrics['target_path']} does not match expected output {expected_target_path}."
+    ), f"Calculated target path {similaritymetrics.metrics['target_path']} does not \
+        match expected output {expected_target_path}."
     assert np.array_equal(
         similaritymetrics.metrics["experimental_path"], expected_experimental_path
-    ), f"Calculated experimental path {similaritymetrics.metrics['experimental_path']} does not match expected output {expected_experimental_path}."
+    ), f"Calculated experimental path {similaritymetrics.metrics['experimental_path']} \
+        does not match expected output {expected_experimental_path}."
     assert isinstance(
         similaritymetrics.method, str
     ), "Returned method should be a string."
