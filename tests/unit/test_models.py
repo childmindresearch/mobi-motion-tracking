@@ -43,7 +43,7 @@ def test_get_metadata_good() -> None:
 )
 def test_from_dtw_good(
     distance: float,
-    warping_path: np.ndarray,
+    warping_path: list,
     expected_method: str,
     expected_distance: float,
     expected_target_path: np.ndarray,
