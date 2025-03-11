@@ -74,7 +74,7 @@ class Metadata:
         Raises:
             ValueError: subject_file named incorrectly.
         """
-        participant_ID = os.path.splitext(os.path.basename(subject_path))[0]
+        participant_ID = subject_path.stem
 
         if not participant_ID.isdigit():
             raise ValueError("The participant file is named incorrectly.")
