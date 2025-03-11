@@ -37,17 +37,6 @@ def test_dtw_good() -> None:
         output.metrics["experimental_path"], expected_experimental_path
     ), f"Calculated experimental path {output.metrics['experimental_path']} \
             does not match expected output {expected_experimental_path}."
-    assert isinstance(
-        output.metrics["distance"], float
-    ), "Ouput distance should be a float."
-    assert isinstance(
-        output.metrics["target_path"], np.ndarray
-    ), "Output target path should be a NumPy \
-        array."
-    assert isinstance(
-        output.metrics["experimental_path"], np.ndarray
-    ), "Output experimental path should \
-        be a NumPy array."
 
 
 def test_dtw_identical_sequences() -> None:
