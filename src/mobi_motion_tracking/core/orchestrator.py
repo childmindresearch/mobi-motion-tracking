@@ -44,10 +44,12 @@ def run(
                     for f in experimental_path.iterdir()
                     if f.is_file() and f.suffix == ".xlsx"
                 ]
+                output_dir = experimental_path
             else:
                 files = (
                     [experimental_path] if experimental_path.suffix == ".xlsx" else []
                 )
+                output_dir = experimental_path.parent
 
             for filepath in files:
                 subject_metadata = models.Metadata.get_metadata(
@@ -70,7 +72,7 @@ def run(
                     algorithm, centered_gold_data, normalized_subject_data
                 )
                 writers.save_results_to_json(
-                    subject_metadata, similarity_metric, experimental_path
+                    gold_metadata, subject_metadata, similarity_metric, output_dir
                 )
 
     return similarity_metric
