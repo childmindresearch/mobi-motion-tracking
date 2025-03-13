@@ -48,7 +48,7 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
     return cleaned_data
 
 
-def read_sheet(path: Path, sequence: str) -> np.ndarray:
+def read_sheet(path: Path, sequence_sheetname: str) -> np.ndarray:
     """Read data from specific sheet.
 
     Currently motion tracking data for Kinect and Zed are saved into xlsx files.
@@ -71,7 +71,7 @@ def read_sheet(path: Path, sequence: str) -> np.ndarray:
 
     try:
         motion_tracking_data = pd.read_excel(
-            path, sheet_name=sequence, engine="openpyxl"
+            path, sheet_name=sequence_sheetname, engine="openpyxl"
         )
     except ValueError:
         raise ValueError("Error: Sheet name does not exist.")

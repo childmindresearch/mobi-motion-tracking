@@ -30,7 +30,7 @@ def run(
     experimental_path: pathlib.Path,
     sequence: int | list[int],
     algorithm: str,
-) -> models.SimilarityMetrics:
+) -> None:
     """Runs main processing steps on single files, or directories."""
     if isinstance(sequence, list):
         for seq in sequence:
