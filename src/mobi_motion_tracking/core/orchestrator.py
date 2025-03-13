@@ -1,7 +1,6 @@
 """Python based runner."""
 
 import pathlib
-from typing import Tuple
 
 import numpy as np
 
@@ -53,11 +52,9 @@ def run(
                         centered_subject_data = preprocessing.center_joints_to_hip(
                             subject_data
                         )
-
                         gold_average_lengths = preprocessing.get_average_length(
                             centered_gold_data
                         )
-
                         normalized_subject_data = preprocessing.normalize_segments(
                             centered_subject_data, gold_average_lengths
                         )
@@ -76,11 +73,9 @@ def run(
 
                 centered_gold_data = preprocessing.center_joints_to_hip(gold_data)
                 centered_subject_data = preprocessing.center_joints_to_hip(subject_data)
-
                 gold_average_lengths = preprocessing.get_average_length(
                     centered_gold_data
                 )
-
                 normalized_subject_data = preprocessing.normalize_segments(
                     centered_subject_data, gold_average_lengths
                 )
@@ -106,11 +101,9 @@ def run(
                     centered_subject_data = preprocessing.center_joints_to_hip(
                         subject_data
                     )
-
                     gold_average_lengths = preprocessing.get_average_length(
                         centered_gold_data
                     )
-
                     normalized_subject_data = preprocessing.normalize_segments(
                         centered_subject_data, gold_average_lengths
                     )
@@ -127,9 +120,7 @@ def run(
 
             centered_gold_data = preprocessing.center_joints_to_hip(gold_data)
             centered_subject_data = preprocessing.center_joints_to_hip(subject_data)
-
             gold_average_lengths = preprocessing.get_average_length(centered_gold_data)
-
             normalized_subject_data = preprocessing.normalize_segments(
                 centered_subject_data, gold_average_lengths
             )
