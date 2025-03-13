@@ -63,6 +63,6 @@ def run(
                     algorithm, centered_gold_data, normalized_subject_data
                 )
 
-                writers.save_results_to_json(
+                writers.save_results_to_ndjson(
                     gold_metadata, subject_metadata, similarity_metric, output_dir
                 )
