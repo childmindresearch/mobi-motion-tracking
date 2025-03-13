@@ -1,6 +1,5 @@
 """Python based runner."""
 
-import json
 import pathlib
 
 import numpy as np
@@ -52,11 +51,9 @@ def run(
                 output_dir = experimental_path.parent
 
             for filepath in files:
-                subject_metadata = models.Metadata.get_metadata(
-                    experimental_path, sequence
-                )
+                subject_metadata = models.Metadata.get_metadata(filepath, sequence)
                 subject_data = readers.read_sheet(
-                    experimental_path, subject_metadata.sequence_sheetname
+                    filepath, subject_metadata.sequence_sheetname
                 )
 
                 centered_gold_data = preprocessing.center_joints_to_hip(gold_data)
@@ -71,8 +68,7 @@ def run(
                 similarity_metric = run_algorithm(
                     algorithm, centered_gold_data, normalized_subject_data
                 )
+
                 writers.save_results_to_json(
                     gold_metadata, subject_metadata, similarity_metric, output_dir
                 )
-
-    return similarity_metric
