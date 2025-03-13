@@ -1,44 +1,95 @@
 """Python based runner."""
 
 import pathlib
+from typing import Tuple
+
+import numpy as np
 
 from mobi_motion_tracking.core import models
 from mobi_motion_tracking.io.readers import readers
+from mobi_motion_tracking.preprocessing import preprocessing
+from mobi_motion_tracking.processing import similarity_functions
 
 
-def read_subject(path: pathlib.Path, sequence: int | list[int]) -> None:
-    """Runs get_metadata and read_sheet.
-
-    This function checks if the input sequence is a list of integers or a single
-    integer. If sequence is a list, it iterates over each integer in the list and runs
-    get_metadata and read_sheet for each sequence for each subject.
-
-    Args:
-        path: File path for a single subject.
-        sequence: Integer or integers representing each sequence for each subject.
-    """
-    if sequence is list[int]:
-        for seq in sequence:
-            subject_metadata = models.Metadata.get_metadata(path, seq)
-            readers.read_sheet(path, subject_metadata.sequence_sheetname)
-    elif sequence is int:
-        subject_metadata = models.Metadata.get_metadata(path, seq)
-        readers.read_sheet(path, subject_metadata.sequence_sheetname)
-
-
-def read_path(path: pathlib.Path, sequence: int | list[int]) -> None:
-    """Runs read_subject for every file.
-
-    This function checks if the input path is a directory of subject files, or a single
-    subject file. For each subject, read_subject is called.
-
-    Args:
-        path: Directory of subject files or single subject file.
-        sequence: Integer or integers representing each sequence for each subject.
-    """
-    if path.is_dir():
-        for filepath in path.iterdir():
+def read_subject(
+    experimental_path: pathlib.Path, sequence: int
+) -> Tuple[np.ndarray, models.Metadata]:
+    """Read every subject file per sequence."""
+    if experimental_path.is_dir():
+        for filepath in experimental_path.iterdir():
             if filepath.is_file() and filepath.suffix == ".xlsx":
-                read_subject(filepath, sequence)
-    elif path.is_file() and filepath.suffix == ".xlsx":
-        read_subject(path, sequence)
+                subject_metadata = models.Metadata.get_metadata(
+                    experimental_path, sequence
+                )
+                subject_data = readers.read_sheet(
+                    experimental_path, subject_metadata.sequence_sheetname
+                )
+
+    elif experimental_path.is_file() and filepath.suffix == ".xlsx":
+        subject_metadata = models.Metadata.get_metadata(experimental_path, sequence)
+        subject_data = readers.read_sheet(
+            experimental_path, subject_metadata.sequence_sheetname
+        )
+
+    return subject_data, subject_metadata
+
+
+def run_algorithm(
+    algorithm: str,
+    prerocessed_gold_data: np.ndarray,
+    preprocessed_subject_data: np.ndarray,
+) -> models.SimilarityMetrics:
+    """Runs similarity metric algorithm."""
+    if algorithm == "DTW":
+        simililarity_metric = similarity_functions.dynamic_time_warping(
+            prerocessed_gold_data, preprocessed_subject_data
+        )
+
+    return simililarity_metric
+
+
+def run(
+    gold_path: pathlib.Path,
+    experimental_path: pathlib.Path,
+    sequence: int | list[int],
+    algorithm: str,
+) -> models.SimilarityMetrics:
+    """Runs main processing steps on single files, or directories."""
+    if sequence is list:
+        for seq in sequence:
+            gold_metadata = models.Metadata.get_metadata(gold_path, seq)
+            gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
+            subject_data, subject_metadata = read_subject(experimental_path, seq)
+
+            centered_gold_data = preprocessing.center_joints_to_hip(gold_data)
+            centered_subject_data = preprocessing.center_joints_to_hip(subject_data)
+
+            gold_average_lengths = preprocessing.get_average_length(centered_gold_data)
+
+            normalized_subject_data = preprocessing.normalize_segments(
+                centered_subject_data, gold_average_lengths
+            )
+
+            similarity_metric = run_algorithm(
+                algorithm, centered_gold_data, normalized_subject_data
+            )
+
+    elif sequence is int:
+        gold_metadata = models.Metadata.get_metadata(gold_path, seq)
+        gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
+        subject_data, subject_metadata = read_subject(experimental_path, seq)
+
+        centered_gold_data = preprocessing.center_joints_to_hip(gold_data)
+        centered_subject_data = preprocessing.center_joints_to_hip(subject_data)
+
+        gold_average_lengths = preprocessing.get_average_length(centered_gold_data)
+
+        normalized_subject_data = preprocessing.normalize_segments(
+            centered_subject_data, gold_average_lengths
+        )
+
+        similarity_metric = run_algorithm(
+            algorithm, centered_gold_data, normalized_subject_data
+        )
+
+    return similarity_metric
