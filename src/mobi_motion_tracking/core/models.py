@@ -75,8 +75,8 @@ class Metadata:
         """
         participant_ID = subject_path.stem
 
-        if not participant_ID.isdigit():
-            raise ValueError("The participant file is named incorrectly.")
+        if not (participant_ID.isdigit() or "gold" in participant_ID.lower()):
+            raise ValueError("The input file is named incorrectly.")
 
         sequence_str = f"seq{sequence}"
 

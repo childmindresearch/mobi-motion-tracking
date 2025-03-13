@@ -7,6 +7,7 @@ import numpy as np
 
 from mobi_motion_tracking.core import models
 from mobi_motion_tracking.io.readers import readers
+from mobi_motion_tracking.io.writers import writers
 from mobi_motion_tracking.preprocessing import preprocessing
 from mobi_motion_tracking.processing import similarity_functions
 
@@ -67,6 +68,9 @@ def run(
 
                 similarity_metric = run_algorithm(
                     algorithm, centered_gold_data, normalized_subject_data
+                )
+                writers.save_results_to_json(
+                    subject_metadata, similarity_metric, experimental_path
                 )
 
     return similarity_metric
