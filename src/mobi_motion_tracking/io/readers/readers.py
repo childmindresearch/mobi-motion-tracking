@@ -57,7 +57,7 @@ def read_sheet(path: Path, sequence_sheetname: str) -> np.ndarray:
 
     Args:
         path: Path to .xlsx file.
-        sequence: str, determines which sequence is processed.
+        sequence_sheetname: str, determines which sequence is processed.
 
     Raises:
         FileNotFoundError: File path does not exist.

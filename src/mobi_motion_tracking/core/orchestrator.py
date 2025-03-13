@@ -38,16 +38,10 @@ def run(
             gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
 
             if experimental_path.is_dir():
-                files = [
-                    f
-                    for f in experimental_path.iterdir()
-                    if f.is_file() and f.suffix == ".xlsx"
-                ]
+                files = [f for f in experimental_path.iterdir()]
                 output_dir = experimental_path
             else:
-                files = (
-                    [experimental_path] if experimental_path.suffix == ".xlsx" else []
-                )
+                files = [experimental_path]
                 output_dir = experimental_path.parent
 
             for filepath in files:
