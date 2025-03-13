@@ -11,29 +11,6 @@ from mobi_motion_tracking.preprocessing import preprocessing
 from mobi_motion_tracking.processing import similarity_functions
 
 
-def read_subject(
-    experimental_path: pathlib.Path, sequence: int
-) -> Tuple[np.ndarray, models.Metadata]:
-    """Read every subject file per sequence."""
-    if experimental_path.is_dir():
-        for filepath in experimental_path.iterdir():
-            if filepath.is_file() and filepath.suffix == ".xlsx":
-                subject_metadata = models.Metadata.get_metadata(
-                    experimental_path, sequence
-                )
-                subject_data = readers.read_sheet(
-                    experimental_path, subject_metadata.sequence_sheetname
-                )
-
-    elif experimental_path.is_file() and filepath.suffix == ".xlsx":
-        subject_metadata = models.Metadata.get_metadata(experimental_path, sequence)
-        subject_data = readers.read_sheet(
-            experimental_path, subject_metadata.sequence_sheetname
-        )
-
-    return subject_data, subject_metadata
-
-
 def run_algorithm(
     algorithm: str,
     prerocessed_gold_data: np.ndarray,
@@ -59,7 +36,94 @@ def run(
         for seq in sequence:
             gold_metadata = models.Metadata.get_metadata(gold_path, seq)
             gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
-            subject_data, subject_metadata = read_subject(experimental_path, seq)
+
+            if experimental_path.is_dir():
+                for filepath in experimental_path.iterdir():
+                    if filepath.is_file() and filepath.suffix == ".xlsx":
+                        subject_metadata = models.Metadata.get_metadata(
+                            experimental_path, sequence
+                        )
+                        subject_data = readers.read_sheet(
+                            experimental_path, subject_metadata.sequence_sheetname
+                        )
+
+                        centered_gold_data = preprocessing.center_joints_to_hip(
+                            gold_data
+                        )
+                        centered_subject_data = preprocessing.center_joints_to_hip(
+                            subject_data
+                        )
+
+                        gold_average_lengths = preprocessing.get_average_length(
+                            centered_gold_data
+                        )
+
+                        normalized_subject_data = preprocessing.normalize_segments(
+                            centered_subject_data, gold_average_lengths
+                        )
+
+                        similarity_metric = run_algorithm(
+                            algorithm, centered_gold_data, normalized_subject_data
+                        )
+
+            elif experimental_path.is_file() and filepath.suffix == ".xlsx":
+                subject_metadata = models.Metadata.get_metadata(
+                    experimental_path, sequence
+                )
+                subject_data = readers.read_sheet(
+                    experimental_path, subject_metadata.sequence_sheetname
+                )
+
+                centered_gold_data = preprocessing.center_joints_to_hip(gold_data)
+                centered_subject_data = preprocessing.center_joints_to_hip(subject_data)
+
+                gold_average_lengths = preprocessing.get_average_length(
+                    centered_gold_data
+                )
+
+                normalized_subject_data = preprocessing.normalize_segments(
+                    centered_subject_data, gold_average_lengths
+                )
+
+                similarity_metric = run_algorithm(
+                    algorithm, centered_gold_data, normalized_subject_data
+                )
+
+    elif sequence is int:
+        gold_metadata = models.Metadata.get_metadata(gold_path, seq)
+        gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
+        if experimental_path.is_dir():
+            for filepath in experimental_path.iterdir():
+                if filepath.is_file() and filepath.suffix == ".xlsx":
+                    subject_metadata = models.Metadata.get_metadata(
+                        experimental_path, sequence
+                    )
+                    subject_data = readers.read_sheet(
+                        experimental_path, subject_metadata.sequence_sheetname
+                    )
+
+                    centered_gold_data = preprocessing.center_joints_to_hip(gold_data)
+                    centered_subject_data = preprocessing.center_joints_to_hip(
+                        subject_data
+                    )
+
+                    gold_average_lengths = preprocessing.get_average_length(
+                        centered_gold_data
+                    )
+
+                    normalized_subject_data = preprocessing.normalize_segments(
+                        centered_subject_data, gold_average_lengths
+                    )
+
+                    similarity_metric = run_algorithm(
+                        algorithm, centered_gold_data, normalized_subject_data
+                    )
+
+        elif experimental_path.is_file() and filepath.suffix == ".xlsx":
+            subject_metadata = models.Metadata.get_metadata(experimental_path, sequence)
+            subject_data = readers.read_sheet(
+                experimental_path, subject_metadata.sequence_sheetname
+            )
 
             centered_gold_data = preprocessing.center_joints_to_hip(gold_data)
             centered_subject_data = preprocessing.center_joints_to_hip(subject_data)
@@ -73,23 +137,5 @@ def run(
             similarity_metric = run_algorithm(
                 algorithm, centered_gold_data, normalized_subject_data
             )
-
-    elif sequence is int:
-        gold_metadata = models.Metadata.get_metadata(gold_path, seq)
-        gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
-        subject_data, subject_metadata = read_subject(experimental_path, seq)
-
-        centered_gold_data = preprocessing.center_joints_to_hip(gold_data)
-        centered_subject_data = preprocessing.center_joints_to_hip(subject_data)
-
-        gold_average_lengths = preprocessing.get_average_length(centered_gold_data)
-
-        normalized_subject_data = preprocessing.normalize_segments(
-            centered_subject_data, gold_average_lengths
-        )
-
-        similarity_metric = run_algorithm(
-            algorithm, centered_gold_data, normalized_subject_data
-        )
 
     return similarity_metric
