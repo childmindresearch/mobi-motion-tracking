@@ -21,6 +21,8 @@ def run_algorithm(
         simililarity_metric = similarity_functions.dynamic_time_warping(
             prerocessed_gold_data, preprocessed_subject_data
         )
+    else:
+        raise ValueError(f"Unsupported algorithm '{algorithm}'.")
     return simililarity_metric
 
 
