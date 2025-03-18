@@ -7,8 +7,7 @@ import numpy as np
 import pytest
 import pytest_mock
 
-from mobi_motion_tracking.core import models, orchestrator
-from mobi_motion_tracking.io.readers import readers
+from mobi_motion_tracking.core import orchestrator
 
 
 @pytest.fixture
@@ -44,7 +43,7 @@ def mock_dependencies(mocker: pytest_mock.MockerFixture) -> None:
 
 
 def test_run_with_valid_directory(
-    mock_paths: Tuple[pathlib.Path, pathlib.Path], mock_dependencies
+    mock_paths: Tuple[pathlib.Path, pathlib.Path], mock_dependencies: None
 ) -> None:
     """Test run funciton with a valid directory."""
     gold_path, experimental_path = mock_paths
@@ -62,7 +61,7 @@ def test_run_with_valid_directory(
 
 
 def test_run_with_valid_file(
-    mock_paths: Tuple[pathlib.Path, pathlib.Path], mock_dependencies
+    mock_paths: Tuple[pathlib.Path, pathlib.Path], mock_dependencies: None
 ) -> None:
     """Test run function with a valid file."""
     gold_path, experimental_file = mock_paths
