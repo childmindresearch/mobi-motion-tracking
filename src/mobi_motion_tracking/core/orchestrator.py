@@ -46,8 +46,8 @@ def run(
                 output_dir = experimental_path.parent
             else:
                 raise ValueError(
-                    f"Path '{experimental_path}' is neither a file nor a \
-                                 directory."
+                    f"Path '{experimental_path}' is neither a \
+                        file nor a directory."
                 )
 
             for filepath in files:
@@ -111,6 +111,6 @@ def run(
             )
         else:
             raise TypeError(
-                f"Unsupported type: {type(sequence).__name__}. \
-                            Expected list or int."
+                f"Unsupported type: \
+                    {type(sequence).__name__}. Expected list or int."
             )
