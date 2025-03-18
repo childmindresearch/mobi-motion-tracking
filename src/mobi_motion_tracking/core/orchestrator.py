@@ -17,11 +17,10 @@ def run_algorithm(
     preprocessed_subject_data: np.ndarray,
 ) -> models.SimilarityMetrics:
     """Runs similarity metric algorithm."""
-    if algorithm == "DTW":
+    if algorithm.lower() == "dtw":
         simililarity_metric = similarity_functions.dynamic_time_warping(
             prerocessed_gold_data, preprocessed_subject_data
         )
-
     return simililarity_metric
 
 
@@ -40,12 +39,17 @@ def run(
             if experimental_path.is_dir():
                 files = [f for f in experimental_path.iterdir()]
                 output_dir = experimental_path
-            else:
+            elif experimental_path.is_file():
                 files = [experimental_path]
                 output_dir = experimental_path.parent
+            else:
+                raise ValueError(
+                    f"Path '{experimental_path}' is neither a file nor a \
+                                 directory."
+                )
 
             for filepath in files:
-                subject_metadata = models.Metadata.get_metadata(filepath, sequence)
+                subject_metadata = models.Metadata.get_metadata(filepath, seq)
                 subject_data = readers.read_sheet(
                     filepath, subject_metadata.sequence_sheetname
                 )
@@ -66,3 +70,45 @@ def run(
                 writers.save_results_to_ndjson(
                     gold_metadata, subject_metadata, similarity_metric, output_dir
                 )
+
+    elif isinstance(sequence, int):
+        gold_metadata = models.Metadata.get_metadata(gold_path, sequence)
+        gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
+
+        if experimental_path.is_dir():
+            files = [f for f in experimental_path.iterdir()]
+            output_dir = experimental_path
+        elif experimental_path.is_file():
+            files = [experimental_path]
+            output_dir = experimental_path.parent
+        else:
+            raise ValueError(
+                f"Path '{experimental_path}' is neither a file nor a \
+                                directory."
+            )
+
+        for filepath in files:
+            subject_metadata = models.Metadata.get_metadata(filepath, sequence)
+            subject_data = readers.read_sheet(
+                filepath, subject_metadata.sequence_sheetname
+            )
+
+            centered_gold_data = preprocessing.center_joints_to_hip(gold_data)
+            centered_subject_data = preprocessing.center_joints_to_hip(subject_data)
+            gold_average_lengths = preprocessing.get_average_length(centered_gold_data)
+            normalized_subject_data = preprocessing.normalize_segments(
+                centered_subject_data, gold_average_lengths
+            )
+
+            similarity_metric = run_algorithm(
+                algorithm, centered_gold_data, normalized_subject_data
+            )
+
+            writers.save_results_to_ndjson(
+                gold_metadata, subject_metadata, similarity_metric, output_dir
+            )
+        else:
+            raise TypeError(
+                f"Unsupported type: {type(sequence).__name__}. \
+                            Expected list or int."
+            )
