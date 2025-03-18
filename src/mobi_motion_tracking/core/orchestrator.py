@@ -33,7 +33,7 @@ def run(
     algorithm: str,
 ) -> None:
     """Runs main processing steps on single files, or directories."""
-    if isinstance(sequence, list):
+    if sequence is list:
         for seq in sequence:
             gold_metadata = models.Metadata.get_metadata(gold_path, seq)
             gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
@@ -73,7 +73,10 @@ def run(
                     gold_metadata, subject_metadata, similarity_metric, output_dir
                 )
 
-    elif isinstance(sequence, int):
+    elif sequence is int:
+        print(
+            f"Calling get_metadata with gold_path={gold_path} and sequence={sequence}"
+        )
         gold_metadata = models.Metadata.get_metadata(gold_path, sequence)
         gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
 
@@ -109,8 +112,8 @@ def run(
             writers.save_results_to_ndjson(
                 gold_metadata, subject_metadata, similarity_metric, output_dir
             )
-        else:
-            raise TypeError(
-                f"Unsupported type: \
-                    {type(sequence).__name__}. Expected list or int."
-            )
+    else:
+        raise TypeError(
+            f"Unsupported type: \
+                {type(sequence).__name__}. Expected list or int."
+        )

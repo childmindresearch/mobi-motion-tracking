@@ -40,10 +40,14 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
     if start_col < 0 or end_col > data.shape[1]:
         raise IndexError("Column index out of range.")
 
-    cleaned_data = data.iloc[
-        row + 1 :,
-        start_col:end_col,
-    ].to_numpy()
+    cleaned_data = (
+        data.iloc[
+            row + 1 :,
+            start_col:end_col,
+        ]
+        .to_numpy()
+        .astype(np.float64)
+    )
 
     return cleaned_data
 
