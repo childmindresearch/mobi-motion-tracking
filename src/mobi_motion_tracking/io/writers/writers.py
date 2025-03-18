@@ -27,7 +27,6 @@ def save_results_to_ndjson(
 ) -> None:
     """Appends results to a newline-delimited JSON file (NDJSON)."""
     new_entry = {
-        "gold_filename": gold_metadata.participant_ID,
         "participant_ID": subject_metadata.participant_ID,
         "sheetname": subject_metadata.sequence_sheetname,
         "method": similarity_metrics.method,
