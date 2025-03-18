@@ -10,13 +10,13 @@ from mobi_motion_tracking.core import models
 def generate_output_filename(gold_participant_ID: str, output_dir: pathlib.Path) -> str:
     """Generates a unique filename based on gold participant ID and date."""
     date_str = datetime.datetime.now().strftime("%m%d%Y")
-    base_filename = f"results_{gold_participant_ID}_{date_str}"
+    base_filename = f"results_{gold_participant_ID}_{date_str}.ndjson"
+    output_file = pathlib.Path(base_filename)
 
-    counter = 1
-    while (output_dir / f"{base_filename}_{counter:03}.ndjson").exists():
-        counter += 1
+    if not output_file.exists():
+        output_file.touch()
 
-    return f"{base_filename}_{counter:03}.ndjson"
+    return output_file
 
 
 def save_results_to_ndjson(
