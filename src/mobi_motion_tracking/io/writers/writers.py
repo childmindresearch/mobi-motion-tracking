@@ -7,7 +7,9 @@ import pathlib
 from mobi_motion_tracking.core import models
 
 
-def generate_output_filename(gold_participant_ID: str, output_dir: pathlib.Path) -> str:
+def generate_output_filename(
+    gold_participant_ID: str, output_dir: pathlib.Path
+) -> pathlib.Path:
     """Generates a unique filename based on gold participant ID and date."""
     date_str = datetime.datetime.now().strftime("%m%d%Y")
     base_filename = f"results_{gold_participant_ID}_{date_str}.ndjson"
