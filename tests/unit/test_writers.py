@@ -11,7 +11,7 @@ from mobi_motion_tracking.io.writers import writers
 
 
 @pytest.fixture
-def temp_output_dir() -> Generator[pathlib.Path]:
+def temp_output_dir() -> Generator[pathlib.Path, None, None]:
     """Fixture to create and clean up a temporary directory."""
     with tempfile.TemporaryDirectory() as temp_dir:
         yield pathlib.Path(temp_dir)
@@ -25,7 +25,7 @@ def test_correct_filename_generation(temp_output_dir: pathlib.Path) -> None:
 
     result = writers.generate_output_filename(participant_id, temp_output_dir)
 
-    assert result.endswith(expected_filename), (
+    assert result.name == expected_filename, (
         "Resulting filename is assigned \
         incorrectly."
     )
