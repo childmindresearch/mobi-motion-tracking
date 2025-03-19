@@ -13,7 +13,7 @@ def run_file(
     file_path: pathlib.Path,
     gold_path: pathlib.Path,
     output_path: pathlib.Path,
-    sequence: list,
+    sequence: list[int],
     algorithm: str,
 ) -> None:
     """Performs main processing steps for a subject, per sequence."""
@@ -40,14 +40,18 @@ def run_file(
             raise ValueError(f"Unsupported algorithm '{algorithm}'.")
 
         writers.save_results_to_ndjson(
-            gold_metadata, subject_metadata, similarity_metric, output_path
+            gold_metadata,
+            subject_metadata,
+            similarity_metric,
+            output_path,
+            selected_metrics=["distance"],
         )
 
 
 def run(
     experimental_path: pathlib.Path,
     gold_path: pathlib.Path,
-    sequence: list,
+    sequence: list[int],
     algorithm: str,
 ) -> None:
     """Checks if experimental path is a directory or file, calls run_file."""

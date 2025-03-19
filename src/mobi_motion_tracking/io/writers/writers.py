@@ -24,14 +24,21 @@ def save_results_to_ndjson(
     subject_metadata: models.Metadata,
     similarity_metrics: models.SimilarityMetrics,
     output_dir: pathlib.Path,
+    selected_metrics: list[str] = None,
 ) -> None:
-    """Appends results to a newline-delimited JSON file (NDJSON)."""
+    """Appends results to a newline-delimited JSON file (NDJSON) with selected or all similarity metrics."""
     new_entry = {
         "participant_ID": subject_metadata.participant_ID,
         "sheetname": subject_metadata.sequence_sheetname,
         "method": similarity_metrics.method,
-        "metric": similarity_metrics.metrics,
     }
+
+    if selected_metrics is None:
+        selected_metrics = list(similarity_metrics.metrics.keys())
+
+    for metric_key in selected_metrics:
+        if metric_key in similarity_metrics.metrics:
+            new_entry[metric_key] = similarity_metrics.metrics[metric_key]
 
     output_path = generate_output_filename(gold_metadata.participant_ID, output_dir)
 
