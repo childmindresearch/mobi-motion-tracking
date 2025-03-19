@@ -37,8 +37,8 @@ class SimilarityMetrics:
             method="DTW",
             metrics={
                 "distance": distance,
-                "target_path": np.array([p[0] for p in warping_path]),
-                "experimental_path": np.array([p[1] for p in warping_path]),
+                "target_path": ([p[0] for p in warping_path]),
+                "experimental_path": ([p[1] for p in warping_path]),
             },
         )
 
