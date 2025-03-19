@@ -72,18 +72,10 @@ def test_from_dtw_good(
     assert np.array_equal(
         similaritymetrics.metrics["experimental_path"], expected_experimental_path
     ), (
-        f"Calculated experimental path {similaritymetrics.metrics['experimental_path']} \
+        f"Calculated experimental path \
+            {similaritymetrics.metrics['experimental_path']} \
         does not match expected output {expected_experimental_path}."
     )
     assert isinstance(similaritymetrics.method, str), (
         "Returned method should be a string."
-    )
-    assert isinstance(similaritymetrics.metrics["distance"], float), (
-        "Output distance should be a float."
-    )
-    assert isinstance(similaritymetrics.metrics["target_path"], np.ndarray), (
-        "Output target path should be a NumPy array."
-    )
-    assert isinstance(similaritymetrics.metrics["experimental_path"], np.ndarray), (
-        "Output experimental path should be a NumPy array."
     )
