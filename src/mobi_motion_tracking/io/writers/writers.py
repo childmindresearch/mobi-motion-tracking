@@ -13,7 +13,8 @@ def generate_output_filename(
     """Generates a unique filename based on gold participant ID and date."""
     date_str = datetime.datetime.now().strftime("%m%d%Y")
     base_filename = f"results_{gold_participant_ID}_{date_str}.ndjson"
-    output_file = pathlib.Path(base_filename)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_file = output_dir / base_filename
 
     if not output_file.exists():
         output_file.touch()
@@ -39,8 +40,10 @@ def save_results_to_ndjson(
         selected_metrics = list(similarity_metrics.metrics.keys())
 
     for metric_key in selected_metrics:
-        if metric_key in similarity_metrics.metrics:
+        if metric_key in list(similarity_metrics.metrics.keys()):
             new_entry[metric_key] = similarity_metrics.metrics[metric_key]
+        else:
+            raise ValueError("Selected metrics are not eligable for selected method.")
 
     output_path = generate_output_filename(gold_metadata.participant_ID, output_dir)
 

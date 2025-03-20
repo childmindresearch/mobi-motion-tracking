@@ -1,62 +1,87 @@
 """Test writers.py functions."""
 
 import datetime
+import json
 import pathlib
-import tempfile
-from typing import Generator
+from typing import List, Optional
 
 import pytest
 
+from mobi_motion_tracking.core import models
 from mobi_motion_tracking.io.writers import writers
 
 
-@pytest.fixture
-def temp_output_dir() -> Generator[pathlib.Path, None, None]:
-    """Fixture to create and clean up a temporary directory."""
-    with tempfile.TemporaryDirectory() as temp_dir:
-        yield pathlib.Path(temp_dir)
-
-
-def test_correct_filename_generation(temp_output_dir: pathlib.Path) -> None:
-    """Test that the generated filename follows the expected format."""
-    participant_id = "Gold"
+def test_generate_output_filename_good() -> None:
+    """Test that the generated filename follows the expected format and is created."""
+    gold_id = "Gold"
+    output_dir = pathlib.Path("tests/sample_data")
     date_str = datetime.datetime.now().strftime("%m%d%Y")
-    expected_filename = f"results_{participant_id}_{date_str}.ndjson"
+    expected_file = output_dir / f"results_Gold_{date_str}.ndjson"
 
-    result = writers.generate_output_filename(participant_id, temp_output_dir)
+    result = writers.generate_output_filename(gold_id, output_dir)
 
-    assert result.name == expected_filename, (
-        "Resulting filename is assigned \
-        incorrectly."
+    assert result == pathlib.Path(expected_file), (
+        "Generated filename does not match the expected format."
     )
-    assert result.exists(), "Output file was not generated."
+    assert result.exists(), "Output file was not created."
 
 
-def test_existing_file_handling(temp_output_dir: pathlib.Path) -> None:
-    """Test that the function does not overwrite an existing file."""
-    participant_id = "Gold"
-
-    result_path = pathlib.Path(
-        writers.generate_output_filename(participant_id, temp_output_dir)
+@pytest.mark.parametrize(
+    "selected_metrics, expected_keys",
+    [
+        (["metric1"], {"participant_ID", "sheetname", "method", "metric1"}),
+        (None, {"participant_ID", "sheetname", "method", "metric1", "metric2"}),
+    ],
+)
+def test_save_results_good(
+    selected_metrics: Optional[List[str]], expected_keys: set
+) -> None:
+    """Test that a single entry is correctly written to the NDJSON file."""
+    gold_metadata = models.Metadata("Gold", "seq1")
+    subject_metadata = models.Metadata("123", "seq1")
+    similarity_metrics = models.SimilarityMetrics(
+        "fake_method", {"metric1": 1, "metric2": 2}
     )
-    result_path.write_text("Test data")
-    result_path = writers.generate_output_filename(participant_id, temp_output_dir)
+    output_dir = pathlib.Path("tests/sample_data")
+    date_str = datetime.datetime.now().strftime("%m%d%Y")
+    expected_output_path = output_dir / f"results_Gold_{date_str}.ndjson"
 
-    assert result_path.read_text() == "Test data", (
-        "Contents of output file has been \
-        overwritten."
+    writers.save_results_to_ndjson(
+        gold_metadata,
+        subject_metadata,
+        similarity_metrics,
+        output_dir,
+        selected_metrics=selected_metrics,
+    )
+
+    with open(expected_output_path, "r") as f:
+        lines = f.readlines()
+    last_entry = [json.loads(line.strip()) for line in lines[-1:]]
+
+    assert last_entry[0].keys() == expected_keys, (
+        "Selected metrics do not match \
+        expected metrics."
     )
 
 
-def test_different_participant_ids(temp_output_dir: pathlib.Path) -> None:
-    """Test that different participant IDs generate different filenames."""
-    id1 = "GoldA"
-    id2 = "GoldB"
-
-    file1 = writers.generate_output_filename(id1, temp_output_dir)
-    file2 = writers.generate_output_filename(id2, temp_output_dir)
-
-    assert file1 != file2, (
-        "Output files are the same. A different fi;e should be \
-        generated for each new Gold ID."
+def test_save_results_wrong_metric() -> None:
+    """Test save_results when an incorrect metric is selected."""
+    gold_metadata = models.Metadata("Gold", "seq1")
+    subject_metadata = models.Metadata("123", "seq1")
+    similarity_metrics = models.SimilarityMetrics(
+        "fake_method", {"metric1": 1, "metric2": 2}
     )
+    output_dir = pathlib.Path("tests/sample_data")
+    selected_metrics = ["metric1", "false_metric"]
+
+    with pytest.raises(
+        ValueError,
+        match="Selected metrics are not eligable for selected method.",
+    ):
+        writers.save_results_to_ndjson(
+            gold_metadata,
+            subject_metadata,
+            similarity_metrics,
+            output_dir,
+            selected_metrics=selected_metrics,
+        )
