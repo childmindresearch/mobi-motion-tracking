@@ -16,7 +16,22 @@ def run_file(
     sequence: list[int],
     algorithm: str,
 ) -> None:
-    """Performs main processing steps for a subject, per sequence."""
+    """Performs main processing steps for a subject, per sequence.
+
+    This function reads motion tracking data from the specified subject and gold-
+    standard files, applies preprocessing steps, computes similarity metrics using the
+    specified algorithm, and saves the results.
+
+    Args:
+        file_path (pathlib.Path): Path to the subject's motion tracking data file.
+        gold_path (pathlib.Path): Path to the gold-standard motion tracking data file.
+        output_path (pathlib.Path): Directory where similarity results should be saved.
+        sequence (list[int]): List of sequence numbers to process.
+        algorithm (str): Name of the algorithm to use for similarity computation.
+
+    Raises:
+        ValueError: If an unsupported algorithm is provided.
+    """
     for seq in sequence:
         gold_metadata = models.Metadata.get_metadata(gold_path, seq)
         gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
@@ -54,7 +69,21 @@ def run(
     sequence: list[int],
     algorithm: str,
 ) -> None:
-    """Checks if experimental path is a directory or file, calls run_file."""
+    """Checks if experimental path is a directory or file, calls run_file.
+
+    This function determines whether the experimental path is a directory or a single
+    file and processes each subject's data accordingly by calling `run_file`.
+
+    Args:
+        experimental_path (pathlib.Path): Path to the subject's motion tracking data
+            file or directory.
+        gold_path (pathlib.Path): Path to the gold-standard motion tracking data file.
+        sequence (list[int]): List of sequence numbers to process.
+        algorithm (str): Name of the algorithm to use for similarity computation.
+
+    Raises:
+        TypeError: If `experimental_path` is not a file or directory.
+    """
     if experimental_path.is_dir():
         for file in experimental_path.iterdir():
             run_file(file, gold_path, experimental_path, sequence, algorithm)
