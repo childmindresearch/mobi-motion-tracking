@@ -10,7 +10,19 @@ from mobi_motion_tracking.core import models
 def generate_output_filename(
     gold_participant_ID: str, output_dir: pathlib.Path
 ) -> pathlib.Path:
-    """Generates a unique filename based on gold participant ID and date."""
+    """Generates a unique filename based on gold participant ID and date.
+
+    The filename follows the format: `results_<gold_participant_ID>_<MMDDYYYY>.ndjson`.
+    If the directory does not exist, it is created. If the file does not exist, it is
+    created.
+
+    Args:
+        gold_participant_ID (str): The identifier for the gold-standard participant.
+        output_dir (pathlib.Path): The directory where the NDJSON file should be stored.
+
+    Returns:
+        pathlib.Path: The full path to the generated NDJSON file.
+    """
     date_str = datetime.datetime.now().strftime("%m%d%Y")
     base_filename = f"results_{gold_participant_ID}_{date_str}.ndjson"
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -29,7 +41,29 @@ def save_results_to_ndjson(
     output_dir: pathlib.Path,
     selected_metrics: list[str] = None,
 ) -> None:
-    """Appends results to a newline-delimited JSON file (NDJSON) with selected or all similarity metrics."""
+    """Appends results to a NDJSON file with selected or all similarity metrics.
+
+    The function writes a new JSON object containing the subject's metadata,
+    the method used, and the selected similarity metrics. If `selected_metrics`
+    is not provided, all available metrics from `similarity_metrics.metrics` are
+    written.
+
+    The data is appended to an NDJSON file specific to the gold participant,
+    with the filename generated using `generate_output_filename()`.
+
+    Args:
+        gold_metadata (models.Metadata): Metadata for the gold-standard participant.
+        subject_metadata (models.Metadata): Metadata for the subject being analyzed.
+        similarity_metrics (models.SimilarityMetrics): Object containing the similarity
+            method and metrics.
+        output_dir (pathlib.Path): Directory where the results file should be saved.
+        selected_metrics (list[str], optional): List of metric keys to include in the
+            output. If None, all available metrics are written.
+
+    Raises:
+        ValueError: If any selected metric is not available in
+            `similarity_metrics.metrics`.
+    """
     new_entry = {
         "participant_ID": subject_metadata.participant_ID,
         "sheetname": subject_metadata.sequence_sheetname,
