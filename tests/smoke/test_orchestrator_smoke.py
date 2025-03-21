@@ -14,8 +14,8 @@ def test_orchestrator_good() -> None:
     valid input data.
 
     It creates temporary files and directories simulating an experimental dataset and a
-    gold standard reference. The test then invokes the `orchestrator.run` function with a sample sequence and
-    algorithm.
+    gold standard reference. The test then invokes the `orchestrator.run` function with
+    a sample sequence and algorithm.
 
     Args:
         tmp_path (Path): A temporary directory provided by pytest for file operations.
