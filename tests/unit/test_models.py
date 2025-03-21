@@ -21,16 +21,16 @@ def test_get_metadata_good() -> None:
 
     metadata = models.Metadata.get_metadata(pathlib.Path("/dummy/path/100.xlsx"), 1)
 
-    assert isinstance(metadata.participant_ID, str), (
-        "participant_ID should be a string."
-    )
+    assert isinstance(
+        metadata.participant_ID, str
+    ), "participant_ID should be a string."
     assert isinstance(metadata.sequence_sheetname, str), "sequence should be a string."
-    assert expected_ID == metadata.participant_ID, (
-        "extracted ID does not match expected value."
-    )
-    assert expected_seq == metadata.sequence_sheetname, (
-        "extracted sequence does not match expected value."
-    )
+    assert (
+        expected_ID == metadata.participant_ID
+    ), "extracted ID does not match expected value."
+    assert (
+        expected_seq == metadata.sequence_sheetname
+    ), "extracted sequence does not match expected value."
 
 
 @pytest.mark.parametrize(
@@ -55,27 +55,23 @@ def test_from_dtw_good(
         distance=distance, warping_path=warping_path
     )
 
-    assert similaritymetrics.method == expected_method, (
-        f"Returned method {similaritymetrics.method} does not equal expected method \
+    assert (
+        similaritymetrics.method == expected_method
+    ), f"Returned method {similaritymetrics.method} does not equal expected method \
         {expected_method}."
-    )
-    assert similaritymetrics.metrics["distance"] == expected_distance, (
-        f"Calculated distance {similaritymetrics.metrics['distance']} does not match \
+    assert (
+        similaritymetrics.metrics["distance"] == expected_distance
+    ), f"Calculated distance {similaritymetrics.metrics['distance']} does not match \
         expected output {expected_distance}."
-    )
     assert np.array_equal(
         similaritymetrics.metrics["target_path"], expected_target_path
-    ), (
-        f"Calculated target path {similaritymetrics.metrics['target_path']} does not \
+    ), f"Calculated target path {similaritymetrics.metrics['target_path']} does not \
         match expected output {expected_target_path}."
-    )
     assert np.array_equal(
         similaritymetrics.metrics["experimental_path"], expected_experimental_path
-    ), (
-        f"Calculated experimental path \
+    ), f"Calculated experimental path \
             {similaritymetrics.metrics['experimental_path']} \
         does not match expected output {expected_experimental_path}."
-    )
-    assert isinstance(similaritymetrics.method, str), (
-        "Returned method should be a string."
-    )
+    assert isinstance(
+        similaritymetrics.method, str
+    ), "Returned method should be a string."

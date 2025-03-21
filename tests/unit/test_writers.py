@@ -20,9 +20,9 @@ def test_generate_output_filename_good() -> None:
 
     result = writers.generate_output_filename(gold_id, output_dir)
 
-    assert result == pathlib.Path(expected_file), (
-        "Generated filename does not match the expected format."
-    )
+    assert result == pathlib.Path(
+        expected_file
+    ), "Generated filename does not match the expected format."
     assert result.exists(), "Output file was not created."
 
 
@@ -58,10 +58,8 @@ def test_save_results_good(
         lines = f.readlines()
     last_entry = [json.loads(line.strip()) for line in lines[-1:]]
 
-    assert last_entry[0].keys() == expected_keys, (
-        "Selected metrics do not match \
+    assert last_entry[0].keys() == expected_keys, "Selected metrics do not match \
         expected metrics."
-    )
 
 
 def test_save_results_wrong_metric() -> None:
