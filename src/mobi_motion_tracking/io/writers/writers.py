@@ -3,6 +3,7 @@
 import datetime
 import json
 import pathlib
+from typing import Optional
 
 from mobi_motion_tracking.core import models
 
@@ -39,7 +40,7 @@ def save_results_to_ndjson(
     subject_metadata: models.Metadata,
     similarity_metrics: models.SimilarityMetrics,
     output_dir: pathlib.Path,
-    selected_metrics: list[str] = None,
+    selected_metrics: Optional[list[str]] = None,
 ) -> None:
     """Appends results to a NDJSON file with selected or all similarity metrics.
 
