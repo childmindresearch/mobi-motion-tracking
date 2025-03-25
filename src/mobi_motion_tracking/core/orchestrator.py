@@ -89,7 +89,7 @@ def run_file(
                 centered_gold_data, normalized_subject_data
             )
         else:
-            raise ValueError(f"Unsupported algorithm '{algorithm}'.")
+            raise ValueError("Unsupported algorithm.")
 
         writers.save_results_to_ndjson(
             gold_metadata,
