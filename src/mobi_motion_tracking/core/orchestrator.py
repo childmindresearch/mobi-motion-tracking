@@ -21,11 +21,11 @@ def run(
     file and processes each subject's data accordingly by calling `run_file`.
 
     Args:
-        experimental_path (pathlib.Path): Path to the subject's motion tracking data
+        experimental_path: Path to the subject's motion tracking data
             file or directory.
-        gold_path (pathlib.Path): Path to the gold-standard motion tracking data file.
-        sequence (list[int]): List of sequence numbers to process.
-        algorithm (str): Name of the algorithm to use for similarity computation.
+        gold_path: Path to the gold-standard motion tracking data file.
+        sequence: List of sequence numbers to process.
+        algorithm: Name of the algorithm to use for similarity computation.
 
     Raises:
         TypeError: If `experimental_path` is not a file or directory.
@@ -38,10 +38,7 @@ def run(
             experimental_path, gold_path, experimental_path.parent, sequence, algorithm
         )
     else:
-        raise TypeError(
-            f"Unsupported type: \
-                {type(sequence).__name__}. Expected list or int."
-        )
+        raise TypeError("Input path is not a file nor a directory.")
 
 
 def run_file(
@@ -58,11 +55,11 @@ def run_file(
     specified algorithm, and saves the results.
 
     Args:
-        file_path (pathlib.Path): Path to the subject's motion tracking data file.
-        gold_path (pathlib.Path): Path to the gold-standard motion tracking data file.
-        output_path (pathlib.Path): Directory where similarity results should be saved.
-        sequence (list[int]): List of sequence numbers to process.
-        algorithm (str): Name of the algorithm to use for similarity computation.
+        file_path: Path to the subject's motion tracking data file.
+        gold_path: Path to the gold-standard motion tracking data file.
+        output_path: Directory where similarity results should be saved.
+        sequence: List of sequence numbers to process.
+        algorithm: Name of the algorithm to use for similarity computation.
 
     Raises:
         ValueError: If an unsupported algorithm is provided.
