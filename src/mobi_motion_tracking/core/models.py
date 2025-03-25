@@ -58,8 +58,8 @@ class Metadata:
         """Strip path name for participant ID and create sequence sheet name.
 
         This function strips the basename without the file extension per
-        participant to extract each participant ID and saves the sequence (int)
-        as a string with the preface 'seq' for the sheet name.
+        participant to extract each participant ID (int or "gold") and saves the
+        sequence (int) as a string with the preface 'seq' for the sheet name.
 
         Args:
             subject_path: Path, full filepath per participant.
