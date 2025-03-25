@@ -29,12 +29,8 @@ def run(
         algorithm: Name of the algorithm to use for similarity computation.
 
     Raises:
-        ValueError: if 'sequence' is empty.
         TypeError: If `experimental_path` is not a file or directory.
     """
-    if not sequence:
-        raise ValueError("Input sequence list is empty. Must have at least 1 sequence.")
-
     if experimental_path.is_dir():
         for file in experimental_path.iterdir():
             output_dir = experimental_path
