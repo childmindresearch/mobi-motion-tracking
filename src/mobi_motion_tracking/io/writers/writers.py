@@ -18,8 +18,8 @@ def generate_output_filename(
     created.
 
     Args:
-        gold_participant_ID (str): The identifier for the gold-standard participant.
-        output_dir (pathlib.Path): The directory where the NDJSON file should be stored.
+        gold_participant_ID: The identifier for the gold-standard participant.
+        output_dir: The directory where the NDJSON file should be stored.
 
     Returns:
         pathlib.Path: The full path to the generated NDJSON file.
@@ -53,12 +53,12 @@ def save_results_to_ndjson(
     with the filename generated using `generate_output_filename()`.
 
     Args:
-        gold_metadata (models.Metadata): Metadata for the gold-standard participant.
-        subject_metadata (models.Metadata): Metadata for the subject being analyzed.
-        similarity_metrics (models.SimilarityMetrics): Object containing the similarity
+        gold_metadata: Metadata for the gold-standard participant.
+        subject_metadata: Metadata for the subject being analyzed.
+        similarity_metrics: Object containing the similarity
             method and metrics.
-        output_dir (pathlib.Path): Directory where the results file should be saved.
-        selected_metrics (list[str], optional): List of metric keys to include in the
+        output_dir: Directory where the results file should be saved.
+        selected_metrics: List of metric keys to include in the
             output. If None, all available metrics are written.
 
     Raises:
