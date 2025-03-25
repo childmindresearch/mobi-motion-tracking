@@ -12,14 +12,13 @@ def test_orchestrator_good() -> None:
     experimental_path = pathlib.Path("tests/sample_data/100.xlsx")
     gold_path = pathlib.Path("tests/sample_data/Gold.xlsx")
     sequence = [1]
-    algorithm = "dtw"
     date_str = datetime.datetime.now().strftime("%m%d%Y")
     expected_output_file = pathlib.Path(
         f"tests/sample_data/results_Gold_{date_str}.ndjson"
     )
     expected_keys = {"participant_ID", "sheetname", "method", "distance"}
 
-    orchestrator.run(experimental_path, gold_path, sequence, algorithm)
+    orchestrator.run(experimental_path, gold_path, sequence, "dtw")
 
     assert expected_output_file.exists(), "Expected file was not created."
 
@@ -27,6 +26,6 @@ def test_orchestrator_good() -> None:
         last_line = list(file)[-1]
     data = json.loads(last_line)
 
-    assert expected_keys == set(
-        data.keys()
-    ), "Saved dictionary keys do not match expected results."
+    assert expected_keys == set(data.keys()), (
+        "Saved dictionary keys do not match expected results."
+    )
