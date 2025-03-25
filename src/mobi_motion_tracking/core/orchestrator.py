@@ -1,6 +1,7 @@
 """Python based runner."""
 
 import pathlib
+from typing import Literal
 
 from mobi_motion_tracking.core import models
 from mobi_motion_tracking.io.readers import readers
@@ -13,7 +14,7 @@ def run(
     experimental_path: pathlib.Path,
     gold_path: pathlib.Path,
     sequence: list[int],
-    algorithm: str,
+    algorithm: Literal["dtw"] = "dtw",
 ) -> None:
     """Checks if experimental path is a directory or file, calls run_file.
 
@@ -28,8 +29,12 @@ def run(
         algorithm: Name of the algorithm to use for similarity computation.
 
     Raises:
+        ValueError: if 'sequence' is empty.
         TypeError: If `experimental_path` is not a file or directory.
     """
+    if not sequence:
+        raise ValueError("Input sequence list is empty. Must have at least 1 sequence.")
+
     if experimental_path.is_dir():
         for file in experimental_path.iterdir():
             run_file(file, gold_path, experimental_path, sequence, algorithm)
@@ -46,7 +51,7 @@ def run_file(
     gold_path: pathlib.Path,
     output_path: pathlib.Path,
     sequence: list[int],
-    algorithm: str,
+    algorithm: Literal["dtw"] = "dtw",
 ) -> None:
     """Performs main processing steps for a subject, per sequence.
 
