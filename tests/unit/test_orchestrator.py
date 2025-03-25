@@ -12,7 +12,7 @@ def test_run_empty_sequence() -> None:
     """Tests the run function with an empty sequence list."""
     file_path = pathlib.Path("tests/sample_data/100.xlsx")
     gold_path = pathlib.Path("tests/sample_data/Gold.xlsx")
-    sequence = []
+    sequence = list[int] = []
 
     with pytest.raises(
         ValueError, match="Input sequence list is empty. Must have at least 1 sequence."
