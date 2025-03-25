@@ -32,6 +32,9 @@ def dynamic_time_warping(
 
     Returns:
         SimilarityMetrics: a dataclass which stores the DTW similarity metrics.
+
+    Raises:
+        ValueError: when dimensions of the two inputs do not match.
     """
     preprocessed_subject_data = preprocessed_subject_data[:, 4:]
     preprocessed_target_data = preprocessed_target_data[:, 4:]
