@@ -16,3 +16,15 @@ def test_run_file_bad_alg() -> None:
 
     with pytest.raises(ValueError, match="Unsupported algorithm."):
         orchestrator.run_file(file_path, gold_path, output_dir, sequence, "bad_alg")
+
+
+def test_run_empty_sequence() -> None:
+    """Tests the run function with an empty sequence list."""
+    file_path = pathlib.Path("tests/sample_data/100.xlsx")
+    gold_path = pathlib.Path("tests/sample_data/Gold.xlsx")
+    sequence = []
+
+    with pytest.raises(
+        ValueError, match="Input sequence list is empty. Must have at least 1 sequence."
+    ):
+        orchestrator.run(file_path, gold_path, sequence, "dtw")
