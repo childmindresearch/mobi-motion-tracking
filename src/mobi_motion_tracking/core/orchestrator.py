@@ -9,6 +9,41 @@ from mobi_motion_tracking.preprocessing import preprocessing
 from mobi_motion_tracking.processing import similarity_functions
 
 
+def run(
+    experimental_path: pathlib.Path,
+    gold_path: pathlib.Path,
+    sequence: list[int],
+    algorithm: str,
+) -> None:
+    """Checks if experimental path is a directory or file, calls run_file.
+
+    This function determines whether the experimental path is a directory or a single
+    file and processes each subject's data accordingly by calling `run_file`.
+
+    Args:
+        experimental_path (pathlib.Path): Path to the subject's motion tracking data
+            file or directory.
+        gold_path (pathlib.Path): Path to the gold-standard motion tracking data file.
+        sequence (list[int]): List of sequence numbers to process.
+        algorithm (str): Name of the algorithm to use for similarity computation.
+
+    Raises:
+        TypeError: If `experimental_path` is not a file or directory.
+    """
+    if experimental_path.is_dir():
+        for file in experimental_path.iterdir():
+            run_file(file, gold_path, experimental_path, sequence, algorithm)
+    elif experimental_path.is_file():
+        run_file(
+            experimental_path, gold_path, experimental_path.parent, sequence, algorithm
+        )
+    else:
+        raise TypeError(
+            f"Unsupported type: \
+                {type(sequence).__name__}. Expected list or int."
+        )
+
+
 def run_file(
     file_path: pathlib.Path,
     gold_path: pathlib.Path,
@@ -60,39 +95,4 @@ def run_file(
             similarity_metric,
             output_path,
             selected_metrics=["distance"],
-        )
-
-
-def run(
-    experimental_path: pathlib.Path,
-    gold_path: pathlib.Path,
-    sequence: list[int],
-    algorithm: str,
-) -> None:
-    """Checks if experimental path is a directory or file, calls run_file.
-
-    This function determines whether the experimental path is a directory or a single
-    file and processes each subject's data accordingly by calling `run_file`.
-
-    Args:
-        experimental_path (pathlib.Path): Path to the subject's motion tracking data
-            file or directory.
-        gold_path (pathlib.Path): Path to the gold-standard motion tracking data file.
-        sequence (list[int]): List of sequence numbers to process.
-        algorithm (str): Name of the algorithm to use for similarity computation.
-
-    Raises:
-        TypeError: If `experimental_path` is not a file or directory.
-    """
-    if experimental_path.is_dir():
-        for file in experimental_path.iterdir():
-            run_file(file, gold_path, experimental_path, sequence, algorithm)
-    elif experimental_path.is_file():
-        run_file(
-            experimental_path, gold_path, experimental_path.parent, sequence, algorithm
-        )
-    else:
-        raise TypeError(
-            f"Unsupported type: \
-                {type(sequence).__name__}. Expected list or int."
         )
