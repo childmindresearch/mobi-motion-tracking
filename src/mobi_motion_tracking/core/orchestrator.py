@@ -37,11 +37,11 @@ def run(
 
     if experimental_path.is_dir():
         for file in experimental_path.iterdir():
-            run_file(file, gold_path, experimental_path, sequence, algorithm)
+            output_dir = experimental_path
+            run_file(file, gold_path, output_dir, sequence, algorithm)
     elif experimental_path.is_file():
-        run_file(
-            experimental_path, gold_path, experimental_path.parent, sequence, algorithm
-        )
+        output_dir = experimental_path.parent
+        run_file(experimental_path, gold_path, output_dir, sequence, algorithm)
     else:
         raise TypeError("Input path is not a file nor a directory.")
 
@@ -49,7 +49,7 @@ def run(
 def run_file(
     file_path: pathlib.Path,
     gold_path: pathlib.Path,
-    output_path: pathlib.Path,
+    output_dir: pathlib.Path,
     sequence: list[int],
     algorithm: Literal["dtw"] = "dtw",
 ) -> None:
@@ -62,7 +62,7 @@ def run_file(
     Args:
         file_path: Path to the subject's motion tracking data file.
         gold_path: Path to the gold-standard motion tracking data file.
-        output_path: Directory where similarity results should be saved.
+        output_dir: Directory where similarity results should be saved.
         sequence: List of sequence numbers to process.
         algorithm: Name of the algorithm to use for similarity computation.
 
@@ -95,6 +95,6 @@ def run_file(
             gold_metadata,
             subject_metadata,
             similarity_metric,
-            output_path,
+            output_dir,
             selected_metrics=["distance"],
         )
