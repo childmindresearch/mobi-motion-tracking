@@ -10,7 +10,7 @@ from mobi_motion_tracking.core import models
 def dynamic_time_warping(
     preprocessed_target_data: np.ndarray,
     preprocessed_subject_data: np.ndarray,
-    window_size: Optional[int] = None,
+    window_size: Optional[float] = None,
 ) -> models.SimilarityMetrics:
     """Perform dynamic time warping.
 
@@ -76,11 +76,13 @@ def dynamic_time_warping(
         elif j == 0:
             i -= 1
         else:
-            min_cost_index = np.argmin([
-                cost_matrix[i - 1, j],
-                cost_matrix[i, j - 1],
-                cost_matrix[i - 1, j - 1],
-            ])
+            min_cost_index = np.argmin(
+                [
+                    cost_matrix[i - 1, j],
+                    cost_matrix[i, j - 1],
+                    cost_matrix[i - 1, j - 1],
+                ]
+            )
             if min_cost_index == 0:
                 i -= 1
             elif min_cost_index == 1:
