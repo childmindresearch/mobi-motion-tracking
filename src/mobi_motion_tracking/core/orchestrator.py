@@ -84,7 +84,7 @@ def run_file(
             centered_subject_data, gold_average_lengths
         )
 
-        if algorithm.lower() == "dtw":
+        if algorithm == "dtw":
             similarity_metric = similarity_functions.dynamic_time_warping(
                 centered_gold_data, normalized_subject_data
             )
