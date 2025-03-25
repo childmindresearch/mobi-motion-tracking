@@ -1,6 +1,6 @@
 """Functions for calculating similarity metrics on preprocessed data."""
 
-from typing import Optional
+from typing import Optional, Any
 
 import numpy as np
 
@@ -10,7 +10,7 @@ from mobi_motion_tracking.core import models
 def dynamic_time_warping(
     preprocessed_target_data: np.ndarray,
     preprocessed_subject_data: np.ndarray,
-    window_size: Optional[float] = None,
+    window_size: Optional[int] = None,
 ) -> models.SimilarityMetrics:
     """Perform dynamic time warping.
 
@@ -47,9 +47,9 @@ def dynamic_time_warping(
         )
 
     if window_size is None:
-        window_size = float("inf")
+        window_size = max(num_frames_subject, num_frames_target)
 
-    window_size = int(max(window_size, abs(num_frames_subject - num_frames_target)))
+    window_size = max(window_size, abs(num_frames_subject - num_frames_target))
 
     cost_matrix = np.full((num_frames_subject + 1, num_frames_target + 1), float("inf"))
     cost_matrix[0, 0] = 0
