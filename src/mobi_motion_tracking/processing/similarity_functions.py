@@ -23,7 +23,6 @@ def dynamic_time_warping(
     we index the data starting at the 4th column until the end. This function returns
     a dataclass which stores the DTW similarity metrics, distance and paths.
 
-
     Args:
         preprocessed_target_data: cleaned and centered target data.
         preprocessed_subject_data: cleaned, centered, and normalized subject data.
