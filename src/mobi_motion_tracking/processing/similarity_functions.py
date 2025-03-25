@@ -49,7 +49,7 @@ def dynamic_time_warping(
     if window_size is None:
         window_size = float("inf")
 
-    window_size = max(window_size, abs(num_frames_subject - num_frames_target))
+    window_size = int(max(window_size, abs(num_frames_subject - num_frames_target)))
 
     cost_matrix = np.full((num_frames_subject + 1, num_frames_target + 1), float("inf"))
     cost_matrix[0, 0] = 0
@@ -76,13 +76,11 @@ def dynamic_time_warping(
         elif j == 0:
             i -= 1
         else:
-            min_cost_index = np.argmin(
-                [
-                    cost_matrix[i - 1, j],
-                    cost_matrix[i, j - 1],
-                    cost_matrix[i - 1, j - 1],
-                ]
-            )
+            min_cost_index = np.argmin([
+                cost_matrix[i - 1, j],
+                cost_matrix[i, j - 1],
+                cost_matrix[i - 1, j - 1],
+            ])
             if min_cost_index == 0:
                 i -= 1
             elif min_cost_index == 1:
