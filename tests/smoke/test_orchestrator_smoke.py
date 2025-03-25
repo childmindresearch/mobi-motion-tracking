@@ -27,6 +27,6 @@ def test_orchestrator_good() -> None:
         last_line = list(file)[-1]
     data = json.loads(last_line)
 
-    assert expected_keys == set(data.keys()), (
-        "Saved dictionary keys do not match expected results."
-    )
+    assert expected_keys == set(
+        data.keys()
+    ), "Saved dictionary keys do not match expected results."
