@@ -1,9 +1,10 @@
 """test orchestrator.py functions."""
 
+import os
 import pathlib
 
 import pytest
-import os
+
 from mobi_motion_tracking.core import orchestrator
 
 
