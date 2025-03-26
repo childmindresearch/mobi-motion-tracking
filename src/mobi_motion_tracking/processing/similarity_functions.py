@@ -48,49 +48,50 @@ def dynamic_time_warping(
 
     if window_size is None:
         window_size = max(num_frames_subject, num_frames_target)
-
-    window_size = max(window_size, abs(num_frames_subject - num_frames_target))
+    else:
+        window_size = max(window_size, abs(num_frames_subject - num_frames_target))
 
     cost_matrix = np.full((num_frames_subject + 1, num_frames_target + 1), float("inf"))
     cost_matrix[0, 0] = 0
 
-    for i in range(1, num_frames_subject + 1):
-        for j in range(
-            max(1, i - window_size), min(num_frames_target + 1, i + window_size + 1)
+    for row in range(1, num_frames_subject + 1):
+        for column in range(
+            max(1, row - window_size), min(num_frames_target + 1, row + window_size + 1)
         ):
-            cost = np.linalg.norm(
-                preprocessed_subject_data[i - 1] - preprocessed_target_data[j - 1]
+            cost_value = np.linalg.norm(
+                preprocessed_subject_data[row - 1]
+                - preprocessed_target_data[column - 1]
             )
-            cost_matrix[i, j] = cost + min(
-                cost_matrix[i - 1, j], cost_matrix[i, j - 1], cost_matrix[i - 1, j - 1]
+            cost_matrix[row, column] = cost_value + min(
+                cost_matrix[row - 1, column],
+                cost_matrix[row, column - 1],
+                cost_matrix[row - 1, column - 1],
             )
 
     distance = cost_matrix[num_frames_subject, num_frames_target]
 
-    i, j = num_frames_subject, num_frames_target
-    path = [(i, j)]
+    subject_idx, target_idx = num_frames_subject, num_frames_target
+    path = [(subject_idx, target_idx)]
 
-    while i > 0 or j > 0:
-        if i == 0:
-            j -= 1
-        elif j == 0:
-            i -= 1
+    while subject_idx > 0 or target_idx > 0:
+        if subject_idx == 0:
+            target_idx -= 1
+        elif target_idx == 0:
+            subject_idx -= 1
         else:
-            min_cost_index = np.argmin(
-                [
-                    cost_matrix[i - 1, j],
-                    cost_matrix[i, j - 1],
-                    cost_matrix[i - 1, j - 1],
-                ]
-            )
+            min_cost_index = np.argmin([
+                cost_matrix[subject_idx - 1, target_idx],
+                cost_matrix[subject_idx, target_idx - 1],
+                cost_matrix[subject_idx - 1, target_idx - 1],
+            ])
             if min_cost_index == 0:
-                i -= 1
+                subject_idx -= 1
             elif min_cost_index == 1:
-                j -= 1
+                target_idx -= 1
             else:
-                i -= 1
-                j -= 1
-        path.append((i, j))
+                subject_idx -= 1
+                target_idx -= 1
+        path.append((subject_idx, target_idx))
 
     path.reverse()
 
