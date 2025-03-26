@@ -26,8 +26,9 @@ def dynamic_time_warping(
     Args:
         preprocessed_target_data: cleaned and centered target data.
         preprocessed_subject_data: cleaned, centered, and normalized subject data.
-        window_size: constraint for matching points, ensuring |i - j| <= window_size.
-            If None, the window size is set to infinity.
+        window_size: constraint for matching points, ensuring
+            |num_frames_subject - num_frames_target| <= window_size. If None, the
+            window size is set to infinity.
 
     Returns:
         SimilarityMetrics: a dataclass which stores the DTW similarity metrics.
