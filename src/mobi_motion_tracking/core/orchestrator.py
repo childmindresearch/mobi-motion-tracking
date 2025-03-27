@@ -60,7 +60,8 @@ def run_file(
 
     This function reads motion tracking data from the specified subject and gold-
     standard files, applies preprocessing steps, computes similarity metrics using the
-    specified algorithm, and saves the results.
+    specified algorithm, and saves the results. By default, the results are saved as a
+    csv in the parent folder of experimental path
 
     Args:
         file_path: Path to the subject's motion tracking data file.
@@ -68,6 +69,9 @@ def run_file(
         output_dir: Directory where similarity results should be saved.
         sequence: List of sequence numbers to process.
         algorithm: Name of the algorithm to use for similarity computation.
+
+    Returns:
+        dict: dictionary entry being written to the output file.
 
     Raises:
         ValueError: If an unsupported algorithm is provided.
