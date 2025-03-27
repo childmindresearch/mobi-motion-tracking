@@ -68,16 +68,14 @@ def read_sheet(path: Path, sequence_sheetname: str) -> np.ndarray:
         ValueError: Invalid file extension.
         ValueError: Sheet name was not found.
     """
-    if not os.path.exists(path):
-        raise FileNotFoundError("File not found.")
-    if ".xlsx" != path.suffix:
-        raise ValueError("Invalid file extension. Expected '.xlsx'.")
-
     try:
         motion_tracking_data = pd.read_excel(
             path, sheet_name=sequence_sheetname, engine="openpyxl"
         )
     except ValueError:
-        raise ValueError("Error: Sheet name does not exist.")
+        print(
+            f"Skipping sheet {sequence_sheetname} in {path}: Sheet name does not exist."
+        )
+        return None
 
     return data_cleaner(motion_tracking_data)
