@@ -78,7 +78,10 @@ def test_read_sheet_invalid_sheet_name_continues(sample_excel_path: Path) -> Non
     """Test ValueError when sheet name does not exist."""
     output = readers.read_sheet(sample_excel_path, "InvalidSheet")
 
-    assert output.size == 0, "Expected output for an invalid sheet name is None."
+    assert output.size == 0, (
+        "Expected output for an invalid sheet name should be \
+        empty."
+    )
 
 
 def test_read_sheet_good(sample_excel_path: Path) -> None:
