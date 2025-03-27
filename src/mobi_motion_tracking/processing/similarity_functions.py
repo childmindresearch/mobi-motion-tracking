@@ -10,6 +10,7 @@ from mobi_motion_tracking.core import models
 def dynamic_time_warping(
     preprocessed_target_data: np.ndarray,
     preprocessed_subject_data: np.ndarray,
+    window_size: Optional[int] = None,
 ) -> models.SimilarityMetrics:
     """Perform dynamic time warping.
 
@@ -25,6 +26,9 @@ def dynamic_time_warping(
     Args:
         preprocessed_target_data: cleaned and centered target data.
         preprocessed_subject_data: cleaned, centered, and normalized subject data.
+        window_size: constraint for matching points, ensuring
+            |num_frames_subject - num_frames_target| <= window_size. If None, the
+            window size is set to infinity.
 
     Returns:
         SimilarityMetrics: a dataclass which stores the DTW similarity metrics.
@@ -43,31 +47,32 @@ def dynamic_time_warping(
             "Error in dtw(): the dimensions of the two input signals do not match."
         )
 
-    Distance_matrix = np.full((num_frames_subject + 1, num_frames_target + 1), np.inf)
-    Distance_matrix[0, 0] = 0
+    if window_size is None:
+        window_size = max(num_frames_subject, num_frames_target)
+    else:
+        window_size = max(window_size, abs(num_frames_subject - num_frames_target))
 
-    cost_matrix = np.zeros((num_frames_subject, num_frames_target))
-    for subject_frame in range(num_frames_subject):
-        for target_frame in range(num_frames_target):
-            cost_matrix[subject_frame, target_frame] = np.linalg.norm(
-                preprocessed_target_data[subject_frame]
-                - preprocessed_subject_data[target_frame]
+    cost_matrix = np.full((num_frames_subject + 1, num_frames_target + 1), float("inf"))
+    cost_matrix[0, 0] = 0
+
+    for row in range(1, num_frames_subject + 1):
+        for column in range(
+            max(1, row - window_size), min(num_frames_target + 1, row + window_size + 1)
+        ):
+            cost_value = np.linalg.norm(
+                preprocessed_subject_data[row - 1]
+                - preprocessed_target_data[column - 1]
+            )
+            cost_matrix[row, column] = cost_value + min(
+                cost_matrix[row - 1, column],
+                cost_matrix[row, column - 1],
+                cost_matrix[row - 1, column - 1],
             )
 
-    for subject_frame in range(1, num_frames_subject + 1):
-        for target_frame in range(1, num_frames_target + 1):
-            Distance_matrix[subject_frame, target_frame] = cost_matrix[
-                subject_frame - 1, target_frame - 1
-            ] + min(
-                Distance_matrix[subject_frame - 1, target_frame],
-                Distance_matrix[subject_frame, target_frame - 1],
-                Distance_matrix[subject_frame - 1, target_frame - 1],
-            )
-
-    dtw_distance = Distance_matrix[num_frames_subject, num_frames_target]
+    distance = cost_matrix[num_frames_subject, num_frames_target]
 
     subject_idx, target_idx = num_frames_subject, num_frames_target
-    warping_path = [(subject_idx, target_idx)]
+    path = [(subject_idx, target_idx)]
 
     while subject_idx > 0 or target_idx > 0:
         if subject_idx == 0:
@@ -76,9 +81,9 @@ def dynamic_time_warping(
             subject_idx -= 1
         else:
             min_cost_index = np.argmin([
-                Distance_matrix[subject_idx - 1, target_idx],
-                Distance_matrix[subject_idx, target_idx - 1],
-                Distance_matrix[subject_idx - 1, target_idx - 1],
+                cost_matrix[subject_idx - 1, target_idx],
+                cost_matrix[subject_idx, target_idx - 1],
+                cost_matrix[subject_idx - 1, target_idx - 1],
             ])
             if min_cost_index == 0:
                 subject_idx -= 1
@@ -87,11 +92,8 @@ def dynamic_time_warping(
             else:
                 subject_idx -= 1
                 target_idx -= 1
+        path.append((subject_idx, target_idx))
 
-        warping_path.append((subject_idx, target_idx))
+    path.reverse()
 
-    warping_path.reverse()
-
-    return models.SimilarityMetrics.from_dtw(
-        distance=dtw_distance, warping_path=warping_path
-    )
+    return models.SimilarityMetrics.from_dtw(distance=distance, warping_path=path)
