@@ -74,22 +74,12 @@ def test_data_cleaner_index_error() -> None:
         readers.data_cleaner(data)
 
 
-def test_read_sheet_file_not_found() -> None:
-    """Test FileNotFoundError when file does not exist."""
-    with pytest.raises(FileNotFoundError, match="File not found."):
-        readers.read_sheet(Path("non_existent_file.xlsx"), "seq1")
-
-
-def test_read_sheet_invalid_file_extension() -> None:
-    """Test ValueError when file is not .xlsx."""
-    with pytest.raises(ValueError, match="Invalid file extension. Expected '.xlsx'."):
-        readers.read_sheet(Path("tests/sample_data/csv_file.csv"), "seq1")
-
-
-def test_read_sheet_invalid_sheet_name(sample_excel_path: Path) -> None:
+def test_read_sheet_invalid_sheet_name_continues(sample_excel_path: Path) -> None:
     """Test ValueError when sheet name does not exist."""
-    with pytest.raises(ValueError, match="Error: Sheet name does not exist."):
-        readers.read_sheet(sample_excel_path, "InvalidSheet")
+    output = readers.read_sheet(sample_excel_path, "InvalidSheet")
+
+    assert len(output) == 0, "Expected output for an invalid sheet name should be \
+        empty."
 
 
 def test_read_sheet_good(sample_excel_path: Path) -> None:

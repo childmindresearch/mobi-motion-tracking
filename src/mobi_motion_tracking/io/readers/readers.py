@@ -1,6 +1,5 @@
 """Functions to read motion tracking data from a file."""
 
-import os
 from pathlib import Path
 
 import numpy as np
@@ -40,15 +39,19 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
     if start_col < 0 or end_col > data.shape[1]:
         raise IndexError("Column index out of range.")
 
-    cleaned_data = data.iloc[
-        row + 1 :,
-        start_col:end_col,
-    ].to_numpy()
+    cleaned_data = (
+        data.iloc[
+            row + 1 :,
+            start_col:end_col,
+        ]
+        .to_numpy()
+        .astype(np.float64)
+    )
 
     return cleaned_data
 
 
-def read_sheet(path: Path, sequence: str) -> np.ndarray:
+def read_sheet(path: Path, sequence_sheetname: str) -> np.ndarray:
     """Read data from specific sheet.
 
     Currently motion tracking data for Kinect and Zed are saved into xlsx files.
@@ -57,23 +60,20 @@ def read_sheet(path: Path, sequence: str) -> np.ndarray:
 
     Args:
         path: Path to .xlsx file.
-        sequence: str, determines which sequence is processed.
+        sequence_sheetname: str, determines which sequence is processed.
 
-    Raises:
-        FileNotFoundError: File path does not exist.
-        ValueError: Invalid file extension.
-        ValueError: Sheet name was not found.
+    Returns:
+        np.ndarray: Data is passed to data_cleaner which returns an np.ndarray, or an
+            empty array is returned if the sheet name does not exist.
     """
-    if not os.path.exists(path):
-        raise FileNotFoundError("File not found.")
-    if ".xlsx" != path.suffix:
-        raise ValueError("Invalid file extension. Expected '.xlsx'.")
-
     try:
         motion_tracking_data = pd.read_excel(
-            path, sheet_name=sequence, engine="openpyxl"
+            path, sheet_name=sequence_sheetname, engine="openpyxl"
         )
     except ValueError:
-        raise ValueError("Error: Sheet name does not exist.")
+        print(
+            f"Skipping sheet {sequence_sheetname} in {path}: Sheet name does not exist."
+        )
+        return np.array([])
 
     return data_cleaner(motion_tracking_data)
