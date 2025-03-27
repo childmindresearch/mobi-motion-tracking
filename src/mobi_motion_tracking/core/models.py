@@ -68,11 +68,6 @@ class Metadata:
 
         Returns:
             Metadata: Dataclass with participant_ID and sequence.
-
-        Raises:
-            FileNotFoundError: subject_file doesn't exist.
-            ValueError: Invalid file extension.
-            ValueError: subject_file named incorrectly.
         """
         try:
             if not os.path.exists(subject_path):

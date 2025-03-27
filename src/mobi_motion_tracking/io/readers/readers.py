@@ -65,9 +65,6 @@ def read_sheet(path: Path, sequence_sheetname: str) -> np.ndarray:
     Returns:
         np.ndarray: Data is passed to data_cleaner which returns an np.ndarray, or an
             empty array is returned if the sheet name does not exist.
-
-    Raises:
-        ValueError: Sheet name was not found.
     """
     try:
         motion_tracking_data = pd.read_excel(
