@@ -9,7 +9,8 @@ from mobi_motion_tracking.processing import similarity_functions
 def test_dtw_good() -> None:
     """Test that the dynamic time warping funciton extracts correct known values.
 
-    The expected_distance output was verified by
+    The expected_distance output was verified by running the same test data in matlab
+    using the mathworks dtw function.
     """
     preprocessed_target_data = np.array([
         [0, 0, 0, 0, 0, 2, 4],
