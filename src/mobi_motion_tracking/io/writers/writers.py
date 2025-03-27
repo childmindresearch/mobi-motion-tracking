@@ -41,7 +41,7 @@ def save_results_to_ndjson(
     similarity_metrics: models.SimilarityMetrics,
     output_dir: pathlib.Path,
     selected_metrics: Optional[list[str]] = None,
-) -> None:
+) -> dict:
     """Appends results to a NDJSON file with selected or all similarity metrics.
 
     The function writes a new JSON object containing the subject's metadata,
@@ -85,3 +85,5 @@ def save_results_to_ndjson(
     with open(output_path, "a") as f:
         json.dump(new_entry, f)
         f.write("\n")
+
+    return new_entry

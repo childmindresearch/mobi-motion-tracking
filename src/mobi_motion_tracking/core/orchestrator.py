@@ -15,7 +15,7 @@ def run(
     gold_path: pathlib.Path,
     sequence: list[int],
     algorithm: Literal["dtw"] = "dtw",
-) -> None:
+) -> list:
     """Checks if experimental path is a directory or file, calls run_file.
 
     This function determines whether the experimental path is a directory or a single
@@ -31,15 +31,22 @@ def run(
     Raises:
         TypeError: If `experimental_path` is not a file or directory.
     """
+    outputs = []
     if experimental_path.is_dir():
         for file in experimental_path.iterdir():
             output_dir = experimental_path
-            run_file(file, gold_path, output_dir, sequence, algorithm)
+            output_dict = run_file(file, gold_path, output_dir, sequence, algorithm)
+            outputs.append(output_dict)
+            print(output_dict)
     elif experimental_path.is_file():
         output_dir = experimental_path.parent
-        run_file(experimental_path, gold_path, output_dir, sequence, algorithm)
+        output_dict = run_file(
+            experimental_path, gold_path, output_dir, sequence, algorithm
+        )
+        outputs.append(output_dict)
     else:
         raise TypeError("Input path is not a file nor a directory.")
+    return outputs
 
 
 def run_file(
@@ -48,7 +55,7 @@ def run_file(
     output_dir: pathlib.Path,
     sequence: list[int],
     algorithm: Literal["dtw"] = "dtw",
-) -> None:
+) -> dict:
     """Performs main processing steps for a subject, per sequence.
 
     This function reads motion tracking data from the specified subject and gold-
@@ -85,10 +92,11 @@ def run_file(
                 centered_gold_data, normalized_subject_data
             )
 
-        writers.save_results_to_ndjson(
+        output_dict = writers.save_results_to_ndjson(
             gold_metadata,
             subject_metadata,
             similarity_metric,
             output_dir,
             selected_metrics=["distance"],
         )
+    return output_dict
