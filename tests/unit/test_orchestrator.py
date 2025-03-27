@@ -1,6 +1,5 @@
 """test orchestrator.py functions."""
 
-import os
 import pathlib
 
 import pytest

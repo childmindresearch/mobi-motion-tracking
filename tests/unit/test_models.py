@@ -31,9 +31,9 @@ def test_get_metadata_good() -> None:
 
 def test_get_metadata_file_not_found() -> None:
     """Test FileNotFoundError when file does not exist."""
-    metadata = models.Metadata.get_metadata(pathlib.Path("/dummy/path/100.xlsx"), 1)  # type: ignore[return-value] # Failing on purpose to test FileNotFoundError
+    metadata = models.Metadata.get_metadata(pathlib.Path("/dummy/path/100.xlsx"), 1)
 
-    assert metadata is None, (
+    assert metadata.participant_ID is None, (
         "Expected output should be None when a file does not \
         exist."
     )
@@ -41,9 +41,9 @@ def test_get_metadata_file_not_found() -> None:
 
 def test_read_sheet_invalid_file_extension() -> None:
     """Test ValueError when file is not .xlsx."""
-    metadata = models.Metadata.get_metadata(pathlib.Path("/dummy/path/100.csv"), 1)  # type: ignore[return-value] # Failing on purpose to test ValueError
+    metadata = models.Metadata.get_metadata(pathlib.Path("/dummy/path/100.csv"), 1)
 
-    assert metadata is None, (
+    assert metadata.participant_ID is None, (
         "Expected output should be None with an invalid file \
         extension."
     )
@@ -53,7 +53,7 @@ def test_get_metadata_incorrect_filename() -> None:
     """Test get_metadata with an incorrect filename."""
     metadata = models.Metadata.get_metadata(pathlib.Path("/dummy/path/100_01.xlsx"), 1)
 
-    assert metadata is None, (
+    assert metadata.participant_ID is None, (
         "Expected output should be None when a file is named \
         incorrectly."
     )

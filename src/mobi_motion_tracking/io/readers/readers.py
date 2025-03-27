@@ -73,6 +73,6 @@ def read_sheet(path: Path, sequence_sheetname: str) -> np.ndarray:
         print(
             f"Skipping sheet {sequence_sheetname} in {path}: Sheet name does not exist."
         )
-        return None
+        return np.ndarray([])
 
     return data_cleaner(motion_tracking_data)

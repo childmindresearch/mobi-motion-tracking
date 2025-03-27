@@ -87,13 +87,13 @@ def run_file(
         gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
 
         subject_metadata = models.Metadata.get_metadata(file_path, seq)
-        if subject_metadata is None:
+        if subject_metadata.participant_ID is None:
             continue
 
         subject_data = readers.read_sheet(
             file_path, subject_metadata.sequence_sheetname
         )
-        if subject_data is None:
+        if subject_data.size == 0:
             continue
 
         centered_gold_data = preprocessing.center_joints_to_hip(gold_data)
