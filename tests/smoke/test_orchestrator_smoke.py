@@ -1,7 +1,6 @@
 """smoke tests for orchestrator.py."""
 
 import datetime
-import json
 import pathlib
 
 from mobi_motion_tracking.core import orchestrator
@@ -18,14 +17,9 @@ def test_orchestrator_good() -> None:
     )
     expected_keys = {"participant_ID", "sheetname", "method", "distance"}
 
-    orchestrator.run(experimental_path, gold_path, sequence, "dtw")
+    outputs = orchestrator.run(experimental_path, gold_path, sequence, "dtw")
 
     assert expected_output_file.exists(), "Expected file was not created."
-
-    with open(expected_output_file, "r") as file:
-        last_line = list(file)[-1]
-    data = json.loads(last_line)
-
-    assert expected_keys == set(
-        data.keys()
+    assert (
+        outputs[0].keys() == expected_keys
     ), "Saved dictionary keys do not match expected results."
