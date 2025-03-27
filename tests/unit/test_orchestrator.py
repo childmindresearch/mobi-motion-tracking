@@ -25,4 +25,4 @@ def test_run_bad_algorithm() -> None:
     sequence = [1, 2, 3]
 
     with pytest.raises(ValueError, match="Unsupported algorithm provided."):
-        orchestrator.run(file_path, gold_path, sequence, "fake_alg")
+        orchestrator.run(file_path, gold_path, sequence, "fake_alg")  # type: ignore[arg-type] # Failing on purpose to test ValueError
