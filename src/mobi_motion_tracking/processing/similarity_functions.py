@@ -80,11 +80,13 @@ def dynamic_time_warping(
         elif target_idx == 0:
             subject_idx -= 1
         else:
-            min_cost_index = np.argmin([
-                cost_matrix[subject_idx - 1, target_idx],
-                cost_matrix[subject_idx, target_idx - 1],
-                cost_matrix[subject_idx - 1, target_idx - 1],
-            ])
+            min_cost_index = np.argmin(
+                [
+                    cost_matrix[subject_idx - 1, target_idx],
+                    cost_matrix[subject_idx, target_idx - 1],
+                    cost_matrix[subject_idx - 1, target_idx - 1],
+                ]
+            )
             if min_cost_index == 0:
                 subject_idx -= 1
             elif min_cost_index == 1:
