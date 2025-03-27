@@ -76,6 +76,11 @@ def run_file(
     Raises:
         ValueError: If an unsupported algorithm is provided.
     """
+    if algorithm == "dtw":
+        similarity_function = similarity_functions.dynamic_time_warping
+    else:
+        raise ValueError("Unsupported algorithm provided.")
+
     for seq in sequence:
         gold_metadata = models.Metadata.get_metadata(gold_path, seq)
         gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
@@ -91,10 +96,9 @@ def run_file(
             centered_subject_data, gold_average_lengths
         )
 
-        if algorithm == "dtw":
-            similarity_metric = similarity_functions.dynamic_time_warping(
-                centered_gold_data, normalized_subject_data
-            )
+        similarity_metric = similarity_function(
+            centered_gold_data, normalized_subject_data
+        )
 
         output_dict = writers.save_results_to_ndjson(
             gold_metadata,
