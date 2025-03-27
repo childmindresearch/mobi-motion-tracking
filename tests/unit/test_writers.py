@@ -1,7 +1,6 @@
 """Test writers.py functions."""
 
 import datetime
-import json
 import pathlib
 from typing import List, Optional
 
@@ -20,9 +19,9 @@ def test_generate_output_filename_good() -> None:
 
     result = writers.generate_output_filename(gold_id, output_dir)
 
-    assert result == pathlib.Path(
-        expected_file
-    ), "Generated filename does not match the expected format."
+    assert result == pathlib.Path(expected_file), (
+        "Generated filename does not match the expected format."
+    )
     assert result.exists(), "Output file was not created."
 
 
@@ -54,8 +53,10 @@ def test_save_results_good(
         selected_metrics=selected_metrics,
     )
     assert expected_output_path.exists(), "Expected output file was not generated."
-    assert output_dict.keys() == expected_keys, "Selected metrics do not match \
+    assert output_dict.keys() == expected_keys, (
+        "Selected metrics do not match \
         expected metrics."
+    )
 
 
 def test_save_results_wrong_metric() -> None:
