@@ -1,5 +1,6 @@
 """Dataclass storing all similarity metrics."""
 
+import os
 import pathlib
 from dataclasses import dataclass, field
 from typing import Any, Dict
@@ -69,13 +70,34 @@ class Metadata:
             Metadata: Dataclass with participant_ID and sequence.
 
         Raises:
+            FileNotFoundError: subject_file doesn't exist.
+            ValueError: Invalid file extension.
             ValueError: subject_file named incorrectly.
         """
-        participant_ID = subject_path.stem
+        try:
+            if not os.path.exists(subject_path):
+                raise FileNotFoundError("File not found.")
+            if ".xlsx" != subject_path.suffix:
+                raise ValueError(
+                    f"Invalid file extension: {subject_path}. Expected '.xlsx'."
+                )
 
-        if not (participant_ID.isdigit() or "gold" in participant_ID.lower()):
-            raise ValueError("The input file is named incorrectly.")
+            participant_ID = subject_path.stem
 
-        sequence_str = f"seq{sequence}"
+        except FileNotFoundError as fnf_error:
+            print(f"Skipping {subject_path}: {fnf_error}")
+            return None
+        except ValueError as ve:
+            print(f"Skipping file {subject_path}: {ve} (Wrong file type)")
+            return None
+
+        try:
+            if not (participant_ID.isdigit() or "gold" in participant_ID.lower()):
+                raise ValueError("The input file is named incorrectly.")
+
+            sequence_str = f"seq{sequence}"
+
+        except ValueError as err:
+            print(f"Skipping file {subject_path}: {err}")
 
         return cls(participant_ID=participant_ID, sequence_sheetname=sequence_str)
