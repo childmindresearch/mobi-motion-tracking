@@ -62,6 +62,10 @@ def read_sheet(path: Path, sequence_sheetname: str) -> np.ndarray:
         path: Path to .xlsx file.
         sequence_sheetname: str, determines which sequence is processed.
 
+    Returns:
+        np.ndarray: Data is passed to data_cleaner which returns an np.ndarray, or an
+            empty array is returned if the sheet name does not exist.
+
     Raises:
         ValueError: Sheet name was not found.
     """
