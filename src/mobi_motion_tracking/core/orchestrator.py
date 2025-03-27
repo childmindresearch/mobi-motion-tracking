@@ -61,7 +61,8 @@ def run_file(
     This function reads motion tracking data from the specified subject and gold-
     standard files, applies preprocessing steps, computes similarity metrics using the
     specified algorithm, and saves the results. By default, the results are saved as a
-    csv in the parent folder of experimental path
+    csv in the parent folder of experimental path. If a file passed in a directory is
+    invalid, the function continues.
 
     Args:
         file_path: Path to the subject's motion tracking data file.
@@ -84,10 +85,16 @@ def run_file(
     for seq in sequence:
         gold_metadata = models.Metadata.get_metadata(gold_path, seq)
         gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
+
         subject_metadata = models.Metadata.get_metadata(file_path, seq)
+        if subject_metadata is None:
+            continue
+
         subject_data = readers.read_sheet(
             file_path, subject_metadata.sequence_sheetname
         )
+        if subject_data is None:
+            continue
 
         centered_gold_data = preprocessing.center_joints_to_hip(gold_data)
         centered_subject_data = preprocessing.center_joints_to_hip(subject_data)
