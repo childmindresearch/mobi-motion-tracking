@@ -46,7 +46,8 @@ def test_dtw_good_with_window() -> None:
     """Test that the dynamic time warping funciton extracts correct known values.
 
     The expected_distance output was verified by running the same test data in matlab
-    using the mathworks dtw function.
+    using the mathworks dtw function. Expected output with a window should be the same
+    as without a window since test data is minimal.
     """
     preprocessed_target_data = np.array([
         [0, 0, 0, 0, 0, 2, 4],
