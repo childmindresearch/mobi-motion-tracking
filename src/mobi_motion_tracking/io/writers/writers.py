@@ -61,6 +61,9 @@ def save_results_to_ndjson(
         selected_metrics: List of metric keys to include in the
             output. If None, all available metrics are written.
 
+    Returns:
+        dict: entry to be written to output file.
+
     Raises:
         ValueError: If any selected metric is not available in
             `similarity_metrics.metrics`.
