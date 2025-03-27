@@ -81,7 +81,7 @@ def save_results_to_ndjson(
         if metric_key in list(similarity_metrics.metrics.keys()):
             new_entry[metric_key] = similarity_metrics.metrics[metric_key]
         else:
-            raise ValueError("Selected metrics are not eligable for selected method.")
+            raise ValueError("Selected metrics are not eligible for selected method.")
 
     output_path = generate_output_filename(gold_metadata.participant_ID, output_dir)
 
