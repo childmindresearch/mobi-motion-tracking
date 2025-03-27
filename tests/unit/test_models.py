@@ -31,7 +31,7 @@ def test_get_metadata_good() -> None:
 
 def test_get_metadata_file_not_found() -> None:
     """Test FileNotFoundError when file does not exist."""
-    metadata = models.Metadata.get_metadata(pathlib.Path("/dummy/path/100.xlsx"), 1)
+    metadata = models.Metadata.get_metadata(pathlib.Path("/dummy/path/100.xlsx"), 1)  # type: ignore[return-value] # Failing on purpose to test FileNotFoundError
 
     assert metadata is None, (
         "Expected output should be None when a file does not \
@@ -41,7 +41,7 @@ def test_get_metadata_file_not_found() -> None:
 
 def test_read_sheet_invalid_file_extension() -> None:
     """Test ValueError when file is not .xlsx."""
-    metadata = models.Metadata.get_metadata(pathlib.Path("/dummy/path/100.csv"), 1)
+    metadata = models.Metadata.get_metadata(pathlib.Path("/dummy/path/100.csv"), 1)  # type: ignore[return-value] # Failing on purpose to test ValueError
 
     assert metadata is None, (
         "Expected output should be None with an invalid file \
