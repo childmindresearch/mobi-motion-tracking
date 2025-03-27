@@ -1,6 +1,5 @@
 """Functions to read motion tracking data from a file."""
 
-import os
 from pathlib import Path
 
 import numpy as np
