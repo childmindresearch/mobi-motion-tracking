@@ -28,7 +28,7 @@ def dynamic_time_warping(
         preprocessed_subject_data: cleaned, centered, and normalized subject data.
         window_size: constraint for matching points, ensuring
             |num_frames_subject - num_frames_target| <= window_size. If None, the
-            window size is set to infinity.
+            window size is set to the maximum amount of rows of the two sequences.
 
     Returns:
         SimilarityMetrics: a dataclass which stores the DTW similarity metrics.
@@ -80,13 +80,11 @@ def dynamic_time_warping(
         elif target_idx == 0:
             subject_idx -= 1
         else:
-            min_cost_index = np.argmin(
-                [
-                    cost_matrix[subject_idx - 1, target_idx],
-                    cost_matrix[subject_idx, target_idx - 1],
-                    cost_matrix[subject_idx - 1, target_idx - 1],
-                ]
-            )
+            min_cost_index = np.argmin([
+                cost_matrix[subject_idx - 1, target_idx],
+                cost_matrix[subject_idx, target_idx - 1],
+                cost_matrix[subject_idx - 1, target_idx - 1],
+            ])
             if min_cost_index == 0:
                 subject_idx -= 1
             elif min_cost_index == 1:
