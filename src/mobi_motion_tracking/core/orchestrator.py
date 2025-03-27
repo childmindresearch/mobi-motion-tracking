@@ -87,7 +87,7 @@ def run_file(
         gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
 
         subject_metadata = models.Metadata.get_metadata(file_path, seq)
-        if subject_metadata.participant_ID is None:
+        if subject_metadata.participant_ID == "None":
             continue
 
         subject_data = readers.read_sheet(

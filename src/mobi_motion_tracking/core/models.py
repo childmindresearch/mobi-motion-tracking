@@ -86,10 +86,10 @@ class Metadata:
 
         except FileNotFoundError as fnf_error:
             print(f"Skipping {subject_path}: {fnf_error}")
-            return cls(participant_ID=None, sequence_sheetname=None)
+            return cls(participant_ID="None", sequence_sheetname="None")
         except ValueError as ve:
             print(f"Skipping file {subject_path}: {ve} (Wrong file type)")
-            return cls(participant_ID=None, sequence_sheetname=None)
+            return cls(participant_ID="None", sequence_sheetname="None")
 
         try:
             if not (participant_ID.isdigit() or "gold" in participant_ID.lower()):
@@ -99,6 +99,6 @@ class Metadata:
 
         except ValueError as err:
             print(f"Skipping file {subject_path}: {err}")
-            return cls(participant_ID=None, sequence_sheetname=None)
+            return cls(participant_ID="None", sequence_sheetname="None")
 
         return cls(participant_ID=participant_ID, sequence_sheetname=sequence_str)
