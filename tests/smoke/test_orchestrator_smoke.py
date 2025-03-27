@@ -20,9 +20,9 @@ def test_orchestrator_good_file() -> None:
     outputs = orchestrator.run(experimental_path, gold_path, sequence, "dtw")
 
     assert expected_output_file.exists(), "Expected file was not created."
-    assert outputs[0].keys() == expected_keys, (
-        "Saved dictionary keys do not match expected results."
-    )
+    assert (
+        outputs[0].keys() == expected_keys
+    ), "Saved dictionary keys do not match expected results."
 
 
 def test_orchestrator_good_dir() -> None:
@@ -39,6 +39,6 @@ def test_orchestrator_good_dir() -> None:
     outputs = orchestrator.run(experimental_path, gold_path, sequence, "dtw")
 
     assert expected_output_file.exists(), "Expected file was not created."
-    assert outputs[0].keys() == expected_keys, (
-        "Saved dictionary keys do not match expected results."
-    )
+    assert (
+        outputs[0].keys() == expected_keys
+    ), "Saved dictionary keys do not match expected results."
