@@ -4,6 +4,7 @@ import datetime
 import pathlib
 from typing import List, Optional
 
+import numpy as np
 import pytest
 
 from mobi_motion_tracking.core import models
@@ -19,9 +20,9 @@ def test_generate_output_filename_good() -> None:
 
     result = writers.generate_output_filename(gold_id, output_dir)
 
-    assert result == pathlib.Path(
-        expected_file
-    ), "Generated filename does not match the expected format."
+    assert result == pathlib.Path(expected_file), (
+        "Generated filename does not match the expected format."
+    )
     assert result.exists(), "Output file was not created."
 
 
@@ -36,8 +37,8 @@ def test_save_results_good(
     selected_metrics: Optional[List[str]], expected_keys: set
 ) -> None:
     """Test that a single entry is correctly written to the NDJSON file."""
-    gold_metadata = models.Metadata("Gold", "seq1")
-    subject_metadata = models.Metadata("123", "seq1")
+    gold = models.ParticipantData("Gold", "seq1", np.array([]))
+    subject = models.ParticipantData("123", "seq1", np.array([]))
     similarity_metrics = models.SimilarityMetrics(
         "fake_method", {"metric1": 1, "metric2": 2}
     )
@@ -46,21 +47,23 @@ def test_save_results_good(
     expected_output_path = output_dir / f"results_Gold_{date_str}.ndjson"
 
     output_dict = writers.save_results_to_ndjson(
-        gold_metadata,
-        subject_metadata,
+        gold,
+        subject,
         similarity_metrics,
         output_dir,
         selected_metrics=selected_metrics,
     )
     assert expected_output_path.exists(), "Expected output file was not generated."
-    assert output_dict.keys() == expected_keys, "Selected metrics do not match \
+    assert output_dict.keys() == expected_keys, (
+        "Selected metrics do not match \
         expected metrics."
+    )
 
 
 def test_save_results_wrong_metric() -> None:
     """Test save_results when an incorrect metric is selected."""
-    gold_metadata = models.Metadata("Gold", "seq1")
-    subject_metadata = models.Metadata("123", "seq1")
+    gold = models.ParticipantData("Gold", "seq1", np.array([]))
+    subject = models.ParticipantData("123", "seq1", np.array([]))
     similarity_metrics = models.SimilarityMetrics(
         "fake_method", {"metric1": 1, "metric2": 2}
     )
@@ -72,8 +75,8 @@ def test_save_results_wrong_metric() -> None:
         match="Selected metrics are not eligible for selected method.",
     ):
         writers.save_results_to_ndjson(
-            gold_metadata,
-            subject_metadata,
+            gold,
+            subject,
             similarity_metrics,
             output_dir,
             selected_metrics=selected_metrics,
