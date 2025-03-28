@@ -28,6 +28,9 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
         ValueError: when x_Hip is not found in dataframe.
         IndexError: when column index is out of range.
     """
+    if data.size == 0:
+        return data
+
     result = data.where(data == "x_Hip").stack().index
 
     if result.empty:
@@ -68,15 +71,20 @@ def read_sheet(path: pathlib.Path, sequence_sheetname: str) -> np.ndarray:
     Returns:
         np.ndarray: Data is passed to data_cleaner which returns an np.ndarray, or an
             empty array is returned if the sheet name does not exist.
+
+    Raises:
+        ValueError: if sheet name does not exist in file.
     """
     try:
         motion_tracking_data = pd.read_excel(
             path, sheet_name=sequence_sheetname, engine="openpyxl"
         )
-    except ValueError:
-        print(
-            f"Skipping sheet {sequence_sheetname} in {path}: Sheet name does not exist."
-        )
+    except ValueError as e:
+        if "Sheet name" in str(e):
+            print(
+                f"Skipping sheet {sequence_sheetname} in {path}: Sheet name does not \
+                    exist."
+            )
         return np.array([])
 
     return data_cleaner(motion_tracking_data)

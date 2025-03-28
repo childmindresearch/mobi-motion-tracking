@@ -45,6 +45,7 @@ def run(
         outputs.append(output_dict)
     else:
         raise TypeError("Input path is not a file nor a directory.")
+
     return outputs
 
 
