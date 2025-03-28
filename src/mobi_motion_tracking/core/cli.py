@@ -51,7 +51,7 @@ def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
 
 def main(
     args: Optional[List[str]] = None,
-) -> dict:
+) -> list[dict]:
     """Runs motion tracking orchestrator with command line arguments.
 
     Args:
@@ -62,3 +62,12 @@ def main(
         A result dict containing saved metrics for specified sequences for all subjects.
     """
     arguments = parse_arguments(args)
+
+    results = orchestrator.run(
+        experimental_path=arguments.data,
+        gold_path=arguments.gold,
+        sequence=arguments.sequence,
+        algorithm=arguments.algorithm,
+    )
+
+    return results
