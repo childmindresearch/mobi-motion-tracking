@@ -4,6 +4,7 @@ import pathlib
 import os
 import numpy as np
 import pandas as pd
+from mobi_motion_tracking.core import models
 
 
 def data_cleaner(data: pd.DataFrame) -> np.ndarray:
@@ -122,3 +123,32 @@ def get_metadata(subject_path: pathlib.Path, sequence: int) -> tuple[str, str]:
         return "None", "None"
 
     return participant_ID, sequence_str
+
+
+def read_participant_data(
+    subject_path: pathlib.Path, sequence: int
+) -> models.ParticipantData:
+    """Calls get_metadata and read sheet.
+
+    This function calls get_metadata to extract the participant_ID value and the
+    sequence_sheetname. read_sheet is then called to create the subject_data array.
+    The participant_ID, sequence_sheetname, and subject_data are passed to the
+    ParticipantData class and returned.
+
+    Args:
+        subject_path: file path to the participant file.
+        sequence: integer value indiciating the sequence currently being tested.
+
+    Returns:
+        models.ParticipantData: containing participant_ID (str), sheetname (str),
+            and data (np.ndarray).
+    """
+    participant_ID, sequence_sheetname = get_metadata(subject_path, sequence)
+
+    subject_data = read_sheet(subject_path, sequence_sheetname)
+
+    return models.ParticipantData(
+        participant_ID=participant_ID,
+        sequence_sheetname=sequence_sheetname,
+        data=subject_data,
+    )
