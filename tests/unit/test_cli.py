@@ -10,16 +10,16 @@ from mobi_motion_tracking.core import cli, orchestrator
 
 def test_parse_arguments() -> None:
     """Test the basic running of argparse with manadatory args."""
-    args = cli.parse_arguments(
-        [
-            "path/to/subject",
-            "path/to/gold",
-            "1",
-            "2",
-            "3",
-            "dtw",
-        ]
-    )
+    args = cli.parse_arguments([
+        "-d",
+        "path/to/subject",
+        "-g",
+        "path/to/gold",
+        "-s",
+        "1,2,3",
+        "-a",
+        "dtw",
+    ])
 
     assert args.data == pathlib.Path("path/to/subject")
     assert args.gold == pathlib.Path("path/to/gold")
@@ -39,14 +39,16 @@ def test_main_default(
     """Test cli with only necessary arguments."""
     mock_run = mocker.patch.object(orchestrator, "run")
 
-    cli.main(
-        [
-            "tests/sample_data/100.xlsx",
-            "tests/sample_data/Gold.xlsx",
-            "1",
-            "dtw",
-        ]
-    )
+    cli.main([
+        "-d",
+        "tests/sample_data/100.xlsx",
+        "-g",
+        "tests/sample_data/Gold.xlsx",
+        "-s",
+        "1",
+        "-a",
+        "dtw",
+    ])
 
     mock_run.assert_called_once_with(
         experimental_path=pathlib.Path("tests/sample_data/100.xlsx"),
