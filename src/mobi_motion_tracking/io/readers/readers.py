@@ -1,7 +1,7 @@
 """Functions to read motion tracking data from a file."""
 
-from pathlib import Path
-
+import pathlib
+import os
 import numpy as np
 import pandas as pd
 
@@ -51,7 +51,7 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
     return cleaned_data
 
 
-def read_sheet(path: Path, sequence_sheetname: str) -> np.ndarray:
+def read_sheet(path: pathlib.Path, sequence_sheetname: str) -> np.ndarray:
     """Read data from specific sheet.
 
     Currently motion tracking data for Kinect and Zed are saved into xlsx files.
@@ -77,3 +77,48 @@ def read_sheet(path: Path, sequence_sheetname: str) -> np.ndarray:
         return np.array([])
 
     return data_cleaner(motion_tracking_data)
+
+
+def get_metadata(subject_path: pathlib.Path, sequence: int) -> tuple[str, str]:
+    """Strip path name for participant ID and create sequence sheet name.
+
+    This function strips the basename without the file extension per
+    participant to extract each participant ID (int or "gold") and saves the
+    sequence (int) as a string with the preface 'seq' for the sheet name.
+
+    Args:
+        subject_path: Path, full filepath per participant.
+        sequence: int, sequence number.
+
+    Returns:
+        participant_ID: basename of file.
+        sequence_str: sheetname in file indicating sequence.
+    """
+    try:
+        if not os.path.exists(subject_path):
+            raise FileNotFoundError("File not found.")
+        if ".xlsx" != subject_path.suffix:
+            raise ValueError(
+                f"Invalid file extension: {subject_path}. Expected '.xlsx'."
+            )
+
+        participant_ID = subject_path.stem
+
+    except FileNotFoundError as fnf_error:
+        print(f"Skipping {subject_path}: {fnf_error}")
+        return "None", "None"
+    except ValueError as ve:
+        print(f"Skipping file {subject_path}: {ve} (Wrong file type)")
+        return "None", "None"
+
+    try:
+        if not (participant_ID.isdigit() or "gold" in participant_ID.lower()):
+            raise ValueError("The input file is named incorrectly.")
+
+        sequence_str = f"seq{sequence}"
+
+    except ValueError as err:
+        print(f"Skipping file {subject_path}: {err}")
+        return "None", "None"
+
+    return participant_ID, sequence_str
