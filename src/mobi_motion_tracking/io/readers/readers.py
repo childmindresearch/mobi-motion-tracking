@@ -101,6 +101,11 @@ def get_metadata(subject_path: pathlib.Path, sequence: int) -> tuple[str, str]:
     Returns:
         participant_ID: basename of file.
         sequence_str: sheetname in file indicating sequence.
+
+    Raises:
+        FileNotFoundError: inout file doesn't exist.
+        ValueError: invalid file extension.
+        ValueError: input file named incorrectly.
     """
     try:
         if not os.path.exists(subject_path):
