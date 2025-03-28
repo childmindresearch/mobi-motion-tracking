@@ -22,24 +22,19 @@ def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         epilog="Please report issues at https://github.com/childmindresearch/mobi-motion-tracking.",
     )
-    parser.add_argument(
-        "--d", "--data", type=pathlib.Path, help="Path to the subject(s) data."
-    )
+    parser.add_argument("data", type=pathlib.Path, help="Path to the subject(s) data.")
+
+    parser.add_argument("gold", type=pathlib.Path, help="Path to the gold data file.")
 
     parser.add_argument(
-        "-g", "--gold", type=pathlib.Path, help="Path to the gold data file."
-    )
-
-    parser.add_argument(
-        "--s",
-        "--sequence",
-        type=List[int],
+        "sequence",
+        type=int,
+        nargs="+",
         help="List of integer(s) indicating which sequences to run the pipeline for.",
     )
 
     parser.add_argument(
-        "-a",
-        "--algorithm",
+        "algorithm",
         type=str,
         choices=["dtw"],
         default="dtw",
