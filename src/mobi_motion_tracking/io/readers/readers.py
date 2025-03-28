@@ -1,9 +1,11 @@
 """Functions to read motion tracking data from a file."""
 
-import pathlib
 import os
+import pathlib
+
 import numpy as np
 import pandas as pd
+
 from mobi_motion_tracking.core import models
 
 

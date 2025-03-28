@@ -5,7 +5,6 @@ import pathlib
 import numpy as np
 import pandas as pd
 import pytest
-import pytest_mock
 
 from mobi_motion_tracking.io.readers import readers
 
