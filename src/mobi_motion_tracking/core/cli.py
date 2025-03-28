@@ -12,7 +12,7 @@ def parse_sequence_list(sequence_str: str) -> List[int]:
     return [int(seq.strip()) for seq in sequence_str.split(",")]
 
 
-def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
+def parse_arguments(args: Optional[List[str]]) -> argparse.Namespace:
     """Argument parser for mobi-motion-tracking cli.
 
     Args:
@@ -68,7 +68,7 @@ def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
 
 
 def main(
-    args: Optional[List[str]] = None,
+    args: Optional[List[str]],
 ) -> list[dict]:
     """Runs motion tracking orchestrator with command line arguments.
 
