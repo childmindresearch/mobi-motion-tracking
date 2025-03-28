@@ -97,11 +97,10 @@ def run_file(
 
         similarity_metric = similarity_function(gold.data, subject.data)
 
-        output_dict = writers.save_results_to_ndjson(
-            gold,
-            subject,
-            similarity_metric,
-            output_dir,
-            selected_metrics=["distance"],
-        )
-    return output_dict
+    return writers.save_results_to_ndjson(
+        gold,
+        subject,
+        similarity_metric,
+        output_dir,
+        selected_metrics=["distance"],
+    )
