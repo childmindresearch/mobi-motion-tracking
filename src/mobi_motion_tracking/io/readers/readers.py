@@ -28,9 +28,6 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
         ValueError: when x_Hip is not found in dataframe.
         IndexError: when column index is out of range.
     """
-    if data.size == 0:
-        return data
-
     result = data.where(data == "x_Hip").stack().index
 
     if result.empty:
