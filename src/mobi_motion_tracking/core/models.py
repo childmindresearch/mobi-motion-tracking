@@ -1,9 +1,9 @@
 """Dataclass storing all similarity metrics."""
 
-import os
-import pathlib
 from dataclasses import dataclass, field
 from typing import Any, Dict
+
+import numpy as np
 
 
 @dataclass
@@ -43,57 +43,15 @@ class SimilarityMetrics:
 
 
 @dataclass
-class Metadata:
+class ParticipantData:
     """Stores relevant participant information.
 
     Attributes:
         participant_ID: Integer value unique to every participant.
         sequence: Integer value associated with each iteration of a test.
+        data: np.ndarray containing subject data for specified sequence.
     """
 
     participant_ID: str
     sequence_sheetname: str
-
-    @classmethod
-    def get_metadata(cls, subject_path: pathlib.Path, sequence: int) -> "Metadata":
-        """Strip path name for participant ID and create sequence sheet name.
-
-        This function strips the basename without the file extension per
-        participant to extract each participant ID (int or "gold") and saves the
-        sequence (int) as a string with the preface 'seq' for the sheet name.
-
-        Args:
-            subject_path: Path, full filepath per participant.
-            sequence: int, sequence number.
-
-        Returns:
-            Metadata: Dataclass with participant_ID and sequence.
-        """
-        try:
-            if not os.path.exists(subject_path):
-                raise FileNotFoundError("File not found.")
-            if ".xlsx" != subject_path.suffix:
-                raise ValueError(
-                    f"Invalid file extension: {subject_path}. Expected '.xlsx'."
-                )
-
-            participant_ID = subject_path.stem
-
-        except FileNotFoundError as fnf_error:
-            print(f"Skipping {subject_path}: {fnf_error}")
-            return cls(participant_ID="None", sequence_sheetname="None")
-        except ValueError as ve:
-            print(f"Skipping file {subject_path}: {ve} (Wrong file type)")
-            return cls(participant_ID="None", sequence_sheetname="None")
-
-        try:
-            if not (participant_ID.isdigit() or "gold" in participant_ID.lower()):
-                raise ValueError("The input file is named incorrectly.")
-
-            sequence_str = f"seq{sequence}"
-
-        except ValueError as err:
-            print(f"Skipping file {subject_path}: {err}")
-            return cls(participant_ID="None", sequence_sheetname="None")
-
-        return cls(participant_ID=participant_ID, sequence_sheetname=sequence_str)
+    data: np.ndarray
