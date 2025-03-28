@@ -3,7 +3,6 @@
 import pathlib
 from typing import Literal
 
-from mobi_motion_tracking.core import models
 from mobi_motion_tracking.io.readers import readers
 from mobi_motion_tracking.io.writers import writers
 from mobi_motion_tracking.preprocessing import preprocessing
@@ -83,33 +82,24 @@ def run_file(
         raise ValueError("Unsupported algorithm provided.")
 
     for seq in sequence:
-        gold_metadata = models.Metadata.get_metadata(gold_path, seq)
-        gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
+        gold = readers.read_participant_data(gold_path, seq)
+        subject = readers.read_participant_data(file_path, seq)
 
-        subject_metadata = models.Metadata.get_metadata(file_path, seq)
-        if subject_metadata.participant_ID == "None":
+        if subject.participant_ID == "None" or subject.data.size == 0:
             continue
 
-        subject_data = readers.read_sheet(
-            file_path, subject_metadata.sequence_sheetname
-        )
-        if subject_data.size == 0:
-            continue
-
-        centered_gold_data = preprocessing.center_joints_to_hip(gold_data)
-        centered_subject_data = preprocessing.center_joints_to_hip(subject_data)
-        gold_average_lengths = preprocessing.get_average_length(centered_gold_data)
-        normalized_subject_data = preprocessing.normalize_segments(
-            centered_subject_data, gold_average_lengths
+        gold.data = preprocessing.center_joints_to_hip(gold.data)
+        subject.data = preprocessing.center_joints_to_hip(subject.data)
+        gold_average_lengths = preprocessing.get_average_length(gold.data)
+        subject.data = preprocessing.normalize_segments(
+            subject.data, gold_average_lengths
         )
 
-        similarity_metric = similarity_function(
-            centered_gold_data, normalized_subject_data
-        )
+        similarity_metric = similarity_function(gold.data, subject.data)
 
         output_dict = writers.save_results_to_ndjson(
-            gold_metadata,
-            subject_metadata,
+            gold,
+            subject,
             similarity_metric,
             output_dir,
             selected_metrics=["distance"],
