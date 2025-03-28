@@ -47,3 +47,18 @@ def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
     )
 
     return parser.parse_args(args)
+
+
+def main(
+    args: Optional[List[str]] = None,
+) -> dict:
+    """Runs motion tracking orchestrator with command line arguments.
+
+    Args:
+         args: A list of command line arguments given as strings. If None, the parser
+            will take the args from `sys.argv`.
+
+    Returns:
+        A result dict containing saved metrics for specified sequences for all subjects.
+    """
+    arguments = parse_arguments(args)
