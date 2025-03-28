@@ -22,17 +22,21 @@ def create_dummy_dataframe(valid: bool = True) -> pd.DataFrame:
         placement or a missing 'x_Hip' for testing.
     """
     if valid:
-        data = pd.DataFrame([
-            list(range(1, 71)),
-            ["a", "b", "c", "d", "e", "x_Hip", "g"] + list(range(8, 71)),
-            list(range(71, 141)),
-        ])
+        data = pd.DataFrame(
+            [
+                list(range(1, 71)),
+                ["a", "b", "c", "d", "e", "x_Hip", "g"] + list(range(8, 71)),
+                list(range(71, 141)),
+            ]
+        )
     else:
-        data = pd.DataFrame([
-            list(range(1, 71)),
-            ["a", "b", "c", "d", "e", "f", "g"] + list(range(8, 71)),
-            list(range(71, 141)),
-        ])
+        data = pd.DataFrame(
+            [
+                list(range(1, 71)),
+                ["a", "b", "c", "d", "e", "f", "g"] + list(range(8, 71)),
+                list(range(71, 141)),
+            ]
+        )
     return data
 
 
