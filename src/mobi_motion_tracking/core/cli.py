@@ -45,3 +45,5 @@ def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
         default="dtw",
         help="Pick which algorithm to use. Can be 'dtw'.",
     )
+
+    return parser.parse_args(args)
