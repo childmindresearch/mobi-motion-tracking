@@ -51,7 +51,8 @@ def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
         "--sequence",
         type=parse_sequence_list,
         required=True,
-        help="String of comma seperated integer(s) indicating which sequences to run the pipeline for.",
+        help="String of comma seperated integer(s) indicating which sequences to run "
+        "the pipeline for.",
     )
 
     parser.add_argument(
