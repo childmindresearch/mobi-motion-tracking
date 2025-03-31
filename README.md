@@ -62,7 +62,7 @@ mobi_motion_tracking -d /subject/file/path/000.xlsx -g /gold/file/path/gold.xlsx
 mobi_motion_tracking -d /subject/file/dir -g /gold/file/path/gold.xlsx -s "1,2,3" -a "dtw"
 ```
 
-### Using Wristpy through a python script or notebook:
+### Using mobi_motion_tracking through a python script or notebook:
 
 #### Running single files:
 ```Python
