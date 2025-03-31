@@ -30,8 +30,8 @@ def run(
         algorithm: Name of the algorithm to use for similarity computation.
 
     Returns:
-        list: list of dictionaries containing metadata and specified metrics for each
-            run.
+        list of lists containing metadata and specified metrics for each
+            subject.
 
     Raises:
         FileNotFoundError: Input 'experimental_path' doesn't exist.
@@ -89,7 +89,7 @@ def run_file(
         algorithm: Name of the algorithm to use for similarity computation.
 
     Returns:
-        list: list of dictionaries being written to the output file.
+        list of dictionaries being written to the output file.
 
     Raises:
         ValueError: Invalid file extension.
