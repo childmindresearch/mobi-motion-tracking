@@ -1,6 +1,5 @@
 """Functions to read motion tracking data from a file."""
 
-import os
 import pathlib
 
 import numpy as np
@@ -54,89 +53,6 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
     return cleaned_data
 
 
-def read_sheet(path: pathlib.Path, sequence_sheetname: str) -> np.ndarray:
-    """Read data from specific sheet.
-
-    Currently motion tracking data for Kinect and Zed are saved into xlsx files.
-    This function reads in the data from 1 sheet as a dataframe. Then passes the
-    raw dataframe to data_cleaner and returns the output from data_cleaner.
-
-    Args:
-        path: Path to .xlsx file.
-        sequence_sheetname: str, determines which sequence is processed.
-
-    Returns:
-        np.ndarray: Data is passed to data_cleaner which returns an np.ndarray, or an
-            empty array is returned if the sheet name does not exist.
-
-    Raises:
-        ValueError: if sheet name does not exist in file.
-    """
-    try:
-        motion_tracking_data = pd.read_excel(
-            path, sheet_name=sequence_sheetname, engine="openpyxl"
-        )
-    except ValueError as e:
-        if "Sheet name" in str(e):
-            print(
-                f"Skipping sheet {sequence_sheetname} in {path}: Sheet name does not \
-                    exist."
-            )
-        return np.array([])
-
-    return data_cleaner(motion_tracking_data)
-
-
-def get_metadata(subject_path: pathlib.Path, sequence: int) -> tuple[str, str]:
-    """Strip path name for participant ID and create sequence sheet name.
-
-    This function strips the basename without the file extension per
-    participant to extract each participant ID (int or "gold") and saves the
-    sequence (int) as a string with the preface 'seq' for the sheet name.
-
-    Args:
-        subject_path: Path, full filepath per participant.
-        sequence: int, sequence number.
-
-    Returns:
-        participant_ID: basename of file.
-        sequence_str: sheetname in file indicating sequence.
-
-    Raises:
-        FileNotFoundError: inout file doesn't exist.
-        ValueError: invalid file extension.
-        ValueError: input file named incorrectly.
-    """
-    try:
-        if not os.path.exists(subject_path):
-            raise FileNotFoundError("File not found.")
-        if ".xlsx" != subject_path.suffix:
-            raise ValueError(
-                f"Invalid file extension: {subject_path}. Expected '.xlsx'."
-            )
-
-        participant_ID = subject_path.stem
-
-    except FileNotFoundError as fnf_error:
-        print(f"Skipping {subject_path}: {fnf_error}")
-        return "None", "None"
-    except ValueError as ve:
-        print(f"Skipping file {subject_path}: {ve} (Wrong file type)")
-        return "None", "None"
-
-    try:
-        if not (participant_ID.isdigit() or "gold" in participant_ID.lower()):
-            raise ValueError("The input file is named incorrectly.")
-
-        sequence_str = f"seq{sequence}"
-
-    except ValueError as err:
-        print(f"Skipping file {subject_path}: {err}")
-        return "None", "None"
-
-    return participant_ID, sequence_str
-
-
 def read_participant_data(
     subject_path: pathlib.Path, sequence: int
 ) -> models.ParticipantData:
@@ -155,9 +71,18 @@ def read_participant_data(
         models.ParticipantData: containing participant_ID (str), sheetname (str),
             and data (np.ndarray).
     """
-    participant_ID, sequence_sheetname = get_metadata(subject_path, sequence)
+    participant_ID = subject_path.stem
+    sequence_sheetname = f"seq{sequence}"
 
-    subject_data = read_sheet(subject_path, sequence_sheetname)
+    try:
+        motion_tracking_data = pd.read_excel(
+            subject_path, sheet_name=sequence_sheetname, engine="openpyxl"
+        )
+    except ValueError as ve:
+        print(f"Sheet doesn't exist: {ve}")
+        return None
+
+    subject_data = data_cleaner(motion_tracking_data)
 
     return models.ParticipantData(
         participant_ID=participant_ID,
