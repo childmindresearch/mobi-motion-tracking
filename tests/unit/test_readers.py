@@ -100,7 +100,7 @@ def test_read_participant_data_no_sheet() -> None:
         pathlib.Path("tests/sample_data/100.xlsx"), 4
     )
 
-    assert participant_data is None, (
-        "Expected result to be None when sheet does not \
+    assert participant_data.data.size == 0, (
+        "Expected result to be empty when sheet does not \
         exist."
     )
