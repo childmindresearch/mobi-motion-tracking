@@ -92,14 +92,11 @@ def run_file(
         list: list of dictionaries being written to the output file.
 
     Raises:
-        ValueError: If an unsupported algorithm is provided.
         ValueError: Invalid file extension.
         ValueError: Subject or gold file is named incorrectly.
     """
     if algorithm == "dtw":
         similarity_function = similarity_functions.dynamic_time_warping
-    else:
-        raise ValueError("Unsupported algorithm provided.")
 
     if ".xlsx" != file_path.suffix:
         raise ValueError(f"Invalid file extension: {file_path}. Expected '.xlsx'.")

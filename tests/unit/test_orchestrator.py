@@ -13,7 +13,7 @@ def test_run_fake_input_path() -> None:
     gold_path = pathlib.Path("tests/sample_data/Gold.xlsx")
     sequence = [1, 2, 3]
 
-    with pytest.raises(TypeError, match="Input path does not exist."):
+    with pytest.raises(FileNotFoundError, match="Input path does not exist."):
         orchestrator.run(file_path, gold_path, sequence, "dtw")
 
 
