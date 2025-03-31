@@ -1,10 +1,11 @@
 """Functions to read motion tracking data from a file."""
 
 import pathlib
+from typing import Optional
 
 import numpy as np
 import pandas as pd
-from typing import Union
+
 from mobi_motion_tracking.core import models
 
 
@@ -55,7 +56,7 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
 
 def read_participant_data(
     subject_path: pathlib.Path, sequence: int
-) -> Union[models.ParticipantData, None]:
+) -> Optional[models.ParticipantData]:
     """Calls get_metadata and read sheet.
 
     This function calls get_metadata to extract the participant_ID value and the
