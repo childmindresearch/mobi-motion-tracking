@@ -84,7 +84,7 @@ def read_participant_data(
         return models.ParticipantData(
             participant_ID=participant_ID,
             sequence_sheetname=sequence_sheetname,
-            data=None,
+            data=np.array([]),
         )
 
     subject_data = data_cleaner(motion_tracking_data)
