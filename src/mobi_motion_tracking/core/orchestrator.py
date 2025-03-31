@@ -110,7 +110,7 @@ def run_file(
         gold = readers.read_participant_data(gold_path, seq)
         subject = readers.read_participant_data(file_path, seq)
 
-        if subject is None:
+        if subject.data is None:
             continue
 
         gold.data = preprocessing.center_joints_to_hip(gold.data)

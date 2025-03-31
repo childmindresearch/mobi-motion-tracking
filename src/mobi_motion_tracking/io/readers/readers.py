@@ -56,7 +56,7 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
 
 def read_participant_data(
     subject_path: pathlib.Path, sequence: int
-) -> Optional[models.ParticipantData]:
+) -> models.ParticipantData:
     """Calls get_metadata and read sheet.
 
     This function calls get_metadata to extract the participant_ID value and the
@@ -81,7 +81,11 @@ def read_participant_data(
         )
     except ValueError as ve:
         print(f"Sheet doesn't exist: {ve}")
-        return None
+        return models.ParticipantData(
+            participant_ID=participant_ID,
+            sequence_sheetname=sequence_sheetname,
+            data=None,
+        )
 
     subject_data = data_cleaner(motion_tracking_data)
 
