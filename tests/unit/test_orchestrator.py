@@ -41,19 +41,21 @@ def test_run_file_invalid_extension() -> None:
     """Tests run_file with an invalid file extension."""
     file_path = pathlib.Path("tests/sample_data/csv_file.csv")
     gold_path = pathlib.Path("tests/sample_data/Gold.xlsx")
+    output_dir = pathlib.Path("tests/sample_data")
     sequence = [1, 2, 3]
 
     with pytest.raises(
         ValueError, match=f"Invalid file extension: {file_path}. Expected '.xlsx'."
     ):
-        orchestrator.run_file(file_path, gold_path, sequence, "dtw")
+        orchestrator.run_file(file_path, gold_path, output_dir, sequence, "dtw")
 
 
 def test_run_file_wrong_basename() -> None:
     """Tests run_file with input file with wrong basename."""
     file_path = pathlib.Path("tests/sample_data/valid_file.xlsx")
     gold_path = pathlib.Path("tests/sample_data/Gold.xlsx")
+    output_dir = pathlib.Path("tests/sample_data")
     sequence = [1, 2, 3]
 
     with pytest.raises(ValueError, match="The input file is named incorrectly."):
-        orchestrator.run_file(file_path, gold_path, sequence, "dtw")
+        orchestrator.run_file(file_path, gold_path, output_dir, sequence, "dtw")
