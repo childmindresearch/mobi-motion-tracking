@@ -36,8 +36,8 @@ def generate_output_filename(
 
 
 def save_results_to_ndjson(
-    gold_metadata: models.Metadata,
-    subject_metadata: models.Metadata,
+    gold: models.ParticipantData,
+    subject: models.ParticipantData,
     similarity_metrics: models.SimilarityMetrics,
     output_dir: pathlib.Path,
     selected_metrics: Optional[list[str]] = None,
@@ -53,8 +53,8 @@ def save_results_to_ndjson(
     with the filename generated using `generate_output_filename()`.
 
     Args:
-        gold_metadata: Metadata for the gold-standard participant.
-        subject_metadata: Metadata for the subject being analyzed.
+        gold: data for the gold-standard participant.
+        subject: data for the subject being analyzed.
         similarity_metrics: Object containing the similarity
             method and metrics.
         output_dir: Directory where the results file should be saved.
@@ -69,8 +69,8 @@ def save_results_to_ndjson(
             `similarity_metrics.metrics`.
     """
     new_entry = {
-        "participant_ID": subject_metadata.participant_ID,
-        "sheetname": subject_metadata.sequence_sheetname,
+        "participant_ID": subject.participant_ID,
+        "sheetname": subject.sequence_sheetname,
         "method": similarity_metrics.method,
     }
 
@@ -83,7 +83,7 @@ def save_results_to_ndjson(
         else:
             raise ValueError("Selected metrics are not eligible for selected method.")
 
-    output_path = generate_output_filename(gold_metadata.participant_ID, output_dir)
+    output_path = generate_output_filename(gold.participant_ID, output_dir)
 
     with open(output_path, "a") as f:
         json.dump(new_entry, f)

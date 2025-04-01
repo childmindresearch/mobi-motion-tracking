@@ -1,6 +1,6 @@
 """test readers.py functions."""
 
-from pathlib import Path
+import pathlib
 
 import numpy as np
 import pandas as pd
@@ -74,27 +74,27 @@ def test_data_cleaner_index_error() -> None:
         readers.data_cleaner(data)
 
 
-def test_read_sheet_invalid_sheet_name_continues(sample_excel_path: Path) -> None:
-    """Test ValueError when sheet name does not exist."""
-    output = readers.read_sheet(sample_excel_path, "InvalidSheet")
+def test_read_participant_data_good() -> None:
+    """Test read_participant_data calls expecetd functions."""
+    participant_data = readers.read_participant_data(
+        pathlib.Path("tests/sample_data/100.xlsx"), 1
+    )
 
-    assert len(output) == 0, "Expected output for an invalid sheet name should be \
-        empty."
+    assert participant_data.participant_ID == "100", f"Expected participant_ID is 100 \
+        not {participant_data.participant_ID}"
+    assert participant_data.sequence_sheetname == "seq1", f"Expected sheetname is seq1 \
+        not {participant_data.sequence_sheetname}"
+    assert participant_data.data.shape == (17, 61), f"Expected shape of sample data is \
+          [18,61] not {participant_data.data.shape}"
 
 
-def test_read_sheet_good(sample_excel_path: Path) -> None:
-    """Test read_sheet with valid file type and sheet name."""
-    expected_rows = 1
-    expected_cols = 61
-    expected_output = [np.array(range(75, 136))]
+def test_read_participant_data_no_sheet() -> None:
+    """Test read_participant_data returns None when sheet doesn't exist."""
+    participant_data = readers.read_participant_data(
+        pathlib.Path("tests/sample_data/100.xlsx"), 4
+    )
 
-    cleaned_data = readers.read_sheet(sample_excel_path, "seq1")
-
-    assert isinstance(cleaned_data, np.ndarray), "Output should be a NumPy array."
-    assert cleaned_data.shape == (
-        expected_rows,
-        expected_cols,
-    ), f"Expected shape ({expected_rows}, {expected_cols}), \
-            but got {cleaned_data.shape}"
-    assert np.array_equal(cleaned_data, expected_output), "Extracted data does not \
-        match expected values."
+    assert (
+        participant_data.data.size == 0
+    ), "Expected result to be empty when sheet does not \
+        exist."
