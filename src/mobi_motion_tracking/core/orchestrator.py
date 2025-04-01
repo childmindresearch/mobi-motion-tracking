@@ -3,11 +3,12 @@
 import pathlib
 from typing import Literal
 
-from mobi_motion_tracking.core import models
 from mobi_motion_tracking.io.readers import readers
 from mobi_motion_tracking.io.writers import writers
 from mobi_motion_tracking.preprocessing import preprocessing
 from mobi_motion_tracking.processing import similarity_functions
+
+ALGORITHM_LIST = ["dtw"]
 
 
 def run(
@@ -28,24 +29,39 @@ def run(
         sequence: List of sequence numbers to process.
         algorithm: Name of the algorithm to use for similarity computation.
 
+    Returns:
+        list of lists containing metadata and specified metrics for each
+            subject.
+
     Raises:
+        FileNotFoundError: Input 'experimental_path' doesn't exist.
+        ValueError: if algorithm is unsupported.
         TypeError: If `experimental_path` is not a file or directory.
     """
     outputs = []
+
+    if algorithm not in ALGORITHM_LIST:
+        raise ValueError("Unsupported algorithm provided.")
+
     if experimental_path.is_dir():
         for file in experimental_path.iterdir():
             output_dir = experimental_path
-            output_dict = run_file(file, gold_path, output_dir, sequence, algorithm)
-            outputs.append(output_dict)
-            print(output_dict)
+            try:
+                subject_output = run_file(
+                    file, gold_path, output_dir, sequence, algorithm
+                )
+                outputs.append(subject_output)
+            except ValueError as ve:
+                print(f"Skipping file: {ve}")
     elif experimental_path.is_file():
         output_dir = experimental_path.parent
-        output_dict = run_file(
+        subject_output = run_file(
             experimental_path, gold_path, output_dir, sequence, algorithm
         )
-        outputs.append(output_dict)
+        outputs.append(subject_output)
     else:
-        raise TypeError("Input path is not a file nor a directory.")
+        raise FileNotFoundError("Input path does not exist.")
+
     return outputs
 
 
@@ -55,7 +71,7 @@ def run_file(
     output_dir: pathlib.Path,
     sequence: list[int],
     algorithm: Literal["dtw"] = "dtw",
-) -> dict:
+) -> list:
     """Performs main processing steps for a subject, per sequence.
 
     This function reads motion tracking data from the specified subject and gold-
@@ -72,46 +88,49 @@ def run_file(
         algorithm: Name of the algorithm to use for similarity computation.
 
     Returns:
-        dict: dictionary entry being written to the output file.
+        list of dictionaries being written to the output file.
 
     Raises:
-        ValueError: If an unsupported algorithm is provided.
+        ValueError: Unsupported algorithm selected.
+        ValueError: Invalid file extension.
+        ValueError: Subject or gold file is named incorrectly.
     """
     if algorithm == "dtw":
         similarity_function = similarity_functions.dynamic_time_warping
     else:
-        raise ValueError("Unsupported algorithm provided.")
+        raise ValueError("Unsupported algorithm selected.")
 
+    if ".xlsx" != file_path.suffix:
+        raise ValueError(f"Invalid file extension: {file_path}. Expected '.xlsx'.")
+
+    participant_ID = file_path.stem
+    if not (participant_ID.isdigit() or "gold" in participant_ID.lower()):
+        raise ValueError("The input file is named incorrectly.")
+
+    results_list = []
     for seq in sequence:
-        gold_metadata = models.Metadata.get_metadata(gold_path, seq)
-        gold_data = readers.read_sheet(gold_path, gold_metadata.sequence_sheetname)
+        gold = readers.read_participant_data(gold_path, seq)
+        subject = readers.read_participant_data(file_path, seq)
 
-        subject_metadata = models.Metadata.get_metadata(file_path, seq)
-        if subject_metadata.participant_ID == "None":
+        if subject.data.size == 0:
             continue
 
-        subject_data = readers.read_sheet(
-            file_path, subject_metadata.sequence_sheetname
-        )
-        if subject_data.size == 0:
-            continue
-
-        centered_gold_data = preprocessing.center_joints_to_hip(gold_data)
-        centered_subject_data = preprocessing.center_joints_to_hip(subject_data)
-        gold_average_lengths = preprocessing.get_average_length(centered_gold_data)
-        normalized_subject_data = preprocessing.normalize_segments(
-            centered_subject_data, gold_average_lengths
+        gold.data = preprocessing.center_joints_to_hip(gold.data)
+        subject.data = preprocessing.center_joints_to_hip(subject.data)
+        gold_average_lengths = preprocessing.get_average_length(gold.data)
+        subject.data = preprocessing.normalize_segments(
+            subject.data, gold_average_lengths
         )
 
-        similarity_metric = similarity_function(
-            centered_gold_data, normalized_subject_data
-        )
+        similarity_metric = similarity_function(gold.data, subject.data)
 
-        output_dict = writers.save_results_to_ndjson(
-            gold_metadata,
-            subject_metadata,
+        results = writers.save_results_to_ndjson(
+            gold,
+            subject,
             similarity_metric,
             output_dir,
             selected_metrics=["distance"],
         )
-    return output_dict
+        results_list.append(results)
+
+    return results_list

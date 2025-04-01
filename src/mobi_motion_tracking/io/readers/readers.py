@@ -1,9 +1,11 @@
 """Functions to read motion tracking data from a file."""
 
-from pathlib import Path
+import pathlib
 
 import numpy as np
 import pandas as pd
+
+from mobi_motion_tracking.core import models
 
 
 def data_cleaner(data: pd.DataFrame) -> np.ndarray:
@@ -51,29 +53,43 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
     return cleaned_data
 
 
-def read_sheet(path: Path, sequence_sheetname: str) -> np.ndarray:
-    """Read data from specific sheet.
+def read_participant_data(
+    subject_path: pathlib.Path, sequence: int
+) -> models.ParticipantData:
+    """Calls get_metadata and read sheet.
 
-    Currently motion tracking data for Kinect and Zed are saved into xlsx files.
-    This function reads in the data from 1 sheet as a dataframe. Then passes the
-    raw dataframe to data_cleaner and returns the output from data_cleaner.
+    This function calls get_metadata to extract the participant_ID value and the
+    sequence_sheetname. read_sheet is then called to create the subject_data array.
+    The participant_ID, sequence_sheetname, and subject_data are passed to the
+    ParticipantData class and returned.
 
     Args:
-        path: Path to .xlsx file.
-        sequence_sheetname: str, determines which sequence is processed.
+        subject_path: file path to the participant file.
+        sequence: integer value indiciating the sequence currently being tested.
 
     Returns:
-        np.ndarray: Data is passed to data_cleaner which returns an np.ndarray, or an
-            empty array is returned if the sheet name does not exist.
+        models.ParticipantData: containing participant_ID (str), sheetname (str),
+            and data (np.ndarray).
     """
+    participant_ID = subject_path.stem
+    sequence_sheetname = f"seq{sequence}"
+
     try:
         motion_tracking_data = pd.read_excel(
-            path, sheet_name=sequence_sheetname, engine="openpyxl"
+            subject_path, sheet_name=sequence_sheetname, engine="openpyxl"
         )
-    except ValueError:
-        print(
-            f"Skipping sheet {sequence_sheetname} in {path}: Sheet name does not exist."
+    except ValueError as ve:
+        print(f"Sheet doesn't exist: {ve}")
+        return models.ParticipantData(
+            participant_ID=participant_ID,
+            sequence_sheetname=sequence_sheetname,
+            data=np.array([]),
         )
-        return np.array([])
 
-    return data_cleaner(motion_tracking_data)
+    subject_data = data_cleaner(motion_tracking_data)
+
+    return models.ParticipantData(
+        participant_ID=participant_ID,
+        sequence_sheetname=sequence_sheetname,
+        data=subject_data,
+    )
