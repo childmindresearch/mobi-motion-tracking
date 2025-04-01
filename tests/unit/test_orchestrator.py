@@ -27,6 +27,17 @@ def test_run_bad_algorithm() -> None:
         orchestrator.run(file_path, gold_path, sequence, "fake_alg")  # type: ignore[arg-type] # Failing on purpose to test ValueError
 
 
+def test_run_file_bad_algorithm() -> None:
+    """Tests run_file with an unsupported algorithm."""
+    file_path = pathlib.Path("tests/sample_data/100.xlsx")
+    gold_path = pathlib.Path("tests/sample_data/Gold.xlsx")
+    output_dir = pathlib.Path("tests/sample_data")
+    sequence = [1, 2, 3]
+
+    with pytest.raises(ValueError, match="Unsupported algorithm selected."):
+        orchestrator.run_file(file_path, gold_path, output_dir, sequence, "fake_alg")  # type: ignore[arg-type] # Failing on purpose to test ValueError
+
+
 def test_run_file_invalid_extension() -> None:
     """Tests run_file with an invalid file extension."""
     file_path = pathlib.Path("tests/sample_data/csv_file.csv")
