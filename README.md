@@ -24,7 +24,9 @@ The package currently supports the following formats:
 
 **Special Note**
     This package works off the assumption that all input participant files are named according to their participant ID containing only digits in the correct format i.e. (0000.xlsx). It is also assummed that each participant file contains 1 or more sheets of data per sequence. The sheets are expected to be named based off the string 'seq' and an integer representing the sequence i.e. ('seq1'). The file names can be any length of digits and there can be an unlimited number of sequences. Sequences will only be processed if indicated in the input list.
+    
     It is assumed that any gold file contains the string 'gold' or 'Gold' in its basename.
+    
     It is also expected that there are no missing data points prior to running the package.
 
 ## Processing pipeline implementation
@@ -121,5 +123,3 @@ sheetname = subject1_seq1["sheetname"]
 method = subject1_seq1["method"]
 distance = subject1_seq1["distance"]
 ```
-
-## Links or References
