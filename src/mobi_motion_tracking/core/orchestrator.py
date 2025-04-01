@@ -47,16 +47,18 @@ def run(
         for file in experimental_path.iterdir():
             output_dir = experimental_path
             try:
-                output_dict = run_file(file, gold_path, output_dir, sequence, algorithm)
-                outputs.append(output_dict)
+                subject_output = run_file(
+                    file, gold_path, output_dir, sequence, algorithm
+                )
+                outputs.append(subject_output)
             except ValueError as ve:
                 print(f"Skipping file: {ve}")
     elif experimental_path.is_file():
         output_dir = experimental_path.parent
-        output_dict = run_file(
+        subject_output = run_file(
             experimental_path, gold_path, output_dir, sequence, algorithm
         )
-        outputs.append(output_dict)
+        outputs.append(subject_output)
     else:
         raise FileNotFoundError("Input path does not exist.")
 
