@@ -49,19 +49,19 @@
 
             </li>
             <li>
-                    <a class="class" href="#Metadata">Metadata</a>
+                    <a class="class" href="#ParticipantData">ParticipantData</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="function" href="#Metadata.__init__">Metadata</a>
+                                <a class="function" href="#ParticipantData.__init__">ParticipantData</a>
                         </li>
                         <li>
-                                <a class="variable" href="#Metadata.participant_ID">participant_ID</a>
+                                <a class="variable" href="#ParticipantData.participant_ID">participant_ID</a>
                         </li>
                         <li>
-                                <a class="variable" href="#Metadata.sequence_sheetname">sequence_sheetname</a>
+                                <a class="variable" href="#ParticipantData.sequence_sheetname">sequence_sheetname</a>
                         </li>
                         <li>
-                                <a class="function" href="#Metadata.get_metadata">get_metadata</a>
+                                <a class="variable" href="#ParticipantData.data">data</a>
                         </li>
                 </ul>
 
@@ -91,10 +91,10 @@
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;Dataclass storing all similarity metrics.&quot;&quot;&quot;</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="nd">@dataclass</span>
@@ -134,60 +134,18 @@
 </span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>
 </span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>
 </span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="nd">@dataclass</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Metadata</span><span class="p">:</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ParticipantData</span><span class="p">:</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Stores relevant participant information.</span>
 </span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>
 </span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">    Attributes:</span>
 </span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">        participant_ID: Integer value unique to every participant.</span>
 </span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">        sequence: Integer value associated with each iteration of a test.</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="n">participant_ID</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="n">sequence_sheetname</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="nd">@classmethod</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_metadata</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">subject_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Metadata&quot;</span><span class="p">:</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Strip path name for participant ID and create sequence sheet name.</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">        This function strips the basename without the file extension per</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">        participant to extract each participant ID (int or &quot;gold&quot;) and saves the</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">        sequence (int) as a string with the preface &#39;seq&#39; for the sheet name.</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">        Args:</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">            subject_path: Path, full filepath per participant.</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="sd">            sequence: int, sequence number.</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="sd">        Returns:</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">            Metadata: Dataclass with participant_ID and sequence.</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="k">try</span><span class="p">:</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">subject_path</span><span class="p">):</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;File not found.&quot;</span><span class="p">)</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>            <span class="k">if</span> <span class="s2">&quot;.xlsx&quot;</span> <span class="o">!=</span> <span class="n">subject_path</span><span class="o">.</span><span class="n">suffix</span><span class="p">:</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>                    <span class="sa">f</span><span class="s2">&quot;Invalid file extension: </span><span class="si">{</span><span class="n">subject_path</span><span class="si">}</span><span class="s2">. Expected &#39;.xlsx&#39;.&quot;</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>                <span class="p">)</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>            <span class="n">participant_ID</span> <span class="o">=</span> <span class="n">subject_path</span><span class="o">.</span><span class="n">stem</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>        <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">fnf_error</span><span class="p">:</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping </span><span class="si">{</span><span class="n">subject_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">fnf_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">participant_ID</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">sequence_sheetname</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">)</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">ve</span><span class="p">:</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping file </span><span class="si">{</span><span class="n">subject_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ve</span><span class="si">}</span><span class="s2"> (Wrong file type)&quot;</span><span class="p">)</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">participant_ID</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">sequence_sheetname</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">)</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a>
-</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>        <span class="k">try</span><span class="p">:</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">participant_ID</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;gold&quot;</span> <span class="ow">in</span> <span class="n">participant_ID</span><span class="o">.</span><span class="n">lower</span><span class="p">()):</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The input file is named incorrectly.&quot;</span><span class="p">)</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a>
-</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a>            <span class="n">sequence_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;seq</span><span class="si">{</span><span class="n">sequence</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos">94</span></a>
-</span><span id="L-95"><a href="#L-95"><span class="linenos">95</span></a>        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos">96</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping file </span><span class="si">{</span><span class="n">subject_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos">97</span></a>            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">participant_ID</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">sequence_sheetname</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">)</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos">98</span></a>
-</span><span id="L-99"><a href="#L-99"><span class="linenos">99</span></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">participant_ID</span><span class="o">=</span><span class="n">participant_ID</span><span class="p">,</span> <span class="n">sequence_sheetname</span><span class="o">=</span><span class="n">sequence_str</span><span class="p">)</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">        data: np.ndarray containing subject data for specified sequence.</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="n">participant_ID</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="n">sequence_sheetname</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
 </span></pre></div>
 
 
@@ -342,73 +300,31 @@ similarity function.</li>
 
                             </div>
                 </section>
-                <section id="Metadata">
-                            <input id="Metadata-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                <section id="ParticipantData">
+                            <input id="ParticipantData-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
                     <div class="decorator decorator-dataclass">@dataclass</div>
 
     <span class="def">class</span>
-    <span class="name">Metadata</span>:
+    <span class="name">ParticipantData</span>:
 
-                <label class="view-source-button" for="Metadata-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="ParticipantData-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Metadata"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Metadata-46"><a href="#Metadata-46"><span class="linenos"> 46</span></a><span class="nd">@dataclass</span>
-</span><span id="Metadata-47"><a href="#Metadata-47"><span class="linenos"> 47</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Metadata</span><span class="p">:</span>
-</span><span id="Metadata-48"><a href="#Metadata-48"><span class="linenos"> 48</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Stores relevant participant information.</span>
-</span><span id="Metadata-49"><a href="#Metadata-49"><span class="linenos"> 49</span></a>
-</span><span id="Metadata-50"><a href="#Metadata-50"><span class="linenos"> 50</span></a><span class="sd">    Attributes:</span>
-</span><span id="Metadata-51"><a href="#Metadata-51"><span class="linenos"> 51</span></a><span class="sd">        participant_ID: Integer value unique to every participant.</span>
-</span><span id="Metadata-52"><a href="#Metadata-52"><span class="linenos"> 52</span></a><span class="sd">        sequence: Integer value associated with each iteration of a test.</span>
-</span><span id="Metadata-53"><a href="#Metadata-53"><span class="linenos"> 53</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Metadata-54"><a href="#Metadata-54"><span class="linenos"> 54</span></a>
-</span><span id="Metadata-55"><a href="#Metadata-55"><span class="linenos"> 55</span></a>    <span class="n">participant_ID</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="Metadata-56"><a href="#Metadata-56"><span class="linenos"> 56</span></a>    <span class="n">sequence_sheetname</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="Metadata-57"><a href="#Metadata-57"><span class="linenos"> 57</span></a>
-</span><span id="Metadata-58"><a href="#Metadata-58"><span class="linenos"> 58</span></a>    <span class="nd">@classmethod</span>
-</span><span id="Metadata-59"><a href="#Metadata-59"><span class="linenos"> 59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_metadata</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">subject_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Metadata&quot;</span><span class="p">:</span>
-</span><span id="Metadata-60"><a href="#Metadata-60"><span class="linenos"> 60</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Strip path name for participant ID and create sequence sheet name.</span>
-</span><span id="Metadata-61"><a href="#Metadata-61"><span class="linenos"> 61</span></a>
-</span><span id="Metadata-62"><a href="#Metadata-62"><span class="linenos"> 62</span></a><span class="sd">        This function strips the basename without the file extension per</span>
-</span><span id="Metadata-63"><a href="#Metadata-63"><span class="linenos"> 63</span></a><span class="sd">        participant to extract each participant ID (int or &quot;gold&quot;) and saves the</span>
-</span><span id="Metadata-64"><a href="#Metadata-64"><span class="linenos"> 64</span></a><span class="sd">        sequence (int) as a string with the preface &#39;seq&#39; for the sheet name.</span>
-</span><span id="Metadata-65"><a href="#Metadata-65"><span class="linenos"> 65</span></a>
-</span><span id="Metadata-66"><a href="#Metadata-66"><span class="linenos"> 66</span></a><span class="sd">        Args:</span>
-</span><span id="Metadata-67"><a href="#Metadata-67"><span class="linenos"> 67</span></a><span class="sd">            subject_path: Path, full filepath per participant.</span>
-</span><span id="Metadata-68"><a href="#Metadata-68"><span class="linenos"> 68</span></a><span class="sd">            sequence: int, sequence number.</span>
-</span><span id="Metadata-69"><a href="#Metadata-69"><span class="linenos"> 69</span></a>
-</span><span id="Metadata-70"><a href="#Metadata-70"><span class="linenos"> 70</span></a><span class="sd">        Returns:</span>
-</span><span id="Metadata-71"><a href="#Metadata-71"><span class="linenos"> 71</span></a><span class="sd">            Metadata: Dataclass with participant_ID and sequence.</span>
-</span><span id="Metadata-72"><a href="#Metadata-72"><span class="linenos"> 72</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Metadata-73"><a href="#Metadata-73"><span class="linenos"> 73</span></a>        <span class="k">try</span><span class="p">:</span>
-</span><span id="Metadata-74"><a href="#Metadata-74"><span class="linenos"> 74</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">subject_path</span><span class="p">):</span>
-</span><span id="Metadata-75"><a href="#Metadata-75"><span class="linenos"> 75</span></a>                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;File not found.&quot;</span><span class="p">)</span>
-</span><span id="Metadata-76"><a href="#Metadata-76"><span class="linenos"> 76</span></a>            <span class="k">if</span> <span class="s2">&quot;.xlsx&quot;</span> <span class="o">!=</span> <span class="n">subject_path</span><span class="o">.</span><span class="n">suffix</span><span class="p">:</span>
-</span><span id="Metadata-77"><a href="#Metadata-77"><span class="linenos"> 77</span></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="Metadata-78"><a href="#Metadata-78"><span class="linenos"> 78</span></a>                    <span class="sa">f</span><span class="s2">&quot;Invalid file extension: </span><span class="si">{</span><span class="n">subject_path</span><span class="si">}</span><span class="s2">. Expected &#39;.xlsx&#39;.&quot;</span>
-</span><span id="Metadata-79"><a href="#Metadata-79"><span class="linenos"> 79</span></a>                <span class="p">)</span>
-</span><span id="Metadata-80"><a href="#Metadata-80"><span class="linenos"> 80</span></a>
-</span><span id="Metadata-81"><a href="#Metadata-81"><span class="linenos"> 81</span></a>            <span class="n">participant_ID</span> <span class="o">=</span> <span class="n">subject_path</span><span class="o">.</span><span class="n">stem</span>
-</span><span id="Metadata-82"><a href="#Metadata-82"><span class="linenos"> 82</span></a>
-</span><span id="Metadata-83"><a href="#Metadata-83"><span class="linenos"> 83</span></a>        <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">fnf_error</span><span class="p">:</span>
-</span><span id="Metadata-84"><a href="#Metadata-84"><span class="linenos"> 84</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping </span><span class="si">{</span><span class="n">subject_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">fnf_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="Metadata-85"><a href="#Metadata-85"><span class="linenos"> 85</span></a>            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">participant_ID</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">sequence_sheetname</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">)</span>
-</span><span id="Metadata-86"><a href="#Metadata-86"><span class="linenos"> 86</span></a>        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">ve</span><span class="p">:</span>
-</span><span id="Metadata-87"><a href="#Metadata-87"><span class="linenos"> 87</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping file </span><span class="si">{</span><span class="n">subject_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ve</span><span class="si">}</span><span class="s2"> (Wrong file type)&quot;</span><span class="p">)</span>
-</span><span id="Metadata-88"><a href="#Metadata-88"><span class="linenos"> 88</span></a>            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">participant_ID</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">sequence_sheetname</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">)</span>
-</span><span id="Metadata-89"><a href="#Metadata-89"><span class="linenos"> 89</span></a>
-</span><span id="Metadata-90"><a href="#Metadata-90"><span class="linenos"> 90</span></a>        <span class="k">try</span><span class="p">:</span>
-</span><span id="Metadata-91"><a href="#Metadata-91"><span class="linenos"> 91</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">participant_ID</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;gold&quot;</span> <span class="ow">in</span> <span class="n">participant_ID</span><span class="o">.</span><span class="n">lower</span><span class="p">()):</span>
-</span><span id="Metadata-92"><a href="#Metadata-92"><span class="linenos"> 92</span></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The input file is named incorrectly.&quot;</span><span class="p">)</span>
-</span><span id="Metadata-93"><a href="#Metadata-93"><span class="linenos"> 93</span></a>
-</span><span id="Metadata-94"><a href="#Metadata-94"><span class="linenos"> 94</span></a>            <span class="n">sequence_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;seq</span><span class="si">{</span><span class="n">sequence</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="Metadata-95"><a href="#Metadata-95"><span class="linenos"> 95</span></a>
-</span><span id="Metadata-96"><a href="#Metadata-96"><span class="linenos"> 96</span></a>        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-</span><span id="Metadata-97"><a href="#Metadata-97"><span class="linenos"> 97</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping file </span><span class="si">{</span><span class="n">subject_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="Metadata-98"><a href="#Metadata-98"><span class="linenos"> 98</span></a>            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">participant_ID</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">sequence_sheetname</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">)</span>
-</span><span id="Metadata-99"><a href="#Metadata-99"><span class="linenos"> 99</span></a>
-</span><span id="Metadata-100"><a href="#Metadata-100"><span class="linenos">100</span></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">participant_ID</span><span class="o">=</span><span class="n">participant_ID</span><span class="p">,</span> <span class="n">sequence_sheetname</span><span class="o">=</span><span class="n">sequence_str</span><span class="p">)</span>
+    <a class="headerlink" href="#ParticipantData"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ParticipantData-46"><a href="#ParticipantData-46"><span class="linenos">46</span></a><span class="nd">@dataclass</span>
+</span><span id="ParticipantData-47"><a href="#ParticipantData-47"><span class="linenos">47</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ParticipantData</span><span class="p">:</span>
+</span><span id="ParticipantData-48"><a href="#ParticipantData-48"><span class="linenos">48</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Stores relevant participant information.</span>
+</span><span id="ParticipantData-49"><a href="#ParticipantData-49"><span class="linenos">49</span></a>
+</span><span id="ParticipantData-50"><a href="#ParticipantData-50"><span class="linenos">50</span></a><span class="sd">    Attributes:</span>
+</span><span id="ParticipantData-51"><a href="#ParticipantData-51"><span class="linenos">51</span></a><span class="sd">        participant_ID: Integer value unique to every participant.</span>
+</span><span id="ParticipantData-52"><a href="#ParticipantData-52"><span class="linenos">52</span></a><span class="sd">        sequence: Integer value associated with each iteration of a test.</span>
+</span><span id="ParticipantData-53"><a href="#ParticipantData-53"><span class="linenos">53</span></a><span class="sd">        data: np.ndarray containing subject data for specified sequence.</span>
+</span><span id="ParticipantData-54"><a href="#ParticipantData-54"><span class="linenos">54</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="ParticipantData-55"><a href="#ParticipantData-55"><span class="linenos">55</span></a>
+</span><span id="ParticipantData-56"><a href="#ParticipantData-56"><span class="linenos">56</span></a>    <span class="n">participant_ID</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="ParticipantData-57"><a href="#ParticipantData-57"><span class="linenos">57</span></a>    <span class="n">sequence_sheetname</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="ParticipantData-58"><a href="#ParticipantData-58"><span class="linenos">58</span></a>    <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
 </span></pre></div>
 
 
@@ -419,122 +335,54 @@ similarity function.</li>
 <ul>
 <li><strong>participant_ID:</strong>  Integer value unique to every participant.</li>
 <li><strong>sequence:</strong>  Integer value associated with each iteration of a test.</li>
+<li><strong>data:</strong>  np.ndarray containing subject data for specified sequence.</li>
 </ul>
 </div>
 
 
-                            <div id="Metadata.__init__" class="classattr">
+                            <div id="ParticipantData.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">Metadata</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">participant_ID</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="n">sequence_sheetname</span><span class="p">:</span> <span class="nb">str</span></span>)</span>
+        <span class="name">ParticipantData</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">participant_ID</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="n">sequence_sheetname</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="n">data</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span></span>)</span>
 
         
     </div>
-    <a class="headerlink" href="#Metadata.__init__"></a>
+    <a class="headerlink" href="#ParticipantData.__init__"></a>
     
     
 
                             </div>
-                            <div id="Metadata.participant_ID" class="classattr">
+                            <div id="ParticipantData.participant_ID" class="classattr">
                                 <div class="attr variable">
             <span class="name">participant_ID</span><span class="annotation">: str</span>
 
         
     </div>
-    <a class="headerlink" href="#Metadata.participant_ID"></a>
+    <a class="headerlink" href="#ParticipantData.participant_ID"></a>
     
     
 
                             </div>
-                            <div id="Metadata.sequence_sheetname" class="classattr">
+                            <div id="ParticipantData.sequence_sheetname" class="classattr">
                                 <div class="attr variable">
             <span class="name">sequence_sheetname</span><span class="annotation">: str</span>
 
         
     </div>
-    <a class="headerlink" href="#Metadata.sequence_sheetname"></a>
+    <a class="headerlink" href="#ParticipantData.sequence_sheetname"></a>
     
     
 
                             </div>
-                            <div id="Metadata.get_metadata" class="classattr">
-                                        <input id="Metadata.get_metadata-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-                    <div class="decorator decorator-classmethod">@classmethod</div>
+                            <div id="ParticipantData.data" class="classattr">
+                                <div class="attr variable">
+            <span class="name">data</span><span class="annotation">: numpy.ndarray</span>
 
-        <span class="def">def</span>
-        <span class="name">get_metadata</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">subject_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">_local</span><span class="o">.</span><span class="n">Path</span>,</span><span class="param">	<span class="n">sequence</span><span class="p">:</span> <span class="nb">int</span></span><span class="return-annotation">) -> <span class="n"><a href="#Metadata">Metadata</a></span>:</span></span>
-
-                <label class="view-source-button" for="Metadata.get_metadata-view-source"><span>View Source</span></label>
-
+        
     </div>
-    <a class="headerlink" href="#Metadata.get_metadata"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Metadata.get_metadata-58"><a href="#Metadata.get_metadata-58"><span class="linenos"> 58</span></a>    <span class="nd">@classmethod</span>
-</span><span id="Metadata.get_metadata-59"><a href="#Metadata.get_metadata-59"><span class="linenos"> 59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_metadata</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">subject_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Metadata&quot;</span><span class="p">:</span>
-</span><span id="Metadata.get_metadata-60"><a href="#Metadata.get_metadata-60"><span class="linenos"> 60</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Strip path name for participant ID and create sequence sheet name.</span>
-</span><span id="Metadata.get_metadata-61"><a href="#Metadata.get_metadata-61"><span class="linenos"> 61</span></a>
-</span><span id="Metadata.get_metadata-62"><a href="#Metadata.get_metadata-62"><span class="linenos"> 62</span></a><span class="sd">        This function strips the basename without the file extension per</span>
-</span><span id="Metadata.get_metadata-63"><a href="#Metadata.get_metadata-63"><span class="linenos"> 63</span></a><span class="sd">        participant to extract each participant ID (int or &quot;gold&quot;) and saves the</span>
-</span><span id="Metadata.get_metadata-64"><a href="#Metadata.get_metadata-64"><span class="linenos"> 64</span></a><span class="sd">        sequence (int) as a string with the preface &#39;seq&#39; for the sheet name.</span>
-</span><span id="Metadata.get_metadata-65"><a href="#Metadata.get_metadata-65"><span class="linenos"> 65</span></a>
-</span><span id="Metadata.get_metadata-66"><a href="#Metadata.get_metadata-66"><span class="linenos"> 66</span></a><span class="sd">        Args:</span>
-</span><span id="Metadata.get_metadata-67"><a href="#Metadata.get_metadata-67"><span class="linenos"> 67</span></a><span class="sd">            subject_path: Path, full filepath per participant.</span>
-</span><span id="Metadata.get_metadata-68"><a href="#Metadata.get_metadata-68"><span class="linenos"> 68</span></a><span class="sd">            sequence: int, sequence number.</span>
-</span><span id="Metadata.get_metadata-69"><a href="#Metadata.get_metadata-69"><span class="linenos"> 69</span></a>
-</span><span id="Metadata.get_metadata-70"><a href="#Metadata.get_metadata-70"><span class="linenos"> 70</span></a><span class="sd">        Returns:</span>
-</span><span id="Metadata.get_metadata-71"><a href="#Metadata.get_metadata-71"><span class="linenos"> 71</span></a><span class="sd">            Metadata: Dataclass with participant_ID and sequence.</span>
-</span><span id="Metadata.get_metadata-72"><a href="#Metadata.get_metadata-72"><span class="linenos"> 72</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Metadata.get_metadata-73"><a href="#Metadata.get_metadata-73"><span class="linenos"> 73</span></a>        <span class="k">try</span><span class="p">:</span>
-</span><span id="Metadata.get_metadata-74"><a href="#Metadata.get_metadata-74"><span class="linenos"> 74</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">subject_path</span><span class="p">):</span>
-</span><span id="Metadata.get_metadata-75"><a href="#Metadata.get_metadata-75"><span class="linenos"> 75</span></a>                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;File not found.&quot;</span><span class="p">)</span>
-</span><span id="Metadata.get_metadata-76"><a href="#Metadata.get_metadata-76"><span class="linenos"> 76</span></a>            <span class="k">if</span> <span class="s2">&quot;.xlsx&quot;</span> <span class="o">!=</span> <span class="n">subject_path</span><span class="o">.</span><span class="n">suffix</span><span class="p">:</span>
-</span><span id="Metadata.get_metadata-77"><a href="#Metadata.get_metadata-77"><span class="linenos"> 77</span></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="Metadata.get_metadata-78"><a href="#Metadata.get_metadata-78"><span class="linenos"> 78</span></a>                    <span class="sa">f</span><span class="s2">&quot;Invalid file extension: </span><span class="si">{</span><span class="n">subject_path</span><span class="si">}</span><span class="s2">. Expected &#39;.xlsx&#39;.&quot;</span>
-</span><span id="Metadata.get_metadata-79"><a href="#Metadata.get_metadata-79"><span class="linenos"> 79</span></a>                <span class="p">)</span>
-</span><span id="Metadata.get_metadata-80"><a href="#Metadata.get_metadata-80"><span class="linenos"> 80</span></a>
-</span><span id="Metadata.get_metadata-81"><a href="#Metadata.get_metadata-81"><span class="linenos"> 81</span></a>            <span class="n">participant_ID</span> <span class="o">=</span> <span class="n">subject_path</span><span class="o">.</span><span class="n">stem</span>
-</span><span id="Metadata.get_metadata-82"><a href="#Metadata.get_metadata-82"><span class="linenos"> 82</span></a>
-</span><span id="Metadata.get_metadata-83"><a href="#Metadata.get_metadata-83"><span class="linenos"> 83</span></a>        <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">fnf_error</span><span class="p">:</span>
-</span><span id="Metadata.get_metadata-84"><a href="#Metadata.get_metadata-84"><span class="linenos"> 84</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping </span><span class="si">{</span><span class="n">subject_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">fnf_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="Metadata.get_metadata-85"><a href="#Metadata.get_metadata-85"><span class="linenos"> 85</span></a>            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">participant_ID</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">sequence_sheetname</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">)</span>
-</span><span id="Metadata.get_metadata-86"><a href="#Metadata.get_metadata-86"><span class="linenos"> 86</span></a>        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">ve</span><span class="p">:</span>
-</span><span id="Metadata.get_metadata-87"><a href="#Metadata.get_metadata-87"><span class="linenos"> 87</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping file </span><span class="si">{</span><span class="n">subject_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ve</span><span class="si">}</span><span class="s2"> (Wrong file type)&quot;</span><span class="p">)</span>
-</span><span id="Metadata.get_metadata-88"><a href="#Metadata.get_metadata-88"><span class="linenos"> 88</span></a>            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">participant_ID</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">sequence_sheetname</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">)</span>
-</span><span id="Metadata.get_metadata-89"><a href="#Metadata.get_metadata-89"><span class="linenos"> 89</span></a>
-</span><span id="Metadata.get_metadata-90"><a href="#Metadata.get_metadata-90"><span class="linenos"> 90</span></a>        <span class="k">try</span><span class="p">:</span>
-</span><span id="Metadata.get_metadata-91"><a href="#Metadata.get_metadata-91"><span class="linenos"> 91</span></a>            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">participant_ID</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;gold&quot;</span> <span class="ow">in</span> <span class="n">participant_ID</span><span class="o">.</span><span class="n">lower</span><span class="p">()):</span>
-</span><span id="Metadata.get_metadata-92"><a href="#Metadata.get_metadata-92"><span class="linenos"> 92</span></a>                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The input file is named incorrectly.&quot;</span><span class="p">)</span>
-</span><span id="Metadata.get_metadata-93"><a href="#Metadata.get_metadata-93"><span class="linenos"> 93</span></a>
-</span><span id="Metadata.get_metadata-94"><a href="#Metadata.get_metadata-94"><span class="linenos"> 94</span></a>            <span class="n">sequence_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;seq</span><span class="si">{</span><span class="n">sequence</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="Metadata.get_metadata-95"><a href="#Metadata.get_metadata-95"><span class="linenos"> 95</span></a>
-</span><span id="Metadata.get_metadata-96"><a href="#Metadata.get_metadata-96"><span class="linenos"> 96</span></a>        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-</span><span id="Metadata.get_metadata-97"><a href="#Metadata.get_metadata-97"><span class="linenos"> 97</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping file </span><span class="si">{</span><span class="n">subject_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="Metadata.get_metadata-98"><a href="#Metadata.get_metadata-98"><span class="linenos"> 98</span></a>            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">participant_ID</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">sequence_sheetname</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">)</span>
-</span><span id="Metadata.get_metadata-99"><a href="#Metadata.get_metadata-99"><span class="linenos"> 99</span></a>
-</span><span id="Metadata.get_metadata-100"><a href="#Metadata.get_metadata-100"><span class="linenos">100</span></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">participant_ID</span><span class="o">=</span><span class="n">participant_ID</span><span class="p">,</span> <span class="n">sequence_sheetname</span><span class="o">=</span><span class="n">sequence_str</span><span class="p">)</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Strip path name for participant ID and create sequence sheet name.</p>
-
-<p>This function strips the basename without the file extension per
-participant to extract each participant ID (int or "gold") and saves the
-sequence (int) as a string with the preface 'seq' for the sheet name.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong>subject_path:</strong>  Path, full filepath per participant.</li>
-<li><strong>sequence:</strong>  int, sequence number.</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p>Metadata: Dataclass with participant_ID and sequence.</p>
-</blockquote>
-</div>
-
+    <a class="headerlink" href="#ParticipantData.data"></a>
+    
+    
 
                             </div>
                 </section>

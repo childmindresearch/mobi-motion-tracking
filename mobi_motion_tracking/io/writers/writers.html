@@ -97,8 +97,8 @@
 </span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>
 </span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>
 </span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="k">def</span><span class="w"> </span><span class="nf">save_results_to_ndjson</span><span class="p">(</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="n">gold_metadata</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">Metadata</span><span class="p">,</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="n">subject_metadata</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">Metadata</span><span class="p">,</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="n">gold</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">ParticipantData</span><span class="p">,</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="n">subject</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">ParticipantData</span><span class="p">,</span>
 </span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="n">similarity_metrics</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">SimilarityMetrics</span><span class="p">,</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="n">output_dir</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
 </span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="n">selected_metrics</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -114,8 +114,8 @@
 </span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">    with the filename generated using `generate_output_filename()`.</span>
 </span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>
 </span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">    Args:</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">        gold_metadata: Metadata for the gold-standard participant.</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">        subject_metadata: Metadata for the subject being analyzed.</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">        gold: data for the gold-standard participant.</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">        subject: data for the subject being analyzed.</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">        similarity_metrics: Object containing the similarity</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">            method and metrics.</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">        output_dir: Directory where the results file should be saved.</span>
@@ -130,8 +130,8 @@
 </span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="sd">            `similarity_metrics.metrics`.</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="n">new_entry</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="s2">&quot;participant_ID&quot;</span><span class="p">:</span> <span class="n">subject_metadata</span><span class="o">.</span><span class="n">participant_ID</span><span class="p">,</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>        <span class="s2">&quot;sheetname&quot;</span><span class="p">:</span> <span class="n">subject_metadata</span><span class="o">.</span><span class="n">sequence_sheetname</span><span class="p">,</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="s2">&quot;participant_ID&quot;</span><span class="p">:</span> <span class="n">subject</span><span class="o">.</span><span class="n">participant_ID</span><span class="p">,</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>        <span class="s2">&quot;sheetname&quot;</span><span class="p">:</span> <span class="n">subject</span><span class="o">.</span><span class="n">sequence_sheetname</span><span class="p">,</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="n">similarity_metrics</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
 </span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>    <span class="p">}</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>
@@ -144,7 +144,7 @@
 </span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>        <span class="k">else</span><span class="p">:</span>
 </span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Selected metrics are not eligible for selected method.&quot;</span><span class="p">)</span>
 </span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>    <span class="n">output_path</span> <span class="o">=</span> <span class="n">generate_output_filename</span><span class="p">(</span><span class="n">gold_metadata</span><span class="o">.</span><span class="n">participant_ID</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>    <span class="n">output_path</span> <span class="o">=</span> <span class="n">generate_output_filename</span><span class="p">(</span><span class="n">gold</span><span class="o">.</span><span class="n">participant_ID</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
 </span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>
 </span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 </span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">new_entry</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
@@ -221,15 +221,15 @@ created.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">save_results_to_ndjson</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">gold_metadata</span><span class="p">:</span> <span class="n"><a href="../../core/models.html#Metadata">mobi_motion_tracking.core.models.Metadata</a></span>,</span><span class="param">	<span class="n">subject_metadata</span><span class="p">:</span> <span class="n"><a href="../../core/models.html#Metadata">mobi_motion_tracking.core.models.Metadata</a></span>,</span><span class="param">	<span class="n">similarity_metrics</span><span class="p">:</span> <span class="n"><a href="../../core/models.html#SimilarityMetrics">mobi_motion_tracking.core.models.SimilarityMetrics</a></span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">_local</span><span class="o">.</span><span class="n">Path</span>,</span><span class="param">	<span class="n">selected_metrics</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="nb">dict</span>:</span></span>
+        <span class="name">save_results_to_ndjson</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">gold</span><span class="p">:</span> <span class="n"><a href="../../core/models.html#ParticipantData">mobi_motion_tracking.core.models.ParticipantData</a></span>,</span><span class="param">	<span class="n">subject</span><span class="p">:</span> <span class="n"><a href="../../core/models.html#ParticipantData">mobi_motion_tracking.core.models.ParticipantData</a></span>,</span><span class="param">	<span class="n">similarity_metrics</span><span class="p">:</span> <span class="n"><a href="../../core/models.html#SimilarityMetrics">mobi_motion_tracking.core.models.SimilarityMetrics</a></span>,</span><span class="param">	<span class="n">output_dir</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">_local</span><span class="o">.</span><span class="n">Path</span>,</span><span class="param">	<span class="n">selected_metrics</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="nb">dict</span>:</span></span>
 
                 <label class="view-source-button" for="save_results_to_ndjson-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#save_results_to_ndjson"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="save_results_to_ndjson-39"><a href="#save_results_to_ndjson-39"><span class="linenos">39</span></a><span class="k">def</span><span class="w"> </span><span class="nf">save_results_to_ndjson</span><span class="p">(</span>
-</span><span id="save_results_to_ndjson-40"><a href="#save_results_to_ndjson-40"><span class="linenos">40</span></a>    <span class="n">gold_metadata</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">Metadata</span><span class="p">,</span>
-</span><span id="save_results_to_ndjson-41"><a href="#save_results_to_ndjson-41"><span class="linenos">41</span></a>    <span class="n">subject_metadata</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">Metadata</span><span class="p">,</span>
+</span><span id="save_results_to_ndjson-40"><a href="#save_results_to_ndjson-40"><span class="linenos">40</span></a>    <span class="n">gold</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">ParticipantData</span><span class="p">,</span>
+</span><span id="save_results_to_ndjson-41"><a href="#save_results_to_ndjson-41"><span class="linenos">41</span></a>    <span class="n">subject</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">ParticipantData</span><span class="p">,</span>
 </span><span id="save_results_to_ndjson-42"><a href="#save_results_to_ndjson-42"><span class="linenos">42</span></a>    <span class="n">similarity_metrics</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">SimilarityMetrics</span><span class="p">,</span>
 </span><span id="save_results_to_ndjson-43"><a href="#save_results_to_ndjson-43"><span class="linenos">43</span></a>    <span class="n">output_dir</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
 </span><span id="save_results_to_ndjson-44"><a href="#save_results_to_ndjson-44"><span class="linenos">44</span></a>    <span class="n">selected_metrics</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -245,8 +245,8 @@ created.</p>
 </span><span id="save_results_to_ndjson-54"><a href="#save_results_to_ndjson-54"><span class="linenos">54</span></a><span class="sd">    with the filename generated using `generate_output_filename()`.</span>
 </span><span id="save_results_to_ndjson-55"><a href="#save_results_to_ndjson-55"><span class="linenos">55</span></a>
 </span><span id="save_results_to_ndjson-56"><a href="#save_results_to_ndjson-56"><span class="linenos">56</span></a><span class="sd">    Args:</span>
-</span><span id="save_results_to_ndjson-57"><a href="#save_results_to_ndjson-57"><span class="linenos">57</span></a><span class="sd">        gold_metadata: Metadata for the gold-standard participant.</span>
-</span><span id="save_results_to_ndjson-58"><a href="#save_results_to_ndjson-58"><span class="linenos">58</span></a><span class="sd">        subject_metadata: Metadata for the subject being analyzed.</span>
+</span><span id="save_results_to_ndjson-57"><a href="#save_results_to_ndjson-57"><span class="linenos">57</span></a><span class="sd">        gold: data for the gold-standard participant.</span>
+</span><span id="save_results_to_ndjson-58"><a href="#save_results_to_ndjson-58"><span class="linenos">58</span></a><span class="sd">        subject: data for the subject being analyzed.</span>
 </span><span id="save_results_to_ndjson-59"><a href="#save_results_to_ndjson-59"><span class="linenos">59</span></a><span class="sd">        similarity_metrics: Object containing the similarity</span>
 </span><span id="save_results_to_ndjson-60"><a href="#save_results_to_ndjson-60"><span class="linenos">60</span></a><span class="sd">            method and metrics.</span>
 </span><span id="save_results_to_ndjson-61"><a href="#save_results_to_ndjson-61"><span class="linenos">61</span></a><span class="sd">        output_dir: Directory where the results file should be saved.</span>
@@ -261,8 +261,8 @@ created.</p>
 </span><span id="save_results_to_ndjson-70"><a href="#save_results_to_ndjson-70"><span class="linenos">70</span></a><span class="sd">            `similarity_metrics.metrics`.</span>
 </span><span id="save_results_to_ndjson-71"><a href="#save_results_to_ndjson-71"><span class="linenos">71</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="save_results_to_ndjson-72"><a href="#save_results_to_ndjson-72"><span class="linenos">72</span></a>    <span class="n">new_entry</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="save_results_to_ndjson-73"><a href="#save_results_to_ndjson-73"><span class="linenos">73</span></a>        <span class="s2">&quot;participant_ID&quot;</span><span class="p">:</span> <span class="n">subject_metadata</span><span class="o">.</span><span class="n">participant_ID</span><span class="p">,</span>
-</span><span id="save_results_to_ndjson-74"><a href="#save_results_to_ndjson-74"><span class="linenos">74</span></a>        <span class="s2">&quot;sheetname&quot;</span><span class="p">:</span> <span class="n">subject_metadata</span><span class="o">.</span><span class="n">sequence_sheetname</span><span class="p">,</span>
+</span><span id="save_results_to_ndjson-73"><a href="#save_results_to_ndjson-73"><span class="linenos">73</span></a>        <span class="s2">&quot;participant_ID&quot;</span><span class="p">:</span> <span class="n">subject</span><span class="o">.</span><span class="n">participant_ID</span><span class="p">,</span>
+</span><span id="save_results_to_ndjson-74"><a href="#save_results_to_ndjson-74"><span class="linenos">74</span></a>        <span class="s2">&quot;sheetname&quot;</span><span class="p">:</span> <span class="n">subject</span><span class="o">.</span><span class="n">sequence_sheetname</span><span class="p">,</span>
 </span><span id="save_results_to_ndjson-75"><a href="#save_results_to_ndjson-75"><span class="linenos">75</span></a>        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="n">similarity_metrics</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
 </span><span id="save_results_to_ndjson-76"><a href="#save_results_to_ndjson-76"><span class="linenos">76</span></a>    <span class="p">}</span>
 </span><span id="save_results_to_ndjson-77"><a href="#save_results_to_ndjson-77"><span class="linenos">77</span></a>
@@ -275,7 +275,7 @@ created.</p>
 </span><span id="save_results_to_ndjson-84"><a href="#save_results_to_ndjson-84"><span class="linenos">84</span></a>        <span class="k">else</span><span class="p">:</span>
 </span><span id="save_results_to_ndjson-85"><a href="#save_results_to_ndjson-85"><span class="linenos">85</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Selected metrics are not eligible for selected method.&quot;</span><span class="p">)</span>
 </span><span id="save_results_to_ndjson-86"><a href="#save_results_to_ndjson-86"><span class="linenos">86</span></a>
-</span><span id="save_results_to_ndjson-87"><a href="#save_results_to_ndjson-87"><span class="linenos">87</span></a>    <span class="n">output_path</span> <span class="o">=</span> <span class="n">generate_output_filename</span><span class="p">(</span><span class="n">gold_metadata</span><span class="o">.</span><span class="n">participant_ID</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+</span><span id="save_results_to_ndjson-87"><a href="#save_results_to_ndjson-87"><span class="linenos">87</span></a>    <span class="n">output_path</span> <span class="o">=</span> <span class="n">generate_output_filename</span><span class="p">(</span><span class="n">gold</span><span class="o">.</span><span class="n">participant_ID</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
 </span><span id="save_results_to_ndjson-88"><a href="#save_results_to_ndjson-88"><span class="linenos">88</span></a>
 </span><span id="save_results_to_ndjson-89"><a href="#save_results_to_ndjson-89"><span class="linenos">89</span></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 </span><span id="save_results_to_ndjson-90"><a href="#save_results_to_ndjson-90"><span class="linenos">90</span></a>        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">new_entry</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
@@ -298,8 +298,8 @@ with the filename generated using <code><a href="#generate_output_filename">gene
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong>gold_metadata:</strong>  Metadata for the gold-standard participant.</li>
-<li><strong>subject_metadata:</strong>  Metadata for the subject being analyzed.</li>
+<li><strong>gold:</strong>  data for the gold-standard participant.</li>
+<li><strong>subject:</strong>  data for the subject being analyzed.</li>
 <li><strong>similarity_metrics:</strong>  Object containing the similarity
 method and metrics.</li>
 <li><strong>output_dir:</strong>  Directory where the results file should be saved.</li>
