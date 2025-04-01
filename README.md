@@ -70,53 +70,56 @@ mobi_motion_tracking -d /subject/file/dir -g /gold/file/path/gold.xlsx -s "1,2,3
 ```Python
 
 from mobi_motion_tracking.core import orchestrator
+import pathlib
 
 # Define data file path, gold file path, sequence list, and algorithm
 # Support for saving as .ndjson
-data_path = '/subject/file/path/000.xlsx'
-gold_path = '/gold/file/path/gold.xlsx'
-sequence = [1,2,3]
+data_path = pathlib.Path("100.xlsx")
+gold_path = pathlib.Path("Gold.xlsx")
+sequence = [1, 2, 3]
 algorithm = "dtw"
 
 # Run the orchestrator
 results = orchestrator.run(
-    data=data_path,
-    gold=gold_path,
+    experimental_path=data_path,
+    gold_path=gold_path,
     sequence=sequence,
-    algorithm=algorithm
+    algorithm=algorithm,
 )
 
-# Data available in list of results
-sequence1 = results_dict[0]
 
-participant_ID = sequence1["participant_ID"]
-sheetname = sequence1["sheetname"]
-method = sequence1["method"]
-distance = sequence1["distance"]
+# Data available in list of results.
+subject1_seq1 = results[0][0]
+
+participant_ID = subject1_seq1["participant_ID"]
+sheetname = subject1_seq1["sheetname"]
+method = subject1_seq1["method"]
+distance = subject1_seq1["distance"]
 ```
 #### Running entire directories:
 ```Python
 
 from mobi_motion_tracking.core import orchestrator
+import pathlib
 
 # Define data file path, gold file path, sequence list, and algorithm
 # Support for saving as .ndjson
-data_path = '/subject/file/dir'
-gold_path = '/gold/file/path/gold.xlsx'
-sequence = [1,2,3]
+data_path = pathlib.Path("")
+gold_path = pathlib.Path("Gold.xlsx")
+sequence = [1, 2, 3]
 algorithm = "dtw"
 
 # Run the orchestrator
 results = orchestrator.run(
-    data=data_path,
-    gold=gold_path,
+    experimental_path=data_path,
+    gold_path=gold_path,
     sequence=sequence,
-    algorithm=algorithm
+    algorithm=algorithm,
 )
 
 
 # Data available in list of results.
-subject1_seq1 = results_dict[0]
+subject1_seq1 = results[0][0]
 
 participant_ID = subject1_seq1["participant_ID"]
 sheetname = subject1_seq1["sheetname"]
