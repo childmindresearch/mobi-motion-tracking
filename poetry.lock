@@ -109,35 +109,6 @@ files = [
 ]
 
 [[package]]
-name = "dtaidistance"
-version = "2.3.13"
-description = "Distance measures for time series (Dynamic Time Warping, fast C implementation)"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "dtaidistance-2.3.13-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:b6a805736778afeb62966ff5dfd78e4f9c6d29667699ba91e3f69d2f2ecadf0e"},
-    {file = "dtaidistance-2.3.13-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0f700efc7bf4c4ff6a13392816c0d50e3ca768f9da4868e3af4d09d38360a1c1"},
-    {file = "dtaidistance-2.3.13-cp310-cp310-win_amd64.whl", hash = "sha256:81527c52c8ba44b7756e3815646584c44c4f7277ef17ae98542d5a256bee462b"},
-    {file = "dtaidistance-2.3.13-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:02f2de97f147cd17c7de1b19140d3a5f48d876c19ae28105c12cca45f9af2520"},
-    {file = "dtaidistance-2.3.13-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c61ef66588cac8b1f2ec7c8a7ca15bc6ae058804f8e5514919a0b682818fa60a"},
-    {file = "dtaidistance-2.3.13-cp311-cp311-win_amd64.whl", hash = "sha256:ac8536147977419a2ab5b4a89d97d91bbaf8ea339d91bbb63e26bea0a842ec5e"},
-    {file = "dtaidistance-2.3.13-cp312-cp312-macosx_10_13_universal2.whl", hash = "sha256:a09b9916f8ecbf11ef3f8824bfb306c1c3bfc63a32dcb4703551a1d5bbe6fa6c"},
-    {file = "dtaidistance-2.3.13-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d071392388dab99462922df8e4fb99f905e59888bd7246dee318ba7fe0d6332d"},
-    {file = "dtaidistance-2.3.13-cp312-cp312-win_amd64.whl", hash = "sha256:465f45d380a1cd4416201a9aeffa9fdf34848db10fe66918456d616989d61316"},
-    {file = "dtaidistance-2.3.13.tar.gz", hash = "sha256:b0344a9b6f642863fcedacf5de86c4a0a0d4b4adec9b9be561a6f513ecf5e695"},
-]
-
-[package.dependencies]
-numpy = "*"
-
-[package.extras]
-all = ["numpy", "pandas", "scipy"]
-dev = ["matplotlib (>=3.0.0)", "numpy", "pytest", "pytest-benchmark", "scipy", "sphinx", "sphinx_rtd_theme"]
-numpy = ["numpy", "pandas", "scipy"]
-tests = ["pytest", "pytest-benchmark"]
-viz = ["matplotlib (>=3.0.0)"]
-
-[[package]]
 name = "et-xmlfile"
 version = "2.0.0"
 description = "An implementation of lxml.xmlfile for the standard library"
@@ -828,4 +799,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11"
-content-hash = "d079fbf3a8c65217fad4f6ed5347e23c59dbbb98c46503ca5c567d8ddd2103d7"
+content-hash = "a29903d486a586a63f1c1a0b292dbefcdae94f2520dc08c03af5ae32f4a6e746"

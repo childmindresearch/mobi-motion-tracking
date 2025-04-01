@@ -12,7 +12,6 @@ python = ">=3.11"
 pandas = "^2.2.3"
 pytest = "^8.3.4"
 openpyxl = "^3.1.5"
-dtaidistance = "^2.3.13"
 pytest-mock = "^3.14.0"
 
 [tool.poetry.group.dev.dependencies]
