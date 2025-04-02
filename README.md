@@ -31,7 +31,7 @@ The package currently supports the following formats:
 
 ## Processing pipeline implementation
 
-The main processing pipeline of the mobi_motion_tracking module can be described as follows:
+The main processing pipeline of the `mobi_motion_tracking` module can be described as follows:
 
 - **Data loading**: Data is loaded per participant, per sequence as a dataframe. If a file is named incorrectly, is not in the right format, or the sequence does not exist for that participant, it is skipped.
 - **Data preprocessing**: The raw subject and gold standard joint data are centered to the hip for every frame. The average lengths of all skeletal segments of the gold standard data are calculated, and the centered subject joint data is normalized to the average gold lengths.
