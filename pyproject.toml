@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mobi_motion_tracking"
-version = "0.1.1"
+version = "0.1.2"
 description = "python package to process 3d motion tracking data"
 authors = ["Celia Maiorano <celia.maiorano@childmind.org>", "Adam Santorelli <adam.santorelli@childmind.org>", "Freymon Perez <freymon.perez@childmind.org>", "John Vito <john.vito@childmind.org>"]
 license = "GNU Lesser General Public License v2.1"
@@ -23,6 +23,10 @@ ruff = "^0.8.1"
 
 [tool.poetry.group.docs.dependencies]
 pdoc = "^15.0.0"
+
+[tool.poetry.scripts]
+mobi_motion_tracking = "mobi_motion_tracking.__main__:run_main"
+
 
 [tool.pytest.ini_options]
 pythonpath = [
