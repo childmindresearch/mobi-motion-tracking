@@ -11,7 +11,7 @@ A python package for 3D motion tracking data processing.
 [![LGPL--2.1 License](https://img.shields.io/badge/license-LGPL--2.1-blue.svg)](https://github.com/childmindresearch/mobi-motion-tracking/blob/main/LICENSE)
 [![pages](https://img.shields.io/badge/api-docs-blue)](https://childmindresearch.github.io/mobi-motion-tracking)
 
-Welcome to mobi_motion_tracking, a Python library designed for processing and analyzing captured motion tracking data. This library provides a set of tools to analyze 3D skeletal data against a gold standard and calculate a similarity metric between them. We provide a labelled output file containing all specified, calculated metrics and metadata for post-procesing analysis. 
+Welcome to `mobi_motion_tracking`, a Python library designed for processing and analyzing captured motion tracking data. This library provides a set of tools to analyze 3D skeletal data against a gold standard and calculate a similarity metric between them. We provide a labelled output file containing all specified, calculated metrics and metadata for post-processing analysis. 
 
 ## Supported formats & devices
 
