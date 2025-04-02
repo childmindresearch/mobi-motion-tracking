@@ -68,7 +68,7 @@ def parse_arguments(args: Optional[List[str]]) -> argparse.Namespace:
 
 
 def main(
-    args: Optional[List[str]],
+    args: Optional[List[str]] = None,
 ) -> list[dict]:
     """Runs motion tracking orchestrator with command line arguments.
 
