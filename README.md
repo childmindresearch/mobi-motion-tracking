@@ -1,4 +1,3 @@
-[![DOI](https://zenodo.org/badge/657341621.svg)]
 
 # `mobi_motion_tracking`
 
