@@ -2,7 +2,7 @@
 name = "mobi_motion_tracking"
 version = "0.1.0"
 description = "python package to process 3d motion tracking data"
-authors = ["cgmaiorano <celiagrace13@gmail.com>"]
+authors = ["Celia Maiorano <celia.maiorano@childmind.org>", "Adam Santorelli <adam.santorelli@childmind.org>", "Freymon Perez <freymon.perez@childmind.org>", "John Vito <john.vito@childmind.org>"]
 license = "GNU Lesser General Public License v2.1"
 readme = "README.md"
 packages = [{include = "mobi_motion_tracking", from = "src"}]
@@ -42,7 +42,7 @@ src = ["src"]
 target-version = "py311"
 
 [tool.ruff.lint]
-select = ["ANN", "D", "E", "F", "I"]
+select = ["ANN", "D", "E", "F", "I", "INP"]
 ignore = []
 fixable = ["ALL"]
 unfixable = []
