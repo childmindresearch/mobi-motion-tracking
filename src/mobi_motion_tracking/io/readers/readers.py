@@ -27,7 +27,17 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
         ValueError: when x_Hip is not found in dataframe.
         IndexError: when column index is out of range.
     """
-    result = data.where(data == "x_Hip").stack().index
+    cols = data.columns.str.strip()
+    if "x_Hip" in cols:
+        col_idx, row = cols.get_loc("x_Hip"), -1
+    else:
+        result = (
+            data
+            .where(data.astype(str).apply(lambda x: x.str.strip()) == "x_Hip")
+            .stack()
+            .index
+        )
+    row, col_idx = result[0][0], data.columns.get_loc(result[0][1])
 
     if result.empty:
         raise ValueError("x_Hip not found in DataFrame.")
@@ -42,7 +52,8 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
         raise IndexError("Column index out of range.")
 
     cleaned_data = (
-        data.iloc[
+        data
+        .iloc[
             row + 1 :,
             start_col:end_col,
         ]
