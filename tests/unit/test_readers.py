@@ -98,3 +98,13 @@ def test_read_participant_data_no_sheet() -> None:
         participant_data.data.size == 0
     ), "Expected result to be empty when sheet does not \
         exist."
+
+
+def test_read_participant_data_valid_column_header() -> None:
+    """Test read_participant_data with valid column header."""
+    participant_data = readers.read_participant_data(
+        pathlib.Path("tests/sample_data/101.xlsx"), 1
+    )
+
+    assert participant_data.data.shape == (62, 61), f"Expected shape of sample data is \
+          [62,61] not {participant_data.data.shape}"
