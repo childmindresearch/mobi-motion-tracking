@@ -38,14 +38,11 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
             raise ValueError("x_Hip not found in DataFrame.")
         row, col_idx = result[0][0], data.columns.get_loc(result[0][1])
 
-        row = result[0][0]
-        col_idx = result[0][1]
+    start_col = data.columns.get_loc(col_idx) - 1
+    end_col = data.columns.get_loc(col_idx) + 60
 
-        start_col = data.columns.get_loc(col_idx) - 1
-        end_col = data.columns.get_loc(col_idx) + 60
-
-        if start_col < 0 or end_col > data.shape[1]:
-            raise IndexError("Column index out of range.")
+    if start_col < 0 or end_col > data.shape[1]:
+        raise IndexError("Column index out of range.")
 
     cleaned_data = (
         data.iloc[
