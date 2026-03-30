@@ -27,33 +27,31 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
         ValueError: when x_Hip is not found in dataframe.
         IndexError: when column index is out of range.
     """
-    cols = data.columns.astype(str).str.strip()
-    if "x_Hip" in cols:
-        col_idx, row = cols.get_loc("x_Hip"), -1
-    else:
-        # fallback to searching inside the data body
-        mask = data.astype(str).apply(lambda x: x.str.strip()) == "x_Hip"
-        result = data.where(mask).stack().index
-        if result.empty:
-            raise ValueError("x_Hip not found in DataFrame.")
-        row, col_idx = result[0][0], data.columns.get_loc(result[0][1])
+    stripped = data.astype(str).apply(lambda x: x.str.strip())
+    matches = stripped == "x_Hip"
+    bool_result = matches.stack()
+
+    if not bool_result.any():
+        raise ValueError("x_Hip not found in DataFrame.")
+    if bool_result.sum() > 1:
+        raise ValueError("Multiple x_Hip entries found in DataFrame.")
+
+    header_row, _ = bool_result[bool_result].index[0]
+
+    filtered_data = data.iloc[header_row + 1 :].copy()
+    filtered_data.columns = data.iloc[header_row].astype(str).str.strip()
+
+    col_idx = filtered_data.columns.get_loc("x_Hip")
 
     start_col = col_idx - 1
     end_col = col_idx + 60
 
-    if start_col < 0 or end_col > data.shape[1]:
+    if start_col < 0 or end_col > filtered_data.shape[1]:
         raise IndexError("Column index out of range.")
 
-    cleaned_data = (
-        data.iloc[
-            row + 1 :,
-            start_col:end_col,
-        ]
-        .to_numpy()
-        .astype(np.float64)
-    )
+    cleaned_data = filtered_data.iloc[:, start_col:end_col]
 
-    return cleaned_data
+    return cleaned_data.to_numpy(dtype=np.float64)
 
 
 def read_participant_data(
@@ -79,7 +77,7 @@ def read_participant_data(
 
     try:
         motion_tracking_data = pd.read_excel(
-            subject_path, sheet_name=sequence_sheetname, engine="openpyxl"
+            subject_path, sheet_name=sequence_sheetname, engine="openpyxl", header=None
         )
     except ValueError as ve:
         print(f"Sheet doesn't exist: {ve}")

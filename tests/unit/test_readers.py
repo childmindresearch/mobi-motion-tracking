@@ -108,3 +108,41 @@ def test_read_participant_data_valid_column_header() -> None:
 
     assert participant_data.data.shape == (62, 61), f"Expected shape of sample data is \
           [62,61] not {participant_data.data.shape}"
+
+
+def test_data_cleaner_header_not_first_row() -> None:
+    """Ensure data_cleaner correctly detects header row not at top."""
+    data = pd.DataFrame(
+        [
+            ["junk"] * 70,
+            ["more junk"] * 70,
+            ["a", "b", "c", "d", "e", "x_Hip", "g"] + list(range(8, 71)),
+            list(range(1, 71)),
+            list(range(71, 141)),
+        ]
+    )
+    expected_first_row = np.array(range(5, 66))
+
+    cleaned_data = readers.data_cleaner(data)
+
+    assert cleaned_data.shape[0] == 2
+    assert cleaned_data.shape[1] == 61
+    assert np.array_equal(cleaned_data[0], expected_first_row)
+
+
+def test_read_participant_data_exact_output() -> None:
+    """Ensure cleaned data matches exact expected values from Excel."""
+    path = pathlib.Path("tests/sample_data/101.xlsx")
+    raw = pd.read_excel(path, sheet_name="seq1", engine="openpyxl", header=None)
+    expected = raw.iloc[1:, :61].to_numpy(dtype=np.float64)
+
+    participant_data = readers.read_participant_data(path, 1)
+    result = participant_data.data
+
+    assert isinstance(result, np.ndarray)
+    assert (
+        result.shape == expected.shape
+    ), f"Shape mismatch: {result.shape} vs {expected.shape}"
+    assert np.allclose(
+        result, expected, equal_nan=True
+    ), "Cleaned data does not match expected output"
