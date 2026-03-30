@@ -29,25 +29,27 @@ def data_cleaner(data: pd.DataFrame) -> np.ndarray:
     """
     stripped = data.astype(str).apply(lambda x: x.str.strip())
     matches = stripped == "x_Hip"
-    result = matches.stack()
+    bool_result = matches.stack()
 
-    if not result.any():
+    if not bool_result.any():
         raise ValueError("x_Hip not found in DataFrame.")
+    if bool_result.sum() > 1:
+        raise ValueError("Multiple x_Hip entries found in DataFrame.")
 
-    header_row, _ = result[result].index[0]
+    header_row, _ = bool_result[bool_result].index[0]
 
-    df = data.iloc[header_row + 1 :].copy()
-    df.columns = data.iloc[header_row].astype(str).str.strip()
+    filtered_data = data.iloc[header_row + 1 :].copy()
+    filtered_data.columns = data.iloc[header_row].astype(str).str.strip()
 
-    col_idx = df.columns.get_loc("x_Hip")
+    col_idx = filtered_data.columns.get_loc("x_Hip")
 
     start_col = col_idx - 1
     end_col = col_idx + 60
 
-    if start_col < 0 or end_col > df.shape[1]:
+    if start_col < 0 or end_col > filtered_data.shape[1]:
         raise IndexError("Column index out of range.")
 
-    cleaned_data = df.iloc[:, start_col:end_col]
+    cleaned_data = filtered_data.iloc[:, start_col:end_col]
 
     return cleaned_data.to_numpy(dtype=np.float64)
 

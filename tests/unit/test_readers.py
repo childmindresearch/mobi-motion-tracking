@@ -121,12 +121,12 @@ def test_data_cleaner_header_not_first_row() -> None:
             list(range(71, 141)),
         ]
     )
+    expected_first_row = np.array(range(5, 66))
 
     cleaned_data = readers.data_cleaner(data)
 
     assert cleaned_data.shape[0] == 2
     assert cleaned_data.shape[1] == 61
-    expected_first_row = np.array(range(5, 66))
     assert np.array_equal(cleaned_data[0], expected_first_row)
 
 
